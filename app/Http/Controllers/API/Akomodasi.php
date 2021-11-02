@@ -12,8 +12,7 @@ class Akomodasi extends Controller
     public function get()
     {
         $data = ModelsAkomodasi::with(["kategori", "fasilitas"])->get();
-        $data->makeHidden('id_kategori_akomodasi');
-        // $data->fasilitas->makeHidden('id_kategori');
+        $data->makeHidden('kategori_akomodasi_id');
         return $data;
 
         return response()->json(ApiResponse::Ok($data, 200, "Ok"));

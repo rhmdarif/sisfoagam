@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAkomodasiFasilitasAkomodasiTable extends Migration
+class CreateFotoVideoAkomodasiTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateAkomodasiFasilitasAkomodasiTable extends Migration
      */
     public function up()
     {
-        Schema::create('akomodasi_fasilitas_akomodasi', function (Blueprint $table) {
+        Schema::create('foto_video_akomodasi', function (Blueprint $table) {
             $table->id();
             $table->integer("akomodasi_id");
-            $table->integer("fasilitas_akomodasi_id");
+            $table->enum("kategori", ["foto", "video"]);
+            $table->string("file");
+            $table->timestamps();
         });
     }
 
@@ -27,6 +29,6 @@ class CreateAkomodasiFasilitasAkomodasiTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('akomodasi_fasilitas_akomodasi');
+        Schema::dropIfExists('foto_video_akomodasi');
     }
 }

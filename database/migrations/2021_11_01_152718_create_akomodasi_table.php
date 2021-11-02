@@ -15,7 +15,7 @@ class CreateAkomodasiTable extends Migration
     {
         Schema::create('akomodasi', function (Blueprint $table) {
             $table->id();
-            $table->integer("id_kategori_akomodasi");
+            $table->integer("kategori_akomodasi_id");
             $table->string("nama_akomodasi");
             $table->string("kelas")->nullable();
             $table->string("tipe")->nullable();
