@@ -40,10 +40,25 @@ class Akomodasi extends Controller
         }
     }
 
-    public function getAkomodasi($slugakomodasi = null)
+    public function getAkomodasi()
     {
         try {
-            $data = ModelsAkomodasi::with(["kategori", "fasilitas", "fotovideo"])->where("slug_akomodasi", $slugakomodasi)->paginate(10);
+            $data = ModelsAkomodasi::with(["kategori", "fasilitas", "fotovideo"])->join("kategori_akomodasi", "kategori_akomodasi.id", '=', "akomodasi.kategori_akomodasi_id")->select("akomodasi.*", "kategori_akomodasi.slug_kategori_akomodasi")->paginate(10);
+
+            if ($data->count() > 0) {
+                $data->makeHidden('kategori_akomodasi_id');
+                return response()->json(ApiResponse::Ok($data, 200, "Ok"));
+            } else {
+                return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
+            }
+        } catch (ModelNotFoundException $e) {
+            return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
+        }
+    }
+    public function getDetailAkomodasi($slugakomodasi = null)
+    {
+        try {
+            $data = ModelsAkomodasi::with(["kategori", "fasilitas", "fotovideo"])->where("slug_akomodasi", $slugakomodasi)->first();
 
             if ($data->count() > 0) {
                 $data->makeHidden('kategori_akomodasi_id');

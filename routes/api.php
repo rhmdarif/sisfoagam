@@ -20,4 +20,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/akomodasi/kategori', [Akomodasi::class, 'getKategori']);
 Route::get('/akomodasi/kategori/{slugkategoriakomodasi}', [Akomodasi::class, 'getByKategori']);
 Route::get('/akomodasi/review/{slugakomodasi}', [Akomodasi::class, 'getReview']);
-Route::get('/akomodasi/{slugakomodasi}', [Akomodasi::class, 'getAkomodasi']);
+Route::get('/akomodasi', [Akomodasi::class, 'getAkomodasi']);
+Route::get('/akomodasi/{slugakomodasi}', [Akomodasi::class, 'getDetailAkomodasi']);
