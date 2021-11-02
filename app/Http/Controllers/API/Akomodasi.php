@@ -19,7 +19,6 @@ class Akomodasi extends Controller
                 $data = ModelsAkomodasi::with(["kategori", "fasilitas"])->get();
             }
             $data->makeHidden('kategori_akomodasi_id');
-            return $data;
             return response()->json(ApiResponse::Ok($data, 200, "Ok"));
         } catch (ModelNotFoundException $e) {
             return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
