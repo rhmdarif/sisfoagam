@@ -18,7 +18,6 @@ class CreateFotoVideoAkomodasiTable extends Migration
             $table->integer("akomodasi_id");
             $table->enum("kategori", ["foto", "video"]);
             $table->string("file");
-            $table->timestamps();
         });
     }
 

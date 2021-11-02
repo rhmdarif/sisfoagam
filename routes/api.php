@@ -17,5 +17,7 @@ use Illuminate\Support\Facades\Route;
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
-
-Route::get('/akomodasi/{slugkategoriakomodasi?}/{slugakomodasi?}', [Akomodasi::class, 'get']);
+Route::get('/akomodasi/kategori', [Akomodasi::class, 'getKategori']);
+Route::get('/akomodasi/kategori/{slugkategoriakomodasi}', [Akomodasi::class, 'getByKategori']);
+Route::get('/akomodasi/review/{slugakomodasi}', [Akomodasi::class, 'getReview']);
+Route::get('/akomodasi/{slugakomodasi}', [Akomodasi::class, 'getAkomodasi']);
