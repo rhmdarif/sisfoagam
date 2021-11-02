@@ -23,7 +23,7 @@ class CreateAkomodasiTable extends Migration
             $table->text("keterangan")->nullable();
             $table->string("lat")->nullable();
             $table->string("long")->nullable();
-            $table->string("slug_akomodasi");
+            $table->string("slug_akomodasi")->unique();
             $table->string("thumbnail_akomodasi");
             $table->timestamps();
         });

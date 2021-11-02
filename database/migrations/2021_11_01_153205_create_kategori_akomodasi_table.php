@@ -16,7 +16,7 @@ class CreateKategoriAkomodasiTable extends Migration
         Schema::create('kategori_akomodasi', function (Blueprint $table) {
             $table->id();
             $table->string("nama_kategori_akomodasi");
-            $table->string("slug_kategori_akomodasi");
+            $table->string("slug_kategori_akomodasi")->unique();
             $table->string("icon_kategori_akomodasi")->nullable();
         });
     }
