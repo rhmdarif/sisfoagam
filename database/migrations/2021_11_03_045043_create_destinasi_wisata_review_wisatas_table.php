@@ -13,8 +13,12 @@ class CreateDestinasiWisataReviewWisatasTable extends Migration
      */
     public function up()
     {
-        Schema::create('destinasi_wisata_review_wisatas', function (Blueprint $table) {
+        Schema::create('destinasi_wisata_review_wisata', function (Blueprint $table) {
             $table->id();
+            $table->foreignId("destinasi_wisata_id");
+            $table->foreignId("user_id");
+            $table->integer("tingkat_kepuasan")->default(0);
+            $table->text("komentar")->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +30,6 @@ class CreateDestinasiWisataReviewWisatasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('destinasi_wisata_review_wisatas');
+        Schema::dropIfExists('destinasi_wisata_review_wisata');
     }
 }

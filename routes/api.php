@@ -1,7 +1,9 @@
 <?php
 
-use App\Http\Controllers\API\Akomodasi;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\Akomodasi;
+use App\Http\Controllers\Api\AkomodasiController;
+use App\Http\Controllers\Api\DestinasiWisataController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,9 +19,18 @@ use Illuminate\Support\Facades\Route;
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
-Route::get('/akomodasi', [Akomodasi::class, 'getAkomodasi']);
-Route::get('/akomodasi/kategori', [Akomodasi::class, 'getKategori']);
-Route::get('/akomodasi/kategori/{slugkategoriakomodasi}', [Akomodasi::class, 'getByKategori']);
+Route::get('/akomodasi', [AkomodasiController::class, 'getAkomodasi']);
+Route::get('/akomodasi/kategori', [AkomodasiController::class, 'getKategori']);
+Route::get('/akomodasi/kategori/{slugkategoriakomodasi}', [AkomodasiController::class, 'getByKategori']);
 
-Route::get('/akomodasi/{slugakomodasi}', [Akomodasi::class, 'getDetailAkomodasi']);
-Route::get('/akomodasi/{slugakomodasi}/review', [Akomodasi::class, 'getReview']);
+Route::get('/akomodasi/{slugakomodasi}', [AkomodasiController::class, 'getDetailAkomodasi']);
+Route::get('/akomodasi/{slugakomodasi}/review', [AkomodasiController::class, 'getReview']);
+
+
+Route::get('/destinasi', [DestinasiWisataController::class, 'getDestinasiWisata']);
+Route::get('/destinasi/kategori', [DestinasiWisataController::class, 'getKategori']);
+Route::get('/destinasi/kategori/{slugkategori}', [DestinasiWisataController::class, 'getByKategori']);
+
+Route::get('/destinasi/{slugkategori}', [DestinasiWisataController::class, 'getDetailDestinasiWisata']);
+Route::get('/destinasi/{slugDestinasiWisata}/review', [DestinasiWisataController::class, 'getReview']);
+

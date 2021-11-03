@@ -1,19 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\Api;
 
+use App\Models\Akomodasi;
 use App\Helper\ApiResponse;
-use App\Http\Controllers\Controller;
-use App\Models\Akomodasi as ModelsAkomodasi;
-use App\Models\KategoriAkomodasi;
-use App\Models\ReviewAkomodasi;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use App\Models\ReviewAkomodasi;
+use App\Models\KategoriAkomodasi;
+use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class Akomodasi extends Controller
+class AkomodasiController extends Controller
 {
-
     public function getKategori()
     {
         try {
@@ -27,7 +25,7 @@ class Akomodasi extends Controller
     public function getBykategori($slugkategori)
     {
         try {
-            $data = ModelsAkomodasi::with(["kategori", "fasilitas", "fotovideo"])->join("kategori_akomodasi", "kategori_akomodasi.id", '=', "akomodasi.kategori_akomodasi_id")->where("slug_kategori_akomodasi", $slugkategori)->select("akomodasi.*", "kategori_akomodasi.slug_kategori_akomodasi")->paginate(8);
+            $data = Akomodasi::with(["kategori", "fasilitas", "fotovideo"])->join("kategori_akomodasi", "kategori_akomodasi.id", '=', "akomodasi.kategori_akomodasi_id")->where("slug_kategori_akomodasi", $slugkategori)->select("akomodasi.*", "kategori_akomodasi.slug_kategori_akomodasi")->paginate(8);
 
             if ($data->count() > 0) {
                 $data->makeHidden('kategori_akomodasi_id');
@@ -43,7 +41,7 @@ class Akomodasi extends Controller
     public function getAkomodasi()
     {
         try {
-            $data = ModelsAkomodasi::with(["kategori", "fasilitas", "fotovideo"])->join("kategori_akomodasi", "kategori_akomodasi.id", '=', "akomodasi.kategori_akomodasi_id")->select("akomodasi.*", "kategori_akomodasi.slug_kategori_akomodasi")->paginate(8);
+            $data = Akomodasi::with(["kategori", "fasilitas", "fotovideo"])->join("kategori_akomodasi", "kategori_akomodasi.id", '=', "akomodasi.kategori_akomodasi_id")->select("akomodasi.*", "kategori_akomodasi.slug_kategori_akomodasi")->paginate(8);
 
             if ($data->count() > 0) {
                 $data->makeHidden('kategori_akomodasi_id');
@@ -58,7 +56,7 @@ class Akomodasi extends Controller
     public function getDetailAkomodasi($slugakomodasi = null)
     {
         try {
-            $data = ModelsAkomodasi::with(["kategori", "fasilitas", "fotovideo"])->where("slug_akomodasi", $slugakomodasi)->first();
+            $data = Akomodasi::with(["kategori", "fasilitas", "fotovideo"])->where("slug_akomodasi", $slugakomodasi)->first();
 
             if ($data->count() > 0) {
                 $data->makeHidden('kategori_akomodasi_id');
