@@ -11,6 +11,17 @@ class Akomodasi extends Model
     use HasFactory;
 
     protected $table = "akomodasi";
+    protected $appends = ['jarak'];
+
+    public function getJarakAttribute()
+    {
+        $request = request();
+        if($request->has('long') && $request->has('lat')) {
+            return distance($request->lat, $request->long, $this->lat, $this->long);
+        }
+
+        return;
+    }
 
     public function kategori()
     {

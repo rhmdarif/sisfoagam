@@ -9,6 +9,7 @@ use App\Models\ReviewAkomodasi;
 use App\Models\KategoriAkomodasi;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
 
 class AkomodasiController extends Controller
 {
@@ -40,8 +41,14 @@ class AkomodasiController extends Controller
 
     public function getAkomodasi()
     {
+        $request = request();
         try {
-            $data = Akomodasi::with(["kategori", "fasilitas", "fotovideo"])->join("kategori_akomodasi", "kategori_akomodasi.id", '=', "akomodasi.kategori_akomodasi_id")->select("akomodasi.*", "kategori_akomodasi.slug_kategori_akomodasi")->paginate(8);
+
+            $data = Akomodasi::with(["kategori", "fasilitas", "fotovideo"])
+            ->join("kategori_akomodasi", "kategori_akomodasi.id", '=', "akomodasi.kategori_akomodasi_id")
+            ->select("akomodasi.*",
+                    "kategori_akomodasi.slug_kategori_akomodasi"
+                    )->paginate(8);
 
             if ($data->count() > 0) {
                 $data->makeHidden('kategori_akomodasi_id');
