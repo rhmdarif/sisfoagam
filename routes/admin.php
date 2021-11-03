@@ -12,6 +12,7 @@ Route::prefix('admin')->as("admin.")->group(function () {
 
 
         Route::resource('fasilitas-akomodasi', Admin\FasilitasAkomodasiController::class)->except(["create", "edit"]);
+        Route::resource('kategori-akomodasi', Admin\KategoriAkomodasiController::class)->except(["create", "edit"]);
         // Route::prefix('fasilitas-akomodasi')->as("fasilitas-akomodasi.")->group(function () {
         //     Route::get('/', [Admin\FasilitasAkomodasiController::class, 'index'])->name("index");
         // });

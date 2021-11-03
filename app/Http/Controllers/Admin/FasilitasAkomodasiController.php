@@ -19,7 +19,7 @@ class FasilitasAkomodasiController extends Controller
     public function index()
     {
         //
-        $fasilitasAkomodasis = DB::table('fasilitas_akomodasi')->orderBy("nama_fasilitas_akomodasi", "desc")->paginate(10);
+        $fasilitasAkomodasis = DB::table('fasilitas_akomodasi')->orderBy("nama_fasilitas_akomodasi", "asc")->paginate(10);
         return view('admin.fasilitas.index', compact('fasilitasAkomodasis'));
     }
 
@@ -53,7 +53,7 @@ class FasilitasAkomodasiController extends Controller
         }
 
         $file_upload = $request->file("icon_fasilitas");
-        $file_location = $file_upload->storeAs("app/public/fasilitas_akomodasi", rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension());
+        $file_location = $file_upload->storeAs("public/fasilitas_akomodasi", rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension());
 
         DB::table('fasilitas_akomodasi')->insert([
             'nama_fasilitas_akomodasi' => $request->nama_fasilitas,
@@ -108,7 +108,7 @@ class FasilitasAkomodasiController extends Controller
 
         if($request->has("icon_fasilitas")) {
             $file_upload = $request->file("icon_fasilitas");
-            $file_location = $file_upload->storeAs("app/public/fasilitas_akomodasi", rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension());
+            $file_location = $file_upload->storeAs("public/fasilitas_akomodasi", rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension());
             Storage::delete([$fasilitasAkomodasi->icon_fasilitas_akomodasi]);
             $update['icon_fasilitas_akomodasi'] = $file_location;
         }
