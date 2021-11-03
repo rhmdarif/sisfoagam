@@ -18,13 +18,13 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('no_hp')->nullable();
+            $table->string('no_hp');
             $table->string('password');
             $table->string('role')->default("USER"); // USER, ADMIN
 
-            $table->enum('status', ["0", "1"]); 
-            // 0 = Status tidak aktif, 
-            // 1 = Status aktif, 
+            $table->enum('status', ["0", "1"]);
+            // 0 = Status tidak aktif,
+            // 1 = Status aktif,
             // Status aktif setelah dikonfirmasi admin
 
             $table->rememberToken();
