@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateKategoriWisataTable extends Migration
+class CreateDestinasiWisataFotoVidioWisatasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateKategoriWisataTable extends Migration
      */
     public function up()
     {
-        Schema::create('kategori_wisata', function (Blueprint $table) {
+        Schema::create('destinasi_wisata_foto_vidio_wisata', function (Blueprint $table) {
             $table->id();
-            $table->string("nama_kategori_wisata");
-            $table->string("slug_kategori_wisata");
-            $table->string("icon_kategori_wisata");
+            $table->foreignId("destinasi_wisata_id");
+            $table->string("kategori");
+            $table->string('file');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreateKategoriWisataTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('kategori_wisata');
+        Schema::dropIfExists('destinasi_wisata_foto_vidio_wisata');
     }
 }
