@@ -16,7 +16,7 @@ class DestinasiWisataController extends Controller
     {
         try {
             $data = KategoriWisata::all();
-            return response()->json(ApiResponse::Ok($data, 200, "Ok"));
+            return response()->json(ApiResponse::Ok($data, 200, "Oke"));
         } catch (ModelNotFoundException $e) {
             return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
         }
