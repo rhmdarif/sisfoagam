@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\Akomodasi;
 use App\Http\Controllers\Api\AkomodasiController;
 use App\Http\Controllers\Api\DestinasiWisataController;
 
