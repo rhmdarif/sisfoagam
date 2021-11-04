@@ -48,16 +48,7 @@ class AkomodasiController extends Controller
                 $data = Akomodasi::with(["kategori", "fasilitas", "fotovideo"])
                 ->join("kategori_akomodasi", "kategori_akomodasi.id", '=', "akomodasi.kategori_akomodasi_id")
                 ->select("akomodasi.*",
-                        "kategori_akomodasi.slug_kategori_akomodasi",
-                        DB::raw("(
-                            6371 * acos (
-                              cos ( radians(".$request->lat.") )
-                              * cos( radians( akomodasi.lat ) )
-                              * cos( radians( akomodasi.long ) - radians(".$request->long.") )
-                              + sin ( radians(".$request->lat.") )
-                              * sin( radians( akomodasi.lat ) )
-                            )
-                          ) AS jarak")
+                        "kategori_akomodasi.slug_kategori_akomodasi"
                         )->paginate(8);
             } else {
                 $data = Akomodasi::with(["kategori", "fasilitas", "fotovideo"])
