@@ -10,6 +10,16 @@ class DestinasiWisata extends Model
     use HasFactory;
     protected $table = "destinasi_wisata";
 
+    public function getJarakAttribute()
+    {
+        $request = request();
+        if($request->has('long') && $request->has('lat')) {
+            return distance($request->lat, $request->long, $this->lat, $this->long);
+        }
+
+        return;
+    }
+
     public function kategori()
     {
         return $this->belongsTo(KategoriWisata::class, "kategori_wisata_id");

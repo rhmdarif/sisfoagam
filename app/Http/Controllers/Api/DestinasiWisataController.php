@@ -58,7 +58,7 @@ class DestinasiWisataController extends Controller
         try {
             $data = DestinasiWisata::with(["kategori", "fasilitas", "fotovideo"])->where("slug_destinasi", $slugDestinasiWisata)->first();
 
-            if ($data->count() > 0) {
+            if ($data != null) {
                 $data->makeHidden('kategori_wisata_id');
                 return response()->json(ApiResponse::Ok($data, 200, "Ok"));
             } else {

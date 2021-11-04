@@ -65,13 +65,14 @@ class AkomodasiController extends Controller
         try {
             $data = Akomodasi::with(["kategori", "fasilitas", "fotovideo"])->where("slug_akomodasi", $slugakomodasi)->first();
 
-            if ($data->count() > 0) {
+            if ($data != null) {
                 $data->makeHidden('kategori_akomodasi_id');
                 return response()->json(ApiResponse::Ok($data, 200, "Ok"));
             } else {
                 return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
             }
 
+            return response()->json(ApiResponse::Ok($data, 200, "Ok"));
         } catch (ModelNotFoundException $e) {
             return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
         }
@@ -82,7 +83,7 @@ class AkomodasiController extends Controller
         try {
             $data = ReviewAkomodasi::join("akomodasi", "akomodasi.id", "=", "review_akomodasi.akomodasi_id")
             ->join("users", "users.id", "=", "review_akomodasi.users_id")
-            ->where("slug_akomodasi", $slugakomodasi)->select("review_akomodasi.id", "review_akomodasi.akomodasi_id", "review_akomodasi.tingkat_kepuasan", "review_akomodasi.komentar", "review_akomodasi.created_at", "users.name")->get();
+            ->where("slug_akomodasi", $slugakomodasi)->select("review_akomodasi.id", "review_akomodasi.akomodasi_id", "review_akomodasi.tingkat_kepuasan", "review_akomodasi.komentar", "review_akomodasi.created_at", "users.name",)->get();
 
             return response()->json(ApiResponse::Ok($data, 200, "Ok"));
         } catch (ModelNotFoundException $e) {
