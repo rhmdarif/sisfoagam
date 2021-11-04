@@ -39,16 +39,46 @@ class AkomodasiController extends Controller
         }
     }
 
-    public function getAkomodasi()
+    public function getAkomodasi(Request $request)
     {
-        $request = request();
         try {
 
-            $data = Akomodasi::with(["kategori", "fasilitas", "fotovideo"])
-            ->join("kategori_akomodasi", "kategori_akomodasi.id", '=', "akomodasi.kategori_akomodasi_id")
-            ->select("akomodasi.*",
-                    "kategori_akomodasi.slug_kategori_akomodasi"
-                    )->paginate(8);
+            if(!$request->has("lat") || !$request->has("long")) {
+
+                $data = Akomodasi::with(["kategori", "fasilitas", "fotovideo"])
+                ->join("kategori_akomodasi", "kategori_akomodasi.id", '=', "akomodasi.kategori_akomodasi_id")
+                ->select("akomodasi.*",
+                        "kategori_akomodasi.slug_kategori_akomodasi",
+                        DB::raw("(
+                            6371 * acos (
+                              cos ( radians(".$request->lat.") )
+                              * cos( radians( akomodasi.lat ) )
+                              * cos( radians( akomodasi.long ) - radians(".$request->long.") )
+                              + sin ( radians(".$request->lat.") )
+                              * sin( radians( akomodasi.lat ) )
+                            )
+                          ) AS jarak"),
+                        )->paginate(8);
+            } else {
+                $data = Akomodasi::with(["kategori", "fasilitas", "fotovideo"])
+                                ->join("kategori_akomodasi", "kategori_akomodasi.id", '=', "akomodasi.kategori_akomodasi_id")
+                                ->select("akomodasi.*",
+                                        "kategori_akomodasi.slug_kategori_akomodasi",
+                                        // DB::raw("calcDistance(akomodasi.lat, akomodasi.long, '".$request->lat."', '".$request->long."') as jarak_lat_long"),
+                                        DB::raw("(
+                                            6371 * acos (
+                                              cos ( radians(".$request->lat.") )
+                                              * cos( radians( akomodasi.lat ) )
+                                              * cos( radians( akomodasi.long ) - radians(".$request->long.") )
+                                              + sin ( radians(".$request->lat.") )
+                                              * sin( radians( akomodasi.lat ) )
+                                            )
+                                          ) AS jarak"),
+                                        // DB::raw("IFNULL(distance, 0) as distance")
+                                )
+                                ->orderBy("jarak")
+                                ->paginate(5);
+            }
 
             if ($data->count() > 0) {
                 $data->makeHidden('kategori_akomodasi_id');

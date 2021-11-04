@@ -39,10 +39,28 @@ class DestinasiWisataController extends Controller
         }
     }
 
-    public function getDestinasiWisata()
+    public function getDestinasiWisata(Request $request)
     {
         try {
+
+        if(!$request->has("lat") || !$request->has("long")) {
             $data = DestinasiWisata::with(["kategori", "fasilitas", "fotovideo"])->join("kategori_wisata", "kategori_wisata.id", '=', "destinasi_wisata.kategori_wisata_id")->select("destinasi_wisata.*", "kategori_wisata.slug_kategori_wisata")->paginate(8);
+        } else {
+            $data = DestinasiWisata::with(["kategori", "fasilitas", "fotovideo"])->join("kategori_wisata", "kategori_wisata.id", '=', "destinasi_wisata.kategori_wisata_id")->select("destinasi_wisata.*", "kategori_wisata.slug_kategori_wisata",
+            DB::raw("(
+                6371 * acos (
+                  cos ( radians(".$request->lat.") )
+                  * cos( radians( destinasi_wisata.lat ) )
+                  * cos( radians( destinasi_wisata.long ) - radians(".$request->long.") )
+                  + sin ( radians(".$request->lat.") )
+                  * sin( radians( destinasi_wisata.lat ) )
+                )
+              ) AS jarak"),
+            // DB::raw("IFNULL(distance, 0) as distance")
+            )
+            ->paginate(5);
+
+        }
 
             if ($data->count() > 0) {
                 $data->makeHidden('kategori_wisata_id');
@@ -103,8 +121,8 @@ class DestinasiWisataController extends Controller
                 )
               ) AS jarak"),
             // DB::raw("IFNULL(distance, 0) as distance")
-    )
-    ->orderBy("jarak")->paginate(5);
+            )
+            ->orderBy("jarak")->limit(5)->get();
 
             if ($data->count() > 0) {
                 $data->makeHidden('kategori_wisata_id');
