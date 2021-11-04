@@ -57,7 +57,7 @@ class AkomodasiController extends Controller
                               + sin ( radians(".$request->lat.") )
                               * sin( radians( akomodasi.lat ) )
                             )
-                          ) AS jarak"),
+                          ) AS jarak")
                         )->paginate(8);
             } else {
                 $data = Akomodasi::with(["kategori", "fasilitas", "fotovideo"])
@@ -145,7 +145,7 @@ class AkomodasiController extends Controller
                                     // DB::raw("IFNULL(distance, 0) as distance")
                             )
                             ->orderBy("jarak")
-                            ->paginate(5);
+                            ->limit(5)->get();
 
             if ($data->count() > 0) {
                 $data->makeHidden('kategori_akomodasi_id');
