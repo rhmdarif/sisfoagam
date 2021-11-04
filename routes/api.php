@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\DestinasiWisataController;
 //     return $request->user();
 // });
 Route::get('/akomodasi', [AkomodasiController::class, 'getAkomodasi']);
+Route::get('/akomodasi/jarak', [AkomodasiController::class, 'getAkomodasiSortByJarak']);
 Route::get('/akomodasi/kategori', [AkomodasiController::class, 'getKategori']);
 Route::get('/akomodasi/kategori/{slugkategoriakomodasi}', [AkomodasiController::class, 'getByKategori']);
 
@@ -27,6 +28,7 @@ Route::get('/akomodasi/{slugakomodasi}/review', [AkomodasiController::class, 'ge
 
 
 Route::get('/destinasi', [DestinasiWisataController::class, 'getDestinasiWisata']);
+Route::get('/destinasi/jarak', [DestinasiWisataController::class, 'getDestinasiWisataSortByJarak']);
 Route::get('/destinasi/kategori', [DestinasiWisataController::class, 'getKategori']);
 Route::get('/destinasi/kategori/{slugkategori}', [DestinasiWisataController::class, 'getByKategori']);
 
