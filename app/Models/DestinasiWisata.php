@@ -9,6 +9,8 @@ class DestinasiWisata extends Model
 {
     use HasFactory;
     protected $table = "destinasi_wisata";
+    protected $appends = ['jarak'];
+
 
     public function getJarakAttribute()
     {
