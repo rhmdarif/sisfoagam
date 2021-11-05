@@ -15,7 +15,7 @@ class CreateEventParawisatasTable extends Migration
     {
         Schema::create('event_parawisata', function (Blueprint $table) {
             $table->id();
-            $table->string('slug_event_parawisata')->unique();
+            $table->string('slug_event_parawisata');
             $table->string('jenis_event');
             $table->date('start_at');
             $table->date('end_at');
