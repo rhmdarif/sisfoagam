@@ -35,7 +35,7 @@ class EventParawisataController extends Controller
     public function eventParawisataComing()
     {
         try {
-            $data = DB::table('event_parawisata')->where('start_at', '>=', date('Y-m-d'))->orderBy('start_at')->get();
+            $data = DB::table('event_parawisata')->where('start_at', '>=', date('Y-m-d'))->orderBy('start_at')->limit(5)->get();
 
             return response()->json(ApiResponse::Ok($data, 200, "Ok"));
         } catch (ModelNotFoundException $th) {
