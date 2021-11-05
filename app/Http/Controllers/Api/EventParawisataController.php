@@ -31,4 +31,15 @@ class EventParawisataController extends Controller
             return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
         }
     }
+
+    public function eventParawisataComing()
+    {
+        try {
+            $data = DB::table('event_parawisata')->where('start_at', '>=', date('Y-m-d'))->orderBy('start_at')->get();
+
+            return response()->json(ApiResponse::Ok($data, 200, "Ok"));
+        } catch (ModelNotFoundException $th) {
+            return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
+        }
+    }
 }

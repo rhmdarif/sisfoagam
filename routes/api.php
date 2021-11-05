@@ -40,4 +40,5 @@ Route::get('/destinasi/{slugDestinasiWisata}/review', [DestinasiWisataController
 
 // EVENT PARAWISATA
 Route::get('/event-parawisata', [EventParawisataController::class, 'eventAllParawisata']);
+Route::get('/event-parawisata/coming', [EventParawisataController::class, 'eventParawisataComing']);
 Route::get('/event-parawisata/{slug_event_parawisata}', [EventParawisataController::class, 'getDetailParawisata']);
