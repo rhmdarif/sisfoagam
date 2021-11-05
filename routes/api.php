@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AkomodasiController;
 use App\Http\Controllers\Api\DestinasiWisataController;
+use App\Http\Controllers\Api\EkonomiKreatifController;
 use App\Http\Controllers\Api\EventParawisataController;
 
 /*
@@ -42,3 +43,13 @@ Route::get('/destinasi/{slugDestinasiWisata}/review', [DestinasiWisataController
 Route::get('/event-parawisata', [EventParawisataController::class, 'eventAllParawisata']);
 Route::get('/event-parawisata/coming', [EventParawisataController::class, 'eventParawisataComing']);
 Route::get('/event-parawisata/{slug_event_parawisata}', [EventParawisataController::class, 'getDetailParawisata']);
+
+
+// EKONOMI KREATIF
+Route::get('/ekonomi-kreatif', [EkonomiKreatifController::class, 'getEkonomiKreatif']);
+Route::get('/ekonomi-kreatif/jarak', [EkonomiKreatifController::class, 'getEkonomiKreatifSortByJarak']);
+Route::get('/ekonomi-kreatif/kategori', [EkonomiKreatifController::class, 'getKategori']);
+Route::get('/ekonomi-kreatif/kategori/{slugkategoriekonomikreatif}', [EkonomiKreatifController::class, 'getByKategori']);
+
+Route::get('/ekonomi-kreatif/{slugekonomikreatif}', [EkonomiKreatifController::class, 'getDetailEkonomiKreatif']);
+Route::get('/ekonomi-kreatif/{slugekonomikreatif}/review', [EkonomiKreatifController::class, 'getReview']);
