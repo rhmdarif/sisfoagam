@@ -13,8 +13,12 @@ class CreateTempatIbadahsTable extends Migration
      */
     public function up()
     {
-        Schema::create('tempat_ibadahs', function (Blueprint $table) {
+        Schema::create('tempat_ibadah', function (Blueprint $table) {
             $table->id();
+            $table->string('nama_tempat_ibadah');
+            $table->string('lat');
+            $table->string('long');
+            $table->text('keterangan');
             $table->timestamps();
         });
     }
@@ -26,6 +30,6 @@ class CreateTempatIbadahsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tempat_ibadahs');
+        Schema::dropIfExists('tempat_ibadah');
     }
 }

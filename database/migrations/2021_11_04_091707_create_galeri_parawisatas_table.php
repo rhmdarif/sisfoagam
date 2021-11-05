@@ -13,8 +13,10 @@ class CreateGaleriParawisatasTable extends Migration
      */
     public function up()
     {
-        Schema::create('galeri_parawisatas', function (Blueprint $table) {
+        Schema::create('galeri_parawisata', function (Blueprint $table) {
             $table->id();
+            $table->string('kategori');
+            $table->string('file');
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ class CreateGaleriParawisatasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('galeri_parawisatas');
+        Schema::dropIfExists('galeri_parawisata');
     }
 }

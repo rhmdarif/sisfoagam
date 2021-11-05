@@ -13,8 +13,11 @@ class CreateFotoTempatIbadahsTable extends Migration
      */
     public function up()
     {
-        Schema::create('foto_tempat_ibadahs', function (Blueprint $table) {
+        Schema::create('foto_tempat_ibadah', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('tempat_ibadah_id');
+            $table->text('keterangan');
+            $table->string('file');
             $table->timestamps();
         });
     }
@@ -26,6 +29,6 @@ class CreateFotoTempatIbadahsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('foto_tempat_ibadahs');
+        Schema::dropIfExists('foto_tempat_ibadah');
     }
 }

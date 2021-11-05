@@ -13,8 +13,12 @@ class CreateEventParawisatasTable extends Migration
      */
     public function up()
     {
-        Schema::create('event_parawisatas', function (Blueprint $table) {
+        Schema::create('event_parawisata', function (Blueprint $table) {
             $table->id();
+            $table->string('jenis_event');
+            $table->string('jadwal_pelaksanaan');
+            $table->text('keterangan');
+            $table->string('foto')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +30,6 @@ class CreateEventParawisatasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('event_parawisatas');
+        Schema::dropIfExists('event_parawisata');
     }
 }
