@@ -1,16 +1,17 @@
-<form action="{{ $url ?? route('admin.fasilitas-akomodasi.store') }}" method="post" enctype="multipart/form-data">
-    @csrf
-    @method("POST")
+<form action="" method="post" enctype="multipart/form-data">
     <div class="form-group">
         <label for="nama_fasilitas">Nama Fasilitas</label>
-        <input type="text" name="nama_fasilitas" id="nama_fasilitas" class="form-control" value="{{ $fasilitas_akomodasi->nama_fasilitas_akomodasi ?? "" }}">
+        <input type="hidden" readonly id="id">
+        <input type="text" name="nama_fasilitas" id="nama_fasilitas" class="form-control" value="">
     </div>
     <div class="form-group">
         <label for="nama_fasilitas">Icon Fasilitas</label>
-        <input type="file" name="icon_fasilitas" id="icon_fasilitas" class="form-control" value="{{ $fasilitas_akomodasi->icon_fasilitas_akomodasi ?? "" }}">
+        <input type="file" name="icon_fasilitas" id="icon_fasilitas" class="form-control" value="">
     </div>
-
-    <button type="button" id="{{ isset($type)? "btnEdit" : "btnCreate" }}" class="btn btn-primary float-right">
-        {{ isset($type)? "Ubah" : "Tambah" }}
+    <div class="form-group text-center">
+        <div id="tampilFoto"></div>
+    </div>
+    <button type="button" onclick="simpan()" style="width:80px" class="btn btn-primary float-right">
+        <div id="btnNama"></div>
     </button>
 </form>

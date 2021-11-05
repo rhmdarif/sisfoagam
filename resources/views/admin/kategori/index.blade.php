@@ -24,39 +24,36 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="card">
+                    <div class="card card-outline card-primary">
+                        <div class="card-header">
+                            <button type="button" class="btn btn-primary" onclick="tampil()">Tambah Data</button>
+                        </div>
                         <div class="card-body">
-                            <button type="button" class="btn btn-primary" data-toggle="modal"
-                                data-target="#tambah-kategori">Tambah Data</button>
-                            <table class="table">
+                            <table class="table" id="table1" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
-                                        <th>Nama Kategori</th>
-                                        <th>Icon kategori</th>
-                                        <th>Aksi</th>
+                                        <th style="width:2%">No</th>
+                                        <th style="width:40%">Nama Kategori</th>
+                                        <th style="width:40%">Icon kategori</th>
+                                        <th style="width:18%">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @php
-                                        $i = 1;
-                                    @endphp
-                                    @foreach ($kategoriAkomodasis as $item)
+                                    @foreach ($kategoriAkomodasis as $i => $item)
                                         <tr>
-                                            <td>{{ $i++ }}</td>
+                                            <td>{{ $i+1 }}</td>
                                             <td>{{ $item->nama_kategori_akomodasi }}</td>
-                                            <td><img src="{{ str_replace("public", "/storage", $item->icon_kategori_akomodasi) }}" alt="{{ $item->nama_kategori_akomodasi }}" class="img-fluid" width="100px"> </td>
+                                            <td><img src="{{ asset('storage/kategori_akomodasi/'.$item->icon_kategori_akomodasi) }}" alt="{{ $item->nama_kategori_akomodasi }}" class="img-fluid" width="60px"> </td>
                                             <td>
-                                                <button type="button" class="btn btn-warning p-1"
-                                                    onclick="edit({{ $item->id }})">Edit</button>
-                                                <button type="button" class="btn btn-danger p-1" onclick="hapus(this, {{ $item->id }})">Hapus</button>
+                                                <button style="width:80px; color:white" type="button" class="btn btn-warning p-1"
+                                                    onclick="edits('{{ $item->id }}')">Edit</button>
+                                                <button style="width:80px" type="button" class="btn btn-danger p-1" onclick="deletes( {{ $item->id }} )">Hapus</button>
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
 
-                            {{ $kategoriAkomodasis->links() }}
                         </div>
                     </div>
                 </div>
@@ -72,38 +69,16 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        <div id="label"></div>
+                    </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    @include('admin.kategori.form', ["url" => route("admin.kategori-akomodasi.store")])
+                    @include('admin.kategori.form')
                 </div>
-                {{-- <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div> --}}
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="edit-kategori" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ubah kategori</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    @include('admin.kategori.form', ["type" => "edit"])
-                </div>
-                {{-- <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div> --}}
             </div>
         </div>
     </div>
@@ -111,137 +86,113 @@
 
 @push('js')
     <script>
-        $(document).ready(function() {
 
-            $("#btnCreate").click(function(event) {
+        function tampil()
+        {
+            $('#label').html("Tambah Data")
+            $('#btnNama').html("Tambah")
+            $('#tambah-kategori').modal('show');
+        }
 
-                //stop submit the form, we will post it manually.
-                event.preventDefault();
+        $('#tambah').click(function(){
+            var icon_kategori = $('#icon_kategori').prop('files')[0];
+            var nama_kategori = $('#nama_kategori').val();
+            var id = $('#id').val();
+            let form_data = new FormData();
 
-                // Get form
-                var form = $('#tambah-kategori form');
+            form_data.append("_token", "{{ csrf_token() }}");
+            form_data.append('id', id);
+            form_data.append('icon_kategori', icon_kategori);
+            form_data.append('nama_kategori', nama_kategori);
 
-                // Create an FormData object
-                var data = new FormData(form[0]);
-                    data.append('icon_kategori', $('#icon_kategori')[0].files);
-                // console.log(data)
-
-                // disabled the submit button
-                $("#btnCreate").prop("disabled", true);
-
-                $.ajax({
-                    type: "POST",
-                    enctype: 'multipart/form-data',
-                    url: form.attr("action"),
-                    data: data,
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    timeout: 800000,
-                    success: function(data) {
-                        if(data.status) {
-                            alert(data.msg);
-                            location.reload();
-                        } else {
-                            alert(data.msg);
-                        }
-                    },
-                    error: function(e) {
-                        alert(e.responseText);
-                    }
-                });
+            $.ajax({
+                type: "POST",
+                url: "{{route('kategori.tambah')}}",
+                contentType: 'multipart/form-data',
+                data: form_data,
+                processData: false,
+                contentType: false,
+                dataType: 'JSON',
+                success: function(data) {
+                    location.reload();
+                    console.log(data);
+                },
+                error: function(e) {
+                    console.log(e.responseText);
+                }
             });
-
-            $("#edit-kategori #btnEdit").click(function(event) {
-                //stop submit the form, we will post it manually.
-                event.preventDefault();
-
-                // Get form
-                var form = $('#edit-kategori form');
-
-                // Create an FormData object
-                var data = new FormData(form[0]);
-                    data.append('icon_kategori', $('#icon_kategori')[0].files);
-
-                // disabled the submit button
-                $("#btnEdit").prop("disabled", true);
-
-                $.ajax({
-                    type: "POST",
-                    enctype: 'multipart/form-data',
-                    url: form.attr("action"),
-                    data: data,
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    timeout: 800000,
-                    success: function(data) {
-
-                        if(data.status) {
-                            alert(data.msg);
-                            location.reload();
-                        } else {
-                            alert(data.msg);
-                        }
-
-                    },
-                    error: function(e) {
-
-                        alert(e.responseText);
-
-                    }
-                });
-
-            });
-
-        });
-
-        function edit(id) {
-            $.get("{{ route('admin.kategori-akomodasi.index') }}/" + id, (result) => {
-                console.log(result);
-
-                $('#edit-kategori .modal-body form').attr("action",
-                    "{{ route('admin.kategori-akomodasi.index') }}/" + id);
-
-                $('#edit-kategori .modal-body form input[name=_method]').val("PUT");
-                $('#edit-kategori .modal-body form input[name=nama_kategori]').val(result
-                    .nama_kategori_akomodasi);
-                $('#edit-kategori').modal('show')
+        })  
+        
+        function edits(id)
+        {
+            $.ajax({
+                url:'{{route("kategori.edit")}}',
+                type:'post',
+                data:{
+                    'id':id,
+                    '_token': "{{ csrf_token() }}"
+                },
+                dataType: 'json',
+                success: function(data) {
+                    console.log(data)
+                    $('#nama_kategori').val(data.data.nama_kategori_akomodasi)
+                    $('#tampilFoto').html(`<img src="{{ asset('storage/kategori_akomodasi/${data.data.icon_kategori_akomodasi}') }}" width="30%"/>`)
+                    $('#id').val(data.data.id)
+                    $('#label').html("Edit Data")
+                    $('#btnNama').html("Edit")
+                    $('#tambah-kategori').modal('show');
+                }
             })
         }
 
-        function hapus(btn, id) {
-            $(btn).prop("disabled", true);
-            let con = confirm("Apakah anda yakin ingin menghapus kategori ini?");
-
-            if(con) {
-
+        function deletes(id)
+        {
+            var ids = id;
+            var pesan = confirm("Yakin Ingin Menghapus Data!");
+            if(pesan){
                 $.ajax({
-                    type: "DELETE",
-                    url: "{{ route('admin.kategori-akomodasi.index') }}/"+id,
-                    data: '{_method:"DELETE", _token: "{{ csrf_token() }}"}',
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    timeout: 800000,
-                    success: function(data) {
-
-                        if(data.status) {
-                            alert(data.msg);
-                            location.reload();
-                        } else {
-                            alert(data.msg);
-                        }
-
+                    url:"{{ route('kategori.delete') }}",
+                    type:'POST',
+                    data: {
+                        id:id,
+                        '_token': "{{ csrf_token() }}"
                     },
-                    error: function(e) {
-
-                        alert(e.responseText);
-
+                    dataType: 'JSON',
+                    success: function(data) {
+                        location.reload();
                     }
-                });
-            } else {
-                alert("Proses di batalkan")
+                })
+            }
+        }
+
+        function tampilfoto()
+        {
+            var fileInput = document.getElementById('icon_kategori');
+            var filePath = fileInput.value;
+            var extensions = /(\.jpg|\.png)$/i;
+            var ukuran = fileInput.files[0].size;
+            if(ukuran > 100000)
+            {
+                alert('ukuran terlalu besar. Maksimal 100KB')
+                fileInput.value = '';
+                document.getElementById('tampilFoto').innerHTML = '';
+                    return false;
+            }else{
+                if(!extensions.exec(filePath)){
+                    alert('Silakan unggah file yang memiliki ekstensi .jpg/.png.');
+                    fileInput.value = '';
+                    document.getElementById('tampilFoto').innerHTML = '';
+                    return false;
+                }else{
+                    //Image preview
+                    if (fileInput.files && fileInput.files[0]) {
+                        var reader = new FileReader();
+                        reader.onload = function(e) {
+                            document.getElementById('tampilFoto').innerHTML = '<img src="'+e.target.result+'" width="30%"/>';
+                        };
+                        reader.readAsDataURL(fileInput.files[0]);
+                    }
+                }
             }
         }
     </script>
