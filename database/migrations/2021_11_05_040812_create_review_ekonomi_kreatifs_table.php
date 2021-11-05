@@ -13,7 +13,7 @@ class CreateReviewEkonomiKreatifsTable extends Migration
      */
     public function up()
     {
-        Schema::create('review_ekonomi_kreatifs', function (Blueprint $table) {
+        Schema::create('review_ekonomi_kreatif', function (Blueprint $table) {
             $table->id();
             $table->foreignId('ekonomi_kreatif_id');
             $table->foreignId('user_id');
@@ -30,6 +30,6 @@ class CreateReviewEkonomiKreatifsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('review_ekonomi_kreatifs');
+        Schema::dropIfExists('review_ekonomi_kreatif');
     }
 }
