@@ -24,39 +24,35 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="card">
+                    <div class="card card-outline card-primary">
+                        <div class="card-header">
+                            <button type="button" class="btn btn-primary" onclick="tampil()">Tambah Data</button>
+                        </div>
                         <div class="card-body">
-                            <button type="button" class="btn btn-primary" data-toggle="modal"
-                                data-target="#tambah-fasilitas">Tambah Data</button>
-                            <table class="table">
+                            <table class="table" id="table1" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
-                                        <th>Nama Fasilitas</th>
-                                        <th>Icon Fasilitas</th>
-                                        <th>Aksi</th>
+                                        <th style="width:2%">No</th>
+                                        <th style="width:40%">Nama Fasilitas</th>
+                                        <th style="width:38%">Icon Fasilitas</th>
+                                        <th style="width:20%%">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @php
-                                        $i = 1;
-                                    @endphp
-                                    @foreach ($fasilitasAkomodasis as $item)
+                                    @foreach ($fasilitasAkomodasis as $i => $item)
                                         <tr>
-                                            <td>{{ $i++ }}</td>
+                                            <td>{{ $i+1 }}</td>
                                             <td>{{ $item->nama_fasilitas_akomodasi }}</td>
-                                            <td><img src="{{ str_replace("app/public", "/storage", $item->icon_fasilitas_akomodasi) }}" alt="{{ $item->nama_fasilitas_akomodasi }}" class="img-fluid" width="100px"> </td>
+                                            <td><img src="{{ asset('storage/fasilitas_akomodasi/'. $item->icon_fasilitas_akomodasi) }}" alt="{{ $item->nama_fasilitas_akomodasi }}" class="img-fluid" width="60px"> </td>
                                             <td>
-                                                <button type="button" class="btn btn-warning p-1"
-                                                    onclick="edit({{ $item->id }})">Edit</button>
-                                                <button type="button" class="btn btn-danger p-1" onclick="hapus(this, {{ $item->id }})">Hapus</button>
+                                                <button style="width:80px;color:white" type="button" class="btn btn-warning p-1"
+                                                    onclick="edits({{ $item->id }})">Edit</button>
+                                                <button style="width:80px" type="button" class="btn btn-danger p-1" onclick="deletes({{ $item->id }})">Hapus</button>
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
-
-                            {{ $fasilitasAkomodasis->links() }}
                         </div>
                     </div>
                 </div>
@@ -72,33 +68,13 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="exampleModalLabel"><div id="title"></div></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    @include('admin.fasilitas.form', ["url" => route("admin.fasilitas-akomodasi.store")])
-                </div>
-                {{-- <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div> --}}
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="edit-fasilitas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ubah Fasilitas</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    @include('admin.fasilitas.form', ["type" => "edit"])
+                    @include('admin.fasilitas.form')
                 </div>
                 {{-- <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -111,137 +87,114 @@
 
 @push('js')
     <script>
-        $(document).ready(function() {
+        function tampil()
+        {
+            $('#tambah-fasilitas').modal()
+            $('#title').html('Tambah Data')
+            $('#btnNama').html('Tambah')
+        }
 
-            $("#btnCreate").click(function(event) {
+        function simpan()
+        {
+            var icon_fasilitas = $('#icon_fasilitas').prop('files')[0];
+            var nama_fasilitas = $('#nama_fasilitas').val();
+            var id = $('#id').val();
+            var form_data = new FormData();
 
-                //stop submit the form, we will post it manually.
-                event.preventDefault();
+            form_data.append("_token", "{{ csrf_token() }}");
+            form_data.append("_method", "POST");
+            form_data.append('icon_fasilitas', icon_fasilitas);
+            form_data.append('nama_fasilitas', nama_fasilitas);
+            form_data.append('id', id);
 
-                // Get form
-                var form = $('#tambah-fasilitas form');
-
-                // Create an FormData object
-                var data = new FormData(form[0]);
-                    data.append('icon_fasilitas', $('#icon_fasilitas')[0].files);
-                // console.log(data)
-
-                // disabled the submit button
-                $("#btnCreate").prop("disabled", true);
-
-                $.ajax({
-                    type: "POST",
-                    enctype: 'multipart/form-data',
-                    url: form.attr("action"),
-                    data: data,
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    timeout: 800000,
-                    success: function(data) {
-                        if(data.status) {
-                            alert(data.msg);
-                            location.reload();
-                        } else {
-                            alert(data.msg);
-                        }
-                    },
-                    error: function(e) {
-                        alert(e.responseText);
-                    }
-                });
+            $.ajax({
+                type: "POST",
+                url: "{{route('fasilitas.tambah')}}",
+                contentType: 'multipart/form-data',
+                data: form_data,
+                processData: false,
+                contentType: false,
+                dataType: 'JSON',
+                success: function(data) {
+                    location.reload();
+                    console.log(data);
+                },
+                error: function(e) {
+                    console.log(e.responseText);
+                }
             });
+        }
 
-            $("#edit-fasilitas #btnEdit").click(function(event) {
-                //stop submit the form, we will post it manually.
-                event.preventDefault();
-
-                // Get form
-                var form = $('#edit-fasilitas form');
-
-                // Create an FormData object
-                var data = new FormData(form[0]);
-                    data.append('icon_fasilitas', $('#icon_fasilitas')[0].files);
-
-                // disabled the submit button
-                $("#btnEdit").prop("disabled", true);
-
-                $.ajax({
-                    type: "POST",
-                    enctype: 'multipart/form-data',
-                    url: form.attr("action"),
-                    data: data,
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    timeout: 800000,
-                    success: function(data) {
-
-                        if(data.status) {
-                            alert(data.msg);
-                            location.reload();
-                        } else {
-                            alert(data.msg);
-                        }
-
-                    },
-                    error: function(e) {
-
-                        alert(e.responseText);
-
-                    }
-                });
-
-            });
-
-        });
-
-        function edit(id) {
-            $.get("{{ route('admin.fasilitas-akomodasi.index') }}/" + id, (result) => {
-                console.log(result);
-
-                $('#edit-fasilitas .modal-body form').attr("action",
-                    "{{ route('admin.fasilitas-akomodasi.index') }}/" + id);
-
-                $('#edit-fasilitas .modal-body form input[name=_method]').val("PUT");
-                $('#edit-fasilitas .modal-body form input[name=nama_fasilitas]').val(result
-                    .nama_fasilitas_akomodasi);
-                $('#edit-fasilitas').modal('show')
+        function edits(id)
+        {
+            $.ajax({
+                url:'{{route("fasilitas.edit")}}',
+                type:'post',
+                data:{
+                    'id':id,
+                    '_token': "{{ csrf_token() }}"
+                },
+                dataType: 'json',
+                success: function(data) {
+                    console.log(data)
+                    $('#nama_fasilitas').val(data.data.nama_fasilitas_akomodasi)
+                    $('#tampilFoto').html(`<img src="{{ asset('storage/fasilitas_akomodasi/${data.data.icon_fasilitas_akomodasi}') }}" width="30%"/>`)
+                    $('#id').val(data.data.id)
+                    $('#label').html("Edit Data")
+                    $('#btnNama').html("Edit")
+                    $('#tambah-fasilitas').modal('show');
+                }
             })
         }
 
-        function hapus(btn, id) {
-            $(btn).prop("disabled", true);
-            let con = confirm("Apakah anda yakin ingin menghapus fasilitas ini?");
-
-            if(con) {
-
+        function deletes(id)
+        {
+            var ids = id;
+            var pesan = confirm("Yakin Ingin Menghapus Data!");
+            if(pesan){
                 $.ajax({
-                    type: "DELETE",
-                    url: "{{ route('admin.fasilitas-akomodasi.index') }}/"+id,
-                    data: '{_method:"DELETE", _token: "{{ csrf_token() }}"}',
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    timeout: 800000,
-                    success: function(data) {
-
-                        if(data.status) {
-                            alert(data.msg);
-                            location.reload();
-                        } else {
-                            alert(data.msg);
-                        }
-
+                    url:"{{ route('fasilitas.delete') }}",
+                    type:'POST',
+                    data: {
+                        id:id,
+                        '_token': "{{ csrf_token() }}"
                     },
-                    error: function(e) {
-
-                        alert(e.responseText);
-
+                    dataType: 'JSON',
+                    success: function(data) {
+                        location.reload();
                     }
-                });
-            } else {
-                alert("Proses di batalkan")
+                })
+            }
+        }
+
+        function tampilfoto()
+        {
+            var fileInput = document.getElementById('icon_kategori');
+            var filePath = fileInput.value;
+            var extensions = /(\.jpg|\.png)$/i;
+            var ukuran = fileInput.files[0].size;
+            if(ukuran > 100000)
+            {
+                alert('ukuran terlalu besar. Maksimal 100KB')
+                fileInput.value = '';
+                document.getElementById('tampilFoto').innerHTML = '';
+                    return false;
+            }else{
+                if(!extensions.exec(filePath)){
+                    alert('Silakan unggah file yang memiliki ekstensi .jpg/.png.');
+                    fileInput.value = '';
+                    document.getElementById('tampilFoto').innerHTML = '';
+                    return false;
+                }else{
+                    //Image preview
+                    if (fileInput.files && fileInput.files[0]) {
+                        var reader = new FileReader();
+                        reader.onload = function(e) {
+                            document.getElementById('tampilFoto').innerHTML = '<img src="'+e.target.result+'" width="30%"/>';
+                        };
+                        reader.readAsDataURL(fileInput.files[0]);
+                    }
+                }
             }
         }
     </script>

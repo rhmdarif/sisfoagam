@@ -1,16 +1,19 @@
-<form action="{{ $url ?? route('admin.kategori-akomodasi.store') }}" method="post" enctype="multipart/form-data">
-    @csrf
-    @method("POST")
+
+<form action="" method="post" enctype="multipart/form-data">
     <div class="form-group">
         <label for="nama_kategori">Nama kategori</label>
-        <input type="text" name="nama_kategori" id="nama_kategori" class="form-control" value="{{ $kategori_akomodasi->nama_kategori_akomodasi ?? "" }}">
+        <input type="hidden" id="id" readonly>
+        <input type="text" name="nama_kategori" id="nama_kategori" class="form-control">
     </div>
     <div class="form-group">
         <label for="nama_kategori">Icon kategori</label>
-        <input type="file" name="icon_kategori" id="icon_kategori" class="form-control" value="{{ $kategori_akomodasi->icon_kategori_akomodasi ?? "" }}">
+        <input type="file" name="icon_kategori" id="icon_kategori" onchange="return tampilfoto()" class="form-control">
+    </div>
+    <div class="form-group text-center">
+        <div id="tampilFoto"></div>
     </div>
 
-    <button type="button" id="{{ isset($type)? "btnEdit" : "btnCreate" }}" class="btn btn-primary float-right">
-        {{ isset($type)? "Ubah" : "Tambah" }}
+    <button type="button" id="tambah" class="btn btn-primary float-right">
+        <div id="btnNama"></div>
     </button>
 </form>

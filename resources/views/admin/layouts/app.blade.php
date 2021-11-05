@@ -18,6 +18,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="{{ url('admin/assets') }}/plugins/fontawesome-free/css/all.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ url('admin/assets') }}/dist/css/adminlte.min.css">
+    <!-- datatables -->
+    <link rel="stylesheet" href="{{ url('admin/assets') }}/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="{{ url('admin/assets') }}/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+
 
     @stack('css')
 </head>
@@ -146,6 +150,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="{{ url('admin/assets') }}/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
     <script src="{{ url('admin/assets') }}/dist/js/adminlte.min.js"></script>
+    <!-- datatable -->
+    <script src="{{ url('admin/assets') }}/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="{{ url('admin/assets') }}/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="{{ url('admin/assets') }}/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="{{ url('admin/assets') }}/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
 
     <script>
 
@@ -154,6 +163,31 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+
+        $(function () {
+          $("#table1").DataTable({
+            "responsive": true,
+            "autoWidth": false,
+          });
+          $('#table2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+          });
+        });
+
+        function keluarSystem() {
+          var pesanKeluar = confirm("Apakah Ingin Keluar Dari Sistem?");
+          if (pesanKeluar) {
+            window.location= "{{route('admin.logout')}}"
+          } else {
+            console.log('batal')
+          }
+        }
 
     </script>
     @stack('js')
