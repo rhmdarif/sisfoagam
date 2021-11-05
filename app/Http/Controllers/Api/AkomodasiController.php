@@ -39,38 +39,14 @@ class AkomodasiController extends Controller
         }
     }
 
-    public function getAkomodasi(Request $request)
+    public function getAkomodasi()
     {
         try {
-
-            if(!$request->has("lat") || !$request->has("long")) {
-
-                $data = Akomodasi::with(["kategori", "fasilitas", "fotovideo"])
-                ->join("kategori_akomodasi", "kategori_akomodasi.id", '=', "akomodasi.kategori_akomodasi_id")
-                ->select("akomodasi.*",
-                        "kategori_akomodasi.slug_kategori_akomodasi"
-                        )->paginate(8);
-            } else {
-                $data = Akomodasi::with(["kategori", "fasilitas", "fotovideo"])
-                                ->join("kategori_akomodasi", "kategori_akomodasi.id", '=', "akomodasi.kategori_akomodasi_id")
-                                ->select("akomodasi.*",
-                                        "kategori_akomodasi.slug_kategori_akomodasi",
-                                        // DB::raw("calcDistance(akomodasi.lat, akomodasi.long, '".$request->lat."', '".$request->long."') as jarak_lat_long"),
-                                        DB::raw("(
-                                            6371 * acos (
-                                              cos ( radians(".$request->lat.") )
-                                              * cos( radians( akomodasi.lat ) )
-                                              * cos( radians( akomodasi.long ) - radians(".$request->long.") )
-                                              + sin ( radians(".$request->lat.") )
-                                              * sin( radians( akomodasi.lat ) )
-                                            )
-                                          ) AS jarak"),
-                                        // DB::raw("IFNULL(distance, 0) as distance")
-                                )
-                                ->orderBy("jarak")
-                                ->paginate(5);
-            }
-
+            $data = Akomodasi::with(["kategori", "fasilitas", "fotovideo"])
+            ->join("kategori_akomodasi", "kategori_akomodasi.id", '=', "akomodasi.kategori_akomodasi_id")
+            ->select("akomodasi.*",
+                    "kategori_akomodasi.slug_kategori_akomodasi"
+                    )->paginate(8);
             if ($data->count() > 0) {
                 $data->makeHidden('kategori_akomodasi_id');
                 return response()->json(ApiResponse::Ok($data, 200, "Ok"));
@@ -122,20 +98,18 @@ class AkomodasiController extends Controller
             $data = Akomodasi::with(["kategori", "fasilitas", "fotovideo"])
                             ->join("kategori_akomodasi", "kategori_akomodasi.id", '=', "akomodasi.kategori_akomodasi_id")
                             ->select("akomodasi.*",
-                                    "kategori_akomodasi.slug_kategori_akomodasi",
-                                    // DB::raw("calcDistance(akomodasi.lat, akomodasi.long, '".$request->lat."', '".$request->long."') as jarak_lat_long"),
-                                    DB::raw("(
-                                        6371 * acos (
-                                          cos ( radians(".$request->lat.") )
-                                          * cos( radians( akomodasi.lat ) )
-                                          * cos( radians( akomodasi.long ) - radians(".$request->long.") )
-                                          + sin ( radians(".$request->lat.") )
-                                          * sin( radians( akomodasi.lat ) )
-                                        )
-                                      ) AS jarak"),
+                                    "kategori_akomodasi.slug_kategori_akomodasi"
                                     // DB::raw("IFNULL(distance, 0) as distance")
                             )
-                            ->orderBy("jarak")
+                            ->orderByRaw("(
+                                6371 * acos (
+                                  cos ( radians(".$request->lat.") )
+                                  * cos( radians( akomodasi.lat ) )
+                                  * cos( radians( akomodasi.long ) - radians(".$request->long.") )
+                                  + sin ( radians(".$request->lat.") )
+                                  * sin( radians( akomodasi.lat ) )
+                                )
+                              )")
                             ->limit(5)->get();
 
             if ($data->count() > 0) {
