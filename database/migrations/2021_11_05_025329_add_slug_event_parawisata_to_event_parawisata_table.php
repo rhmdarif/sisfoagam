@@ -15,7 +15,7 @@ class AddSlugEventParawisataToEventParawisataTable extends Migration
     {
         Schema::table('event_parawisata', function (Blueprint $table) {
             //
-            $table->string('slug_event_parawisata', 255)->after('jadwal_pelaksanaan')->unique();
+            $table->string('slug_event_parawisata', 255)->after('jadwal_pelaksanaan');
         });
     }
 
