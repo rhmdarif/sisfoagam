@@ -14,7 +14,7 @@ class BeritaParawisataController extends Controller
     public function beritaAllParawisata()
     {
         try {
-            $data = DB::table('berita_parawisata')->orderBy('id', 'desc')->get();
+            $data = DB::table('berita_parawisata')->orderBy('id', 'desc')->paginate(10);
 
             return response()->json(ApiResponse::Ok($data, 200, "Ok"));
         } catch (ModelNotFoundException $th) {
