@@ -33,6 +33,7 @@ Route::get('/akomodasi/{slugakomodasi}/review', [AkomodasiController::class, 'ge
 
 // DESTINASI
 Route::get('/destinasi', [DestinasiWisataController::class, 'getDestinasiWisata']);
+Route::get('/destinasi/search', [DestinasiWisataController::class, 'searchDestinasiWisata']);
 Route::get('/destinasi/jarak', [DestinasiWisataController::class, 'getDestinasiWisataSortByJarak']);
 Route::get('/destinasi/kategori', [DestinasiWisataController::class, 'getKategori']);
 Route::get('/destinasi/kategori/{slugkategori}', [DestinasiWisataController::class, 'getByKategori']);

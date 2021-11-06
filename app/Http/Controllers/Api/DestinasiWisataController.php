@@ -114,4 +114,30 @@ class DestinasiWisataController extends Controller
             return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
         }
     }
+
+    public function searchDestinasiWisata(Request $request)
+    {
+        $q = $request->q ?? '';
+        $limit = (int) ($request->limit ?? 5);
+
+        try {
+
+            $data = DestinasiWisata::with(["kategori", "fasilitas", "fotovideo"])
+                                    ->join("kategori_wisata", "kategori_wisata.id", '=', "destinasi_wisata.kategori_wisata_id")
+                                    ->select("destinasi_wisata.*", "kategori_wisata.slug_kategori_wisata")
+                                    ->where("destinasi_wisata.nama_wisata", "like", "%".$q."%")
+                                    ->limit($limit)
+                                    ->get();
+
+            if ($data->count() > 0) {
+                $data->makeHidden('kategori_wisata_id');
+                return response()->json(ApiResponse::Ok($data, 200, "Ok"));
+            } else {
+                return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
+            }
+        } catch (ModelNotFoundException $e) {
+            return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
+        }
+
+    }
 }
