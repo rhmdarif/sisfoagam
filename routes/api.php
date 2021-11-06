@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AkomodasiController;
+use App\Http\Controllers\Api\BeritaParawisataController;
 use App\Http\Controllers\Api\DestinasiWisataController;
 use App\Http\Controllers\Api\EkonomiKreatifController;
 use App\Http\Controllers\Api\EventParawisataController;
@@ -53,3 +54,8 @@ Route::get('/ekonomi-kreatif/kategori/{slugkategoriekonomikreatif}', [EkonomiKre
 
 Route::get('/ekonomi-kreatif/{slugekonomikreatif}', [EkonomiKreatifController::class, 'getDetailEkonomiKreatif']);
 Route::get('/ekonomi-kreatif/{slugekonomikreatif}/review', [EkonomiKreatifController::class, 'getReview']);
+
+
+// BERITA PARAWISATA
+Route::get('/berita-parawisata', [BeritaParawisataController::class, 'beritaAllParawisata']);
+Route::get('/berita-parawisata/{slug_event_parawisata}', [BeritaParawisataController::class, 'getDetailBeritaParawisata']);
