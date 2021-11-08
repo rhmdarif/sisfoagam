@@ -42,6 +42,8 @@ class LoginController extends Controller
             $token = collect($add_token);
         }
 
+        $token->nama = $user->name ?? "";
+
         return response()->json(ApiResponse::Ok($token, 200, "Login berhasil"));
     }
 }
