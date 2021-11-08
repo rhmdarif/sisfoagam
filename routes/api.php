@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\BeritaParawisataController;
 use App\Http\Controllers\Api\DestinasiWisataController;
 use App\Http\Controllers\Api\EkonomiKreatifController;
 use App\Http\Controllers\Api\EventParawisataController;
+use App\Http\Controllers\Api\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,3 +61,12 @@ Route::get('/ekonomi-kreatif/{slugekonomikreatif}/review', [EkonomiKreatifContro
 // BERITA PARAWISATA
 Route::get('/berita-parawisata', [BeritaParawisataController::class, 'beritaAllParawisata']);
 Route::get('/berita-parawisata/{slug_event_parawisata}', [BeritaParawisataController::class, 'getDetailBeritaParawisata']);
+
+
+// AUTH
+Route::prefix('auth')->group(function () {
+    // Login
+    Route::post('login', [Auth\LoginController::class, "login"]);
+    Route::post('register', [Auth\RegisterController::class, "register"]);
+
+});
