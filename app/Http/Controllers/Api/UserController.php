@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -39,5 +40,29 @@ class UserController extends Controller
         ]);
 
         return response()->json(ApiResponse::Ok($request->only(["nama", 'email', 'no_hp']), 200, "Data berhasil diperbaharui"));
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $user = Auth::user();
+
+        $validator = Validator::make($request->all(), [
+            'password_old' => 'required|string',
+            'password_new' => 'required|string|same:password_confirm'
+        ]);
+
+        if($validator->fails()) {
+            return response()->json(ApiResponse::Error(null, 200, $validator->errors()->first()));
+        }
+
+        if(!Hash::check($request->password_old, $user->password)) {
+            return response()->json(ApiResponse::Error(null, 200, "Password lama tidak sesuai"));
+        }
+
+        DB::table('users')->where('id', $user->id)->update([
+            'password' => Hash::make($request->password_new),
+        ]);
+
+        return response()->json(ApiResponse::Ok(null, 200, "Password berhasil diperbaharui"));
     }
 }

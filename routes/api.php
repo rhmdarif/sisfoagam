@@ -76,4 +76,5 @@ Route::prefix('auth')->group(function () {
 Route::middleware(['verify.api'])->group(function () {
     Route::post('users/show', [UserController::class, 'show']);
     Route::post('users/update', [UserController::class, 'update']);
+    Route::post('users/update-password', [UserController::class, 'updatePassword']);
 });
