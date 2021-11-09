@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\DestinasiWisataController;
 use App\Http\Controllers\Api\EkonomiKreatifController;
 use App\Http\Controllers\Api\EventParawisataController;
 use App\Http\Controllers\Api\Auth;
+use App\Http\Controllers\Api\FasilitasUmumController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
 
@@ -64,6 +65,9 @@ Route::get('/ekonomi-kreatif/{slugekonomikreatif}/review', [EkonomiKreatifContro
 Route::get('/berita-parawisata', [BeritaParawisataController::class, 'beritaAllParawisata']);
 Route::get('/berita-parawisata/{slug_event_parawisata}', [BeritaParawisataController::class, 'getDetailBeritaParawisata']);
 
+// FASILITAS UMUM
+Route::get('/fasilitas-umum', [FasilitasUmumController::class, 'getFasilitasUmum']);
+Route::get('/fasilitas-umum/{slugfasilitas_umum}', [FasilitasUmumController::class, 'getDetailFasilitasUmum']);
 
 // AUTH
 Route::prefix('auth')->group(function () {
