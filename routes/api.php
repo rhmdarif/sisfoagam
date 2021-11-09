@@ -7,6 +7,8 @@ use App\Http\Controllers\Api\DestinasiWisataController;
 use App\Http\Controllers\Api\EkonomiKreatifController;
 use App\Http\Controllers\Api\EventParawisataController;
 use App\Http\Controllers\Api\Auth;
+use App\Http\Controllers\Api\UserController;
+use Illuminate\Support\Facades\Auth as FacadesAuth;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,4 +71,9 @@ Route::prefix('auth')->group(function () {
     Route::post('login', [Auth\LoginController::class, "login"]);
     Route::post('register', [Auth\RegisterController::class, "register"]);
 
+});
+
+Route::middleware(['verify.api'])->group(function () {
+    Route::post('users/show', [UserController::class, 'show']);
+    Route::post('users/update', [UserController::class, 'update']);
 });
