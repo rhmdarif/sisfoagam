@@ -23,18 +23,18 @@ class VerifyApi
         $token = $request->bearerToken();
         if(isset($token)) {
             // return response()->json(ApiResponse::Error(null, 200, $token));
-            $user = User::join("user_tokens", "user_tokens.user_id", "=", "users.id")
-                        ->where("user_tokens.token", $token)
-                        ->first();
+            $user_token = DB::table('user_tokens')->where("token", $token)->first();
             // $user = DB::table('user_tokens')
             //             ->select('users.id')
             //             ->join("users", "users.id", "=", "user_tokens.user_id")
             //             ->where("user_tokens.token", $token)
             //             ->first();
                 // return response()->json(ApiResponse::Error(null, 200, $user));
-            if($user == null) {
+            if($user_token == null) {
                 return response()->json(ApiResponse::Error(null, 200, "Token tidak valid"));
             } else {
+                $user = User::find($user_token->user_id);
+
                 Auth::login($user);
                 return $next($request);
             }
