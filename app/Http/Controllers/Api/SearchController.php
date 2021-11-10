@@ -28,7 +28,7 @@ class SearchController extends Controller
                         ->select("akomodasi.*", "kategori_akomodasi.slug_kategori_akomodasi")
                         ->limit($limit)
                         ->get();
-            $data['fasilitas'] = FasilitasUmum::where('nama_fasilitas_umum', 'like', '%'.$q.'%')
+            $data['fasilitas_umum'] = FasilitasUmum::where('nama_fasilitas_umum', 'like', '%'.$q.'%')
                         ->with(["fotovideo"])
                         ->select("fasilitas_umum.*")
                         ->limit($limit)
