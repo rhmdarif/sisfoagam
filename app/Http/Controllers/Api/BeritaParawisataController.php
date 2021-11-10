@@ -31,8 +31,10 @@ class BeritaParawisataController extends Controller
             return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
         }
     }
-    public function newestBeritaParawisata()
+
+    public function newestBeritaParawisata(Request $request)
     {
+        $limit = $request->limit ?? 5;
         try {
             $data = DB::table('berita_parawisata')->orderBy('id', 'desc')->limit(5)->get();
 
