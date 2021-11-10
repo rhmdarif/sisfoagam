@@ -27,7 +27,7 @@ class DestinasiWisataController extends Controller
     {
         try {
 
-            $data = DestinasiWisata::with(["kategori", "fasilitas", "fotovideo"])->join("kategori_wisata", "kategori_wisata.id", '=', "destinasi_wisata.kategori_wisata_id")->where("slug_kategori_wisata", $slugkategori)->select("destinasi_wisata.*", "kategori_wisata.slug_kategori_wisata")->paginate(8);
+            $data = DestinasiWisata::with(["kategori", "fasilitas", "fotovideo"])->join("kategori_wisata", "kategori_wisata.id", '=', "destinasi_wisata.kategori_wisata_id")->where("slug_kategori_wisata", $slugkategori)->select("destinasi_wisata.*", "kategori_wisata.slug_kategori_wisata")->paginate(9);
             if ($data->count() > 0) {
                 $data->makeHidden('kategori_wisata_id');
                 return response()->json(ApiResponse::Ok($data, 200, "Ok"));
@@ -43,7 +43,7 @@ class DestinasiWisataController extends Controller
     {
         try {
 
-            $data = DestinasiWisata::with(["kategori", "fasilitas", "fotovideo"])->join("kategori_wisata", "kategori_wisata.id", '=', "destinasi_wisata.kategori_wisata_id")->select("destinasi_wisata.*", "kategori_wisata.slug_kategori_wisata")->paginate(8);
+            $data = DestinasiWisata::with(["kategori", "fasilitas", "fotovideo"])->join("kategori_wisata", "kategori_wisata.id", '=', "destinasi_wisata.kategori_wisata_id")->select("destinasi_wisata.*", "kategori_wisata.slug_kategori_wisata")->paginate(9);
 
             if ($data->count() > 0) {
                 $data->makeHidden('kategori_wisata_id');
@@ -117,7 +117,7 @@ class DestinasiWisataController extends Controller
 
     public function searchDestinasiWisata(Request $request)
     {
-        $q = $request->q ?? '';
+        $q = $request->q;
         $limit = (int) ($request->limit ?? 5);
 
         try {
