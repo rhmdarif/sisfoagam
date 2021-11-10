@@ -22,15 +22,14 @@ class SearchController extends Controller
             $q = $request->q ?? '';
             $limit = (int) ($request->limit ?? 5);
 
-            $data = collect(DB::select("SELECT id, nama_akomodasi as nama, 'akomodasi' as table_name, SIMILARITY_STRING('".$q."', nama_akomodasi) as score FROM akomodasi  WHERE nama_akomodasi LIKE '%".$q."%'
+            $data = collect(DB::select("SELECT id, nama_akomodasi as nama, 'akomodasi' as table_name FROM akomodasi  WHERE nama_akomodasi LIKE '%".$q."%'
                         UNION ALL
-                        SELECT id, nama_fasilitas_umum as nama, 'fasilitas_umum' as table_name, SIMILARITY_STRING('".$q."', nama_fasilitas_umum) as score FROM fasilitas_umum WHERE nama_fasilitas_umum LIKE '%".$q."%'
+                        SELECT id, nama_fasilitas_umum as nama, 'fasilitas_umum' as table_name FROM fasilitas_umum WHERE nama_fasilitas_umum LIKE '%".$q."%'
                         UNION ALL
-                        SELECT id, nama_wisata as nama, 'destinasi_wisata' as table_name, SIMILARITY_STRING('".$q."', nama_wisata) as score FROM destinasi_wisata WHERE nama_wisata LIKE '%".$q."%'
+                        SELECT id, nama_wisata as nama, 'destinasi_wisata' as table_name FROM destinasi_wisata WHERE nama_wisata LIKE '%".$q."%'
                         UNION ALL
-                        SELECT id, nama_ekonomi_kreatif as nama, 'ekonomi_kreatif' as table_name, SIMILARITY_STRING('".$q."', nama_ekonomi_kreatif) as score FROM ekonomi_kreatif WHERE nama_ekonomi_kreatif LIKE '%".$q."%'
-
-                        ORDER BY score DESC LIMIT ".$limit))
+                        SELECT id, nama_ekonomi_kreatif as nama, 'ekonomi_kreatif' as table_name FROM ekonomi_kreatif WHERE nama_ekonomi_kreatif LIKE '%".$q."%'
+                        LIMIT ".$limit))
             ->groupBy("table_name")
             ->map(function($item, $key) {
                 if($key == "akomodasi") {
