@@ -9,6 +9,17 @@ class FasilitasUmum extends Model
 {
     use HasFactory;
     protected $table = "fasilitas_umum";
+    protected $appends = ['jarak'];
+
+    public function getJarakAttribute()
+    {
+        $request = request();
+        if($request->has('long') && $request->has('lat')) {
+            return distance($request->lat, $request->long, $this->lat, $this->long);
+        }
+
+        return;
+    }
 
     public function fotovideo()
     {
