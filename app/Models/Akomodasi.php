@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Akomodasi extends Model
@@ -11,7 +12,7 @@ class Akomodasi extends Model
     use HasFactory;
 
     protected $table = "akomodasi";
-    protected $appends = ['jarak'];
+    protected $appends = ['jarak', 'rating'];
 
     public function getJarakAttribute()
     {
@@ -21,6 +22,11 @@ class Akomodasi extends Model
         }
 
         return;
+    }
+
+    public function getRatingAttribute()
+    {
+        return (double) DB::table('review_akomodasi')->selectRaw("AVG(tingkat_kepuasan) as rating")->first()->rating;
     }
 
     public function kategori()

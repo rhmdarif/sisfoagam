@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class DestinasiWisata extends Model
 {
     use HasFactory;
     protected $table = "destinasi_wisata";
-    protected $appends = ['jarak'];
+    protected $appends = ['jarak', 'rating'];
 
 
     public function getJarakAttribute()
@@ -20,6 +21,11 @@ class DestinasiWisata extends Model
         }
 
         return;
+    }
+
+    public function getRatingAttribute()
+    {
+        return (double) DB::table('destinasi_wisata_review_wisata')->selectRaw("AVG(tingkat_kepuasan) as rating")->first()->rating;
     }
 
     public function kategori()

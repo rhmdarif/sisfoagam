@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class EkonomiKreatif extends Model
 {
     use HasFactory;
     protected $table = "ekonomi_kreatif";
-    protected $appends = ['jarak'];
+    protected $appends = ['jarak', 'rating'];
 
     public function getJarakAttribute()
     {
@@ -19,6 +20,11 @@ class EkonomiKreatif extends Model
         }
 
         return;
+    }
+
+    public function getRatingAttribute()
+    {
+        return (double) DB::table('review_ekonomi_kreatif')->selectRaw("AVG(tingkat_kepuasan) as rating")->first()->rating;
     }
 
     public function kategori()
