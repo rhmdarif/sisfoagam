@@ -148,7 +148,7 @@ class DestinasiWisataController extends Controller
         $user = Auth::user();
 
         $validator = Validator::make($request->all(), [
-            'destinasi_wisata' => 'required|exists:destinasi_wisata,id',
+            'id' => 'required|exists:destinasi_wisata,id',
             'rating' => 'required|numeric|min:0|max:5',
             'comment' => 'nullable|string'
         ]);
@@ -158,7 +158,7 @@ class DestinasiWisataController extends Controller
         }
 
         DestinasiWisataReviewWisata::updateOrCreate([
-            'destinasi_wisata_id' => $request->destinasi_wisata,
+            'destinasi_wisata_id' => $request->id,
             'user_id' => $user->id
         ],[
             'tingkat_kepuasan' => $request->rating ?? 0,

@@ -130,7 +130,7 @@ class EkonomiKreatifController extends Controller
         $user = Auth::user();
 
         $validator = Validator::make($request->all(), [
-            'ekonomi_kreatif' => 'required|exists:ekonomi_kreatif,id',
+            'id' => 'required|exists:ekonomi_kreatif,id',
             'rating' => 'required|numeric|min:0|max:5',
             'comment' => 'nullable|string'
         ]);
@@ -140,7 +140,7 @@ class EkonomiKreatifController extends Controller
         }
 
         ReviewEkonomiKreatif::updateOrCreate([
-            'ekonomi_kreatif_id' => $request->ekonomi_kreatif,
+            'ekonomi_kreatif_id' => $request->id,
             'user_id' => $user->id
         ],[
             'tingkat_kepuasan' => $request->rating ?? 0,
