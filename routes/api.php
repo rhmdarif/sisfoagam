@@ -33,6 +33,8 @@ Route::get('/akomodasi/jarak', [AkomodasiController::class, 'getAkomodasiSortByJ
 Route::get('/akomodasi/kategori', [AkomodasiController::class, 'getKategori']);
 Route::get('/akomodasi/kategori/{slugkategoriakomodasi}', [AkomodasiController::class, 'getByKategori']);
 
+Route::post("/akomodasi/rating", [AkomodasiController::class, 'reviewAkomdasi'])->middleware('verify.api');
+
 Route::get('/akomodasi/{slugakomodasi}', [AkomodasiController::class, 'getDetailAkomodasi']);
 Route::get('/akomodasi/{slugakomodasi}/review', [AkomodasiController::class, 'getReview']);
 
@@ -42,6 +44,8 @@ Route::get('/destinasi/search', [DestinasiWisataController::class, 'searchDestin
 Route::get('/destinasi/jarak', [DestinasiWisataController::class, 'getDestinasiWisataSortByJarak']);
 Route::get('/destinasi/kategori', [DestinasiWisataController::class, 'getKategori']);
 Route::get('/destinasi/kategori/{slugkategori}', [DestinasiWisataController::class, 'getByKategori']);
+
+Route::post("/destinasi/rating", [DestinasiWisataController::class, 'reviewDestinasiWisata'])->middleware('verify.api');
 
 Route::get('/destinasi/{slugkategori}', [DestinasiWisataController::class, 'getDetailDestinasiWisata']);
 Route::get('/destinasi/{slugDestinasiWisata}/review', [DestinasiWisataController::class, 'getReview']);
