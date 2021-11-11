@@ -7,9 +7,11 @@ use App\Helper\ApiResponse;
 use Illuminate\Http\Request;
 use App\Models\ReviewAkomodasi;
 use App\Models\KategoriAkomodasi;
-use App\Http\Controllers\Controller;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AkomodasiController extends Controller
 {
@@ -121,5 +123,30 @@ class AkomodasiController extends Controller
         } catch (ModelNotFoundException $e) {
             return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
         }
+    }
+
+    public function reviewAkomdasi(Request $request)
+    {
+        $user = Auth::user();
+
+        $validator = Validator::make($request->all(), [
+            'akomodasi' => 'required|exists:akomodasi,id',
+            'rating' => 'required_without:comment',
+            'comment' => 'required_without:rating|string'
+        ]);
+
+        if($validator->fails()) {
+            return response()->json(ApiResponse::Error(null, 200, $validator->errors()->first()));
+        }
+
+        ReviewAkomodasi::updateOrCreate([
+            'akomodasi_id' => $request->akomodasi,
+            'user_id' => $user->id
+        ],[
+            'tingkat_kepuasan' => $request->rating ?? 0,
+            'komentar' => $request->comment ?? ""
+        ]);
+
+        return response()->json(ApiResponse::Ok(null, 200, "Rating telah diterapkan"));
     }
 }

@@ -8,6 +8,8 @@ use App\Models\KategoriWisata;
 use App\Models\DestinasiWisata;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use App\Models\DestinasiWisataReviewWisata;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -139,5 +141,30 @@ class DestinasiWisataController extends Controller
             return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
         }
 
+    }
+
+    public function reviewDestinasiWisata(Request $request)
+    {
+        $user = Auth::user();
+
+        $validator = Validator::make($request->all(), [
+            'destinasi_wisata' => 'required|exists:destinasi_wisata_review_wisata,id',
+            'rating' => 'required_without:comment',
+            'comment' => 'required_without:rating|string'
+        ]);
+
+        if($validator->fails()) {
+            return response()->json(ApiResponse::Error(null, 200, $validator->errors()->first()));
+        }
+
+        DestinasiWisataReviewWisata::updateOrCreate([
+            'destinasi_wisata_id' => $request->destinasi_wisata,
+            'user_id' => $user->id
+        ],[
+            'tingkat_kepuasan' => $request->rating ?? 0,
+            'komentar' => $request->comment ?? ""
+        ]);
+
+        return response()->json(ApiResponse::Ok(null, 200, "Rating telah diterapkan"));
     }
 }
