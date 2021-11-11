@@ -131,8 +131,8 @@ class AkomodasiController extends Controller
 
         $validator = Validator::make($request->all(), [
             'akomodasi' => 'required|exists:akomodasi,id',
-            'rating' => 'required_without:comment',
-            'comment' => 'required_without:rating|string'
+            'rating' => 'required|numeric|min:0|max:5',
+            'comment' => 'nullable|string'
         ]);
 
         if($validator->fails()) {

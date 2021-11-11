@@ -131,8 +131,8 @@ class EkonomiKreatifController extends Controller
 
         $validator = Validator::make($request->all(), [
             'ekonomi_kreatif' => 'required|exists:ekonomi_kreatif,id',
-            'rating' => 'required_without:comment',
-            'comment' => 'required_without:rating|string'
+            'rating' => 'required|numeric|min:0|max:5',
+            'comment' => 'nullable|string'
         ]);
 
         if($validator->fails()) {
