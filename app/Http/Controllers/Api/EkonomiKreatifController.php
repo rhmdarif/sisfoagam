@@ -7,8 +7,10 @@ use Illuminate\Http\Request;
 use App\Models\EkonomiKreatif;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\KategoriEkonomiKreatif;
 use App\Models\ReviewEkonomiKreatif;
+use Illuminate\Support\Facades\Auth;
+use App\Models\KategoriEkonomiKreatif;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class EkonomiKreatifController extends Controller
@@ -121,5 +123,30 @@ class EkonomiKreatifController extends Controller
         } catch (ModelNotFoundException $e) {
             return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
         }
+    }
+
+    public function reviewEkonomiKreatif(Request $request)
+    {
+        $user = Auth::user();
+
+        $validator = Validator::make($request->all(), [
+            'ekonomi_kreatif' => 'required|exists:ekonomi_kreatif,id',
+            'rating' => 'required_without:comment',
+            'comment' => 'required_without:rating|string'
+        ]);
+
+        if($validator->fails()) {
+            return response()->json(ApiResponse::Error(null, 200, $validator->errors()->first()));
+        }
+
+        ReviewEkonomiKreatif::updateOrCreate([
+            'ekonomi_kreatif_id' => $request->ekonomi_kreatif,
+            'user_id' => $user->id
+        ],[
+            'tingkat_kepuasan' => $request->rating ?? 0,
+            'komentar' => $request->comment ?? ""
+        ]);
+
+        return response()->json(ApiResponse::Ok(null, 200, "Rating telah diterapkan"));
     }
 }

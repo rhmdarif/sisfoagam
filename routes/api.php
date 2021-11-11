@@ -62,6 +62,8 @@ Route::get('/ekonomi-kreatif/jarak', [EkonomiKreatifController::class, 'getEkono
 Route::get('/ekonomi-kreatif/kategori', [EkonomiKreatifController::class, 'getKategori']);
 Route::get('/ekonomi-kreatif/kategori/{slugkategoriekonomikreatif}', [EkonomiKreatifController::class, 'getByKategori']);
 
+Route::post("/ekonomi-kreatif/rating", [EkonomiKreatifController::class, 'reviewEkonomiKreatif'])->middleware('verify.api');
+
 Route::get('/ekonomi-kreatif/{slugekonomikreatif}', [EkonomiKreatifController::class, 'getDetailEkonomiKreatif']);
 Route::get('/ekonomi-kreatif/{slugekonomikreatif}/review', [EkonomiKreatifController::class, 'getReview']);
 

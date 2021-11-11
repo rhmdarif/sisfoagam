@@ -148,7 +148,7 @@ class DestinasiWisataController extends Controller
         $user = Auth::user();
 
         $validator = Validator::make($request->all(), [
-            'destinasi_wisata' => 'required|exists:destinasi_wisata_review_wisata,id',
+            'destinasi_wisata' => 'required|exists:destinasi_wisata,id',
             'rating' => 'required_without:comment',
             'comment' => 'required_without:rating|string'
         ]);
