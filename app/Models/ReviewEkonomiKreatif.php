@@ -9,4 +9,5 @@ class ReviewEkonomiKreatif extends Model
 {
     use HasFactory;
     protected $table = "review_ekonomi_kreatif";
+    protected $fillable = ['ekonomi_kreatif_id', 'user_id', 'tingkat_kepuasan', 'komentar'];
 }
