@@ -81,7 +81,7 @@ class AkomodasiController extends Controller
     {
         try {
             $data = ReviewAkomodasi::join("akomodasi", "akomodasi.id", "=", "review_akomodasi.akomodasi_id")
-            ->join("users", "users.id", "=", "review_akomodasi.user_id")asd
+            ->join("users", "users.id", "=", "review_akomodasi.user_id")
             ->where("slug_akomodasi", $slugakomodasi)
             ->select("review_akomodasi.*", "users.name")->get();
 
