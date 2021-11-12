@@ -82,7 +82,8 @@ class AkomodasiController extends Controller
         try {
             $data = ReviewAkomodasi::join("akomodasi", "akomodasi.id", "=", "review_akomodasi.akomodasi_id")
             ->join("users", "users.id", "=", "review_akomodasi.users_id")
-            ->where("slug_akomodasi", $slugakomodasi)->select("review_akomodasi.id", "review_akomodasi.akomodasi_id", "review_akomodasi.tingkat_kepuasan", "review_akomodasi.komentar", "review_akomodasi.created_at", "users.name",)->get();
+            ->where("slug_akomodasi", $slugakomodasi)
+            ->select("review_akomodasi.id", "review_akomodasi.akomodasi_id", "review_akomodasi.tingkat_kepuasan", "review_akomodasi.komentar", "review_akomodasi.created_at", "users.name", "users.id")->get();
 
             return response()->json(ApiResponse::Ok($data, 200, "Ok"));
         } catch (ModelNotFoundException $e) {
@@ -128,6 +129,7 @@ class AkomodasiController extends Controller
     public function reviewAkomdasi(Request $request)
     {
         $user = Auth::user();
+        // return $request->all();
 
         $validator = Validator::make($request->all(), [
             'id' => 'required|exists:akomodasi,id',
