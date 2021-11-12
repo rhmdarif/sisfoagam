@@ -128,7 +128,6 @@ class EkonomiKreatifController extends Controller
 
     public function reviewEkonomiKreatif(Request $request)
     {
-        return $request->all();
         $user = Auth::user();
         $validator = Validator::make($request->all(), [
             'id' => 'required|exists:ekonomi_kreatif,id',
