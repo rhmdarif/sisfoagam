@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Session;
 
 class LoginController extends Controller
 {
@@ -36,5 +37,40 @@ class LoginController extends Controller
         Auth::login($user);
 
         return redirect()->route("admin.home");
+    }
+
+    public function daftar()
+    {
+        return view("admin.auth.register");
+    }
+
+    public function register(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'nohp' => 'required|string',
+            'email' => 'required',
+            'password' => 'required|string'
+        ]);
+
+        if($validator->fails()) {
+            return back()->with("error", $validator->errors()->first());
+        }
+
+        $register = new User();
+        $register->name = $request->name;
+        $register->no_hp = $request->nohp;
+        $register->email = $request->email;
+        $register->password = Hash::make($request->password);
+        $register->save();
+
+        return redirect()->route("admin.login");
+    }
+
+    public function logout()
+    {
+        Session::flush();
+        Auth::logout();
+        return redirect('/dashboard');
     }
 }

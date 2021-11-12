@@ -18,11 +18,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="{{ url('admin/assets') }}/plugins/fontawesome-free/css/all.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ url('admin/assets') }}/dist/css/adminlte.min.css">
+    <!-- summernote -->
+    <link rel="stylesheet" href="{{ url('admin/assets') }}/plugins/summernote/summernote-bs4.min.css">
+    <!-- datatables -->
+    <link rel="stylesheet" href="{{ url('admin/assets') }}/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="{{ url('admin/assets') }}/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   crossorigin=""/>
 
     @stack('css')
 </head>
 
 <body class="hold-transition sidebar-mini">
+<script src="{{ url('admin/assets') }}/plugins/jquery/jquery.min.js"></script>
     <div class="wrapper">
         @include('admin.layouts.navbar')
 
@@ -141,11 +150,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- REQUIRED SCRIPTS -->
 
     <!-- jQuery -->
-    <script src="{{ url('admin/assets') }}/plugins/jquery/jquery.min.js"></script>
+    
     <!-- Bootstrap 4 -->
     <script src="{{ url('admin/assets') }}/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
     <script src="{{ url('admin/assets') }}/dist/js/adminlte.min.js"></script>
+    <!-- datatable -->
+    <script src="{{ url('admin/assets') }}/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="{{ url('admin/assets') }}/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="{{ url('admin/assets') }}/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="{{ url('admin/assets') }}/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <!-- summernote -->
+    <script src="{{ url('admin/assets') }}/plugins/summernote/summernote-bs4.min.js"></script>
+    <!-- leafletjs -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-search/3.0.2/leaflet-search.src.js"></script>
+
+    <!-- auto numeric -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/autonumeric/4.1.0/autoNumeric.min.js" integrity="sha512-U0/lvRgEOjWpS5e0JqXK6psnAToLecl7pR+c7EEnndsVkWq3qGdqIGQGN2qxSjrRnCyBJhoaktKXTVceVG2fTw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
 
@@ -154,6 +176,35 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+
+        $(function () {
+          $('.note').summernote({
+            height: 240,
+          })
+
+          $("#table1").DataTable({
+            "responsive": true,
+            "autoWidth": false,
+          });
+          $('#table2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+          });
+        });
+
+        function keluarSystem() {
+          var pesanKeluar = confirm("Apakah Ingin Keluar Dari Sistem?");
+          if (pesanKeluar) {
+            window.location= "{{route('admin.logout')}}"
+          } else {
+            console.log('batal')
+          }
+        }
 
     </script>
     @stack('js')
