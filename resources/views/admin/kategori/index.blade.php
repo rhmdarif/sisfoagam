@@ -111,7 +111,6 @@
                 contentType: 'multipart/form-data',
                 data: form_data,
                 processData: false,
-                contentType: false,
                 dataType: 'JSON',
                 success: function(data) {
                     location.reload();

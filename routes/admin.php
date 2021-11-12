@@ -35,4 +35,12 @@ Route::middleware(['auth'])->group(function () {
         Route::post('update', [Admin\FasilitasAkomodasiController::class, 'update'])->name('update');
         Route::post('delete', [Admin\FasilitasAkomodasiController::class, 'delete'])->name('delete');
     });
+
+    Route::prefix('akomodasi')->as('akomodasi.')->group(function (){
+        Route::get('home', [Admin\AkomodasiController::class, 'index'])->name('home');
+        Route::post('tambah', [Admin\AkomodasiController::class, 'create'])->name('tambah');
+        Route::post('edit', [Admin\AkomodasiController::class, 'edit'])->name('edit');
+        Route::post('delete', [Admin\AkomodasiController::class, 'delete'])->name('delete');
+        Route::post('fasilitas', [Admin\AkomodasiController::class, 'fasilitas'])->name('fasilitas');
+    });
 });
