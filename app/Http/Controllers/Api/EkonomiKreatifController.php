@@ -82,7 +82,8 @@ class EkonomiKreatifController extends Controller
         try {
             $data = ReviewEkonomiKreatif::join("ekonomi_kreatif", "ekonomi_kreatif.id", "=", "review_ekonomi_kreatif.ekonomi_kreatif_id")
             ->join("users", "users.id", "=", "review_ekonomi_kreatif.user_id")
-            ->where("slug_ekonomi_kreatif", $slugekonomi_kreatif)->select("review_ekonomi_kreatif.id", "review_ekonomi_kreatif.ekonomi_kreatif_id", "review_ekonomi_kreatif.tingkat_kepuasan", "review_ekonomi_kreatif.komentar", "review_ekonomi_kreatif.created_at", "users.name",)->get();
+            ->where("slug_ekonomi_kreatif", $slugekonomi_kreatif)
+            ->select("review_ekonomi_kreatif.id", "review_ekonomi_kreatif.ekonomi_kreatif_id", "review_ekonomi_kreatif.tingkat_kepuasan", "review_ekonomi_kreatif.komentar", "review_ekonomi_kreatif.created_at", "users.name", "users.id")->get();
 
             return response()->json(ApiResponse::Ok($data, 200, "Ok"));
         } catch (ModelNotFoundException $e) {
@@ -127,8 +128,8 @@ class EkonomiKreatifController extends Controller
 
     public function reviewEkonomiKreatif(Request $request)
     {
+        return $request->all();
         $user = Auth::user();
-
         $validator = Validator::make($request->all(), [
             'id' => 'required|exists:ekonomi_kreatif,id',
             'rating' => 'required|numeric|min:0|max:5',

@@ -80,7 +80,8 @@ class DestinasiWisataController extends Controller
         try {
             $data = DestinasiWisataReviewWisata::join("destinasi_wisata", "destinasi_wisata.id", "=", "destinasi_wisata_review_wisata.destinasi_wisata_id")
             ->join("users", "users.id", "=", "destinasi_wisata_review_wisata.user_id")
-            ->where("slug_destinasi", $slugDestinasiWisata)->select("destinasi_wisata_review_wisata.id", "destinasi_wisata_review_wisata.destinasi_wisata_id", "destinasi_wisata_review_wisata.tingkat_kepuasan", "destinasi_wisata_review_wisata.komentar", "destinasi_wisata_review_wisata.created_at", "users.name",)->get();
+            ->where("slug_destinasi", $slugDestinasiWisata)
+            ->select("destinasi_wisata_review_wisata.id", "destinasi_wisata_review_wisata.destinasi_wisata_id", "destinasi_wisata_review_wisata.tingkat_kepuasan", "destinasi_wisata_review_wisata.komentar", "destinasi_wisata_review_wisata.created_at", "users.name", "users.id")->get();
 
             return response()->json(ApiResponse::Ok($data, 200, "Ok"));
         } catch (ModelNotFoundException $e) {
