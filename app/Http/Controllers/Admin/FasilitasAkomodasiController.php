@@ -14,7 +14,7 @@ class FasilitasAkomodasiController extends Controller
     public function index()
     {
         $data['fasilitasAkomodasis'] = DB::table('fasilitas_akomodasi')->orderBy("nama_fasilitas_akomodasi", "asc")->get();
-        return view('admin.fasilitas.index', $data);
+        return view('admin.akomodasi.fasilitas.index', $data);
     }
 
     public function create(Request $request)
@@ -26,15 +26,15 @@ class FasilitasAkomodasiController extends Controller
                 'nama_fasilitas' => 'required|string|unique:fasilitas_akomodasi,nama_fasilitas_akomodasi',
                 'icon_fasilitas' => 'nullable|image',
             ]);
-    
+
             if($validator->fails()) {
                 return ['status' => false, 'msg' => $validator->errors()->first()];
             }
-    
+
             $file_upload = $request->file("icon_fasilitas");
             $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
             $file_location = $file_upload->storeAs("public/fasilitas_akomodasi", $file_name);
-    
+
             $simpan = DB::table('fasilitas_akomodasi')->insert([
                 'nama_fasilitas_akomodasi' => $request->nama_fasilitas,
                 'icon_fasilitas_akomodasi' => $file_name,

@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Akomodasi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
-use DB;
 
 class AkomodasiController extends Controller
 {
@@ -21,23 +21,30 @@ class AkomodasiController extends Controller
         return view('admin.akomodasi.index',$data);
     }
 
+    public function select2Fasilitas(Request $request)
+    {
+        $q = $request->search ?? "";
+        $fasilitas = DB::table('fasilitas_akomodasi')->where("nama_fasilitas_akomodasi", "like", "%".$q."%")->get()->map(function($data) {
+            return ['id' => $data->id, "text" => $data->nama_fasilitas_akomodasi];
+        });
+        return ['result' => $fasilitas, "pagination" => ["more" => true]];
+    }
+
+    public function add()
+    {
+        $data['kategori'] = DB::table('kategori_akomodasi')->get();
+        $data['fasilitas'] = DB::table('fasilitas_akomodasi')->get();
+        return view("admin.akomodasi.create",$data);
+    }
+
     public function create(Request $r)
     {
         if($r->id == NULL)
         {
-            // $validator = Validator::make($request->all(), [
-            //     'nama_kategori' => 'required|string|unique:kategori_akomodasi,nama_kategori_akomodasi',
-            //     'icon_kategori' => 'nullable|image',
-            // ]);
-    
-            // if($validator->fails()) {
-            //     return ['status' => false, 'msg' => $validator->errors()->first()];
-            // }
-
             $file_upload = $r->file("thumbnail");
             $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
             $file_location = $file_upload->storeAs("public/thumbnail", $file_name);
-    
+
             $simpan = DB::table('akomodasi')->insert([
                 'kategori_akomodasi_id' => $r->kategori,
                 'nama_akomodasi' => $r->akomodasi,

@@ -77,7 +77,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    @include('admin.kategori.form')
+                    @include('admin.akomodasi.kategori.form')
                 </div>
             </div>
         </div>
@@ -107,7 +107,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "{{route('kategori.tambah')}}",
+                url: "{{route('master-data.kategori-akomodasi.tambah')}}",
                 contentType: 'multipart/form-data',
                 data: form_data,
                 processData: false,
@@ -120,12 +120,12 @@
                     console.log(e.responseText);
                 }
             });
-        })  
-        
+        })
+
         function edits(id)
         {
             $.ajax({
-                url:'{{route("kategori.edit")}}',
+                url:'{{route("master-data.kategori-akomodasi.edit")}}',
                 type:'post',
                 data:{
                     'id':id,
@@ -150,7 +150,7 @@
             var pesan = confirm("Yakin Ingin Menghapus Data!");
             if(pesan){
                 $.ajax({
-                    url:"{{ route('kategori.delete') }}",
+                    url:"{{ route('master-data.kategori-akomodasi.delete') }}",
                     type:'POST',
                     data: {
                         id:id,

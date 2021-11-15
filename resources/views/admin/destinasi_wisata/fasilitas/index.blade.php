@@ -74,7 +74,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    @include('admin.fasilitas.form')
+                    @include('admin.akomodasi.fasilitas.form')
                 </div>
                 {{-- <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -109,7 +109,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "{{route('fasilitas.tambah')}}",
+                url: "{{route('master-data.fasilitas.tambah')}}",
                 contentType: 'multipart/form-data',
                 data: form_data,
                 processData: false,
@@ -128,7 +128,7 @@
         function edits(id)
         {
             $.ajax({
-                url:'{{route("fasilitas.edit")}}',
+                url:'{{route("master-data.fasilitas.edit")}}',
                 type:'post',
                 data:{
                     'id':id,
@@ -153,7 +153,7 @@
             var pesan = confirm("Yakin Ingin Menghapus Data!");
             if(pesan){
                 $.ajax({
-                    url:"{{ route('fasilitas.delete') }}",
+                    url:"{{ route('master-data.fasilitas.delete') }}",
                     type:'POST',
                     data: {
                         id:id,

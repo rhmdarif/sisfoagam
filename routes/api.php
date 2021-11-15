@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\EkonomiKreatifController;
 use App\Http\Controllers\Api\EventParawisataController;
 use App\Http\Controllers\Api\Auth;
 use App\Http\Controllers\Api\FasilitasUmumController;
+use App\Http\Controllers\Api\GaleryController;
 use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
@@ -37,6 +38,8 @@ Route::post("/akomodasi/rating", [AkomodasiController::class, 'reviewAkomdasi'])
 
 Route::get('/akomodasi/{slugakomodasi}', [AkomodasiController::class, 'getDetailAkomodasi']);
 Route::get('/akomodasi/{slugakomodasi}/review', [AkomodasiController::class, 'getReview']);
+
+Route::get('/akomodasi/{slugakomodasi}/galery', [AkomodasiController::class, 'galeriAkomodasi']);
 
 // DESTINASI
 Route::get('/destinasi', [DestinasiWisataController::class, 'getDestinasiWisata']);
@@ -76,10 +79,13 @@ Route::get('/berita-parawisata/{slug_event_parawisata}', [BeritaParawisataContro
 // FASILITAS UMUM
 Route::get('/fasilitas-umum', [FasilitasUmumController::class, 'getFasilitasUmum']);
 Route::get('/fasilitas-umum/{slugfasilitas_umum}', [FasilitasUmumController::class, 'getDetailFasilitasUmum']);
-
+Route::get('/fasilitas-umum/{slugfasilitas_umum}/galery', [FasilitasUmumController::class, 'galeriFasilitasUmum']);
 
 // SEARCH
 Route::any('/search', [SearchController::class, 'home']);
+
+// GALERY
+Route::any('/galery/{kategori}/{slug}', [GaleryController::class, 'index']);
 
 
 // AUTH
