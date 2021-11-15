@@ -15,7 +15,7 @@ class FasilitasUmumController extends Controller
     {
         try {
             $data = FasilitasUmum::with(["fotovideo"])
-            ->select("fasilitas_umum.*")->paginate(8);
+            ->select("fasilitas_umum.*")->paginate(16);
             if ($data->count() > 0) {
                 $data->makeHidden('fasilitas_umum_id');
                 return response()->json(ApiResponse::Ok($data, 200, "Ok"));
