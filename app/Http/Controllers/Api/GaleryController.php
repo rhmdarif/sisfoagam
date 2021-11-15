@@ -25,6 +25,10 @@ class GaleryController extends Controller
                 $t_foto_video = "foto_video_fasilitas_umum";
                 $t_kategori = "fasilitas_umum";
                 break;
+            case 'destinasi':
+                $t_foto_video = "destinasi_wisata_foto_vidio_wisata";
+                $t_kategori = "destinasi_wisata";
+                break;
 
             default:
                 $t_foto_video = "foto_video_akomodasi";
