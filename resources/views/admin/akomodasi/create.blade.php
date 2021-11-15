@@ -1,5 +1,10 @@
 @extends('admin.layouts.app')
 @section('title', 'Akomodasi')
+@push('css')
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ url('admin/assets') }}/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="{{ url('admin/assets') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+@endpush
 @section('content')
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -25,49 +30,75 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card card-outline card-primary">
-                        <div class="card-header">
-                            <button type="button" class="btn btn-primary" onclick="tampil()">Tambah Data</button>
-                        </div>
                         <div class="card-body">
-                            <table id="table1" class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th style="width:2%">No</th>
-                                        <th style="width:10%">Thumbnail</th>
-                                        <th style="width:10%">Kategori</th>
-                                        <th style="width:10%">Akomodasi</th>
-                                        <th style="width:10%">Kelas</th>
-                                        <th style="width:10%">Tipe</th>
-                                        <th style="width:10%">Harga</th>
-                                        <th style="width:10%">lokasi</th>
-                                        <!-- <th style="width:18%">Keterangan</th> -->
-                                        <th style="width:10%">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($akomodasi as $i => $a)
-                                    <tr>
-                                        <td>{{$i+1}}</td>
-                                        <td><img src="{{ asset('storage/thumbnail/'.$a->thumbnail_akomodasi) }}" alt="{{ $a->thumbnail_akomodasi }}" class="img-fluid" width="100px"></td>
-                                        <td>{{$a->nama_akomodasi}}</td>
-                                        <td>{{$a->nama_kategori_akomodasi}}</td>
-                                        <td>{{$a->kelas}}</td>
-                                        <td>{{$a->tipe}}</td>
-                                        <td>Rp.{{number_format($a->harga)}}</td>
-                                        <td>
-                                            <iframe width="300" height="170" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=<?= $a->lat; ?>,<?= $a->long; ?>&hl=in&z=14&amp;output=embed"></iframe>
-                                        </td>
-                                        <td>
-                                            <button style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>
-                                            <button onclick="fasilitas('<?= $a->id_akomodasi ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-plus"></i></button>
-                                            <button onclick="edit('<?= $a->id_akomodasi ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></button>
-                                            <button onclick="hapus('<?= $a->id_akomodasi ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-
+                            <form action="" method="POST" enctype="multipart/form-data">
+                                <input type="hidden" name="id" id="id">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="">Kategori</label>
+                                            <button type="button" class="btn btn-sm btn-primary float-right mb-2">Tambah</button>
+                                            <select name="kategori" id="kategori" class="form-control">
+                                                <option value="">-PILIH KATEGORI-</option>
+                                                @foreach ($kategori as $a)
+                                                    <option value="{{ $a->id }}">{{ $a->nama_kategori_akomodasi }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Akomodasi</label>
+                                            <input type="text" id="akomodasi" class="form-control"
+                                                placeholder="Akomodasi">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Kelas</label>
+                                            <input type="text" id="kelas" class="form-control" placeholder="Kelas">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="">Tipe</label>
+                                            <input type="text" id="tipe" class="form-control" placeholder="Tipe">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Harga</label>
+                                            <input type="text" id="harga" class="form-control" placeholder="Harga">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Thumbnail</label>
+                                            <input type="file" name="thumbnail" id="thumbnail"
+                                                onchange="return tampilfoto()" class="form-control">
+                                            <input type="hidden" id="lat" class="form-control">
+                                            <input type="hidden" id="lng" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                        <div style="margin-top:30px" id="tampilFoto"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="">Fasilitas</label>
+                                            <button type="button" class="btn btn-sm btn-primary float-right mb-2" onclick="tampil_fasilitas()">Tambah</button>
+                                            <select name="fasilitas" id="fasilitas" class="form-control select2bs4" multiple style="width: 100% !important">
+                                                @foreach ($fasilitas as $item)
+                                                    <option value="{{ $item->id }}">{{ $item->nama_fasilitas_akomodasi }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Keterangan</label>
+                                            <textarea name="" id="keterangan" class="note"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="">Lokasi</label>
+                                            <div style="height: 337px;" id="map"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -99,8 +130,8 @@
                                     <label for="">Kategori</label>
                                     <select name="kategori" id="kategori" class="form-control">
                                         <option value="">-PILIH KATEGORI-</option>
-                                        @foreach($kategori as $a)
-                                        <option value="{{$a->id}}">{{$a->nama_kategori_akomodasi}}</option>
+                                        @foreach ($kategori as $a)
+                                            <option value="{{ $a->id }}">{{ $a->nama_kategori_akomodasi }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -124,7 +155,8 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="">Thumbnail</label>
-                                    <input type="file" name="thumbnail" id="thumbnail" onchange="return tampilfoto()" class="form-control">
+                                    <input type="file" name="thumbnail" id="thumbnail" onchange="return tampilfoto()"
+                                        class="form-control">
                                     <input type="hidden" id="lat" class="form-control">
                                     <input type="hidden" id="lng" class="form-control">
                                 </div>
@@ -192,7 +224,8 @@
                 <div class="modal-body">
                     <div class="card card-outline card-primary">
                         <div class="card-header">
-                            <button onclick="tambahFasilitas()" type="button" class="btn btn-primary">Tambah Fasilitas</button>
+                            <button onclick="tambahFasilitas()" type="button" class="btn btn-primary">Tambah
+                                Fasilitas</button>
                         </div>
                         <div class="card-body">
                             <table id="table1" class="table">
@@ -233,25 +266,83 @@
             </div>
         </div>
     </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="tambah-fasilitas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"><div id="title"></div></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @include('admin.akomodasi.fasilitas.form')
+                </div>
+                {{-- <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div> --}}
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('js')
+    <!-- Select2 -->
+    <script src="{{ url('admin/assets') }}/plugins/select2/js/select2.full.min.js"></script>
     <script>
-        var harga = new AutoNumeric('#harga', {
-            currencySymbol : 'Rp.',
-            decimalCharacter : ',',
-            digitGroupSeparator : '.',
+        $(function() {
+            //Initialize Select2 Elements
+            // $('.select2bs4').select2({
+            //     theme: 'bootstrap4'
+            // })
+
+            $('select[name=fasilitas]').select2({
+                ajax: {
+                    url: "{{ route('admin.select2.fasilitas-akomodasi') }}",
+                    dataType: 'json',
+                    data: function (params) {
+                        var query = {
+                            search: params.term,
+                            type: 'public'
+                        }
+
+                        // Query parameters will be ?search=[term]&type=public
+                        return query;
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+
+                        return {
+                            results: data.result,
+                            pagination: {
+                                more: (params.page * 10) < data.count_filtered
+                            }
+                        };
+                    }
+                    // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+                }
+            });
         });
 
-        function tampil()
-        {
+
+        var harga = new AutoNumeric('#harga', {
+            currencySymbol: 'Rp.',
+            decimalCharacter: ',',
+            digitGroupSeparator: '.',
+        });
+
+        function tampil() {
             $('#tampilFoto').html(`<img src="../img/noimages.png" width="60%"/>`)
             $('#addAkomoadasi').modal('show')
             $('#title').html('Tambah Akomodasi')
         }
 
-        function simpan()
-        {
+        function simpan() {
             var id = $('#id').val();
             var kategori = $('#kategori').val();
             var akomodasi = $('#akomodasi').val();
@@ -278,34 +369,32 @@
 
             $.ajax({
                 type: "POST",
-                url: '{{route("admin.akomodasi.tambah")}}',
+                url: "{{ route('admin.akomodasi.tambah') }}",
                 contentType: 'multipart/form-data',
                 data: form_data,
                 processData: false,
                 contentType: false,
                 dataType: 'JSON',
                 success: function(data) {
-                    if(data.pesan == 'berhasil')
-                    {
+                    if (data.pesan == 'berhasil') {
                         window.location.reload();
                     }
                 }
             })
         }
 
-        function edit(id)
-        {
+        function edit(id) {
             const harga = AutoNumeric.getAutoNumericElement('#harga')
 
             $.ajax({
-                url: '{{route("admin.akomodasi.edit")}}',
+                url: "{{ route('admin.akomodasi.edit') }}",
                 dataType: "json",
                 type: 'POST',
-                data:{
+                data: {
                     "_token": "{{ csrf_token() }}",
                     "id": id
                 },
-                success: function(res){
+                success: function(res) {
                     console.log(res);
                     $('#id').val(res.data.id_akomodasi);
                     $('#kategori').val(res.data.kategori_akomodasi_id);
@@ -314,12 +403,13 @@
                     $('#tipe').val(res.data.tipe);
                     $('#lat').val(res.data.lat);
                     $('#lng').val(res.data.long);
-                    $('#tampilFoto').html(`<img src="{{ asset('storage/thumbnail/${res.data.thumbnail_akomodasi}') }}" width="60%"/>`)
-                    if (marker)
-                    {
+                    $('#tampilFoto').html(
+                        `<img src="{{ asset('storage/thumbnail/${res.data.thumbnail_akomodasi}') }}" width="60%"/>`
+                    )
+                    if (marker) {
                         map.removeLayer(marker);
                     }
-                    marker = new L.Marker([res.data.lat,res.data.long]).addTo(map);
+                    marker = new L.Marker([res.data.lat, res.data.long]).addTo(map);
                     $(".note").summernote("code", res.data.keterangan);
                     harga.set(res.data.harga);
                     $('#addAkomoadasi').modal('show')
@@ -328,19 +418,19 @@
             })
         }
 
-        function hapus(id)
-        {
+        function hapus(id) {
             var pesan = confirm("Yakin Ingin Menghapus Data!");
-            if(pesan){
+            if (pesan) {
                 $.ajax({
-                    url: "{{route('admin.akomodasi.delete')}}",
-                    type:"POST",
+                    url: "{{ route('admin.akomodasi.delete') }}",
+                    type: "POST",
                     dataType: "JSON",
-                    data:{'id':id,"_token":"{{csrf_token()}}"},
-                    success: function(data)
-                    {
-                        if(data.pesan == 'berhasil')
-                        {
+                    data: {
+                        'id': id,
+                        "_token": "{{ csrf_token() }}"
+                    },
+                    success: function(data) {
+                        if (data.pesan == 'berhasil') {
                             window.location.reload();
                         }
                     }
@@ -348,34 +438,73 @@
             }
         }
 
-        function fasilitas(id)
+
+        function tampil_fasilitas()
         {
+            $('#tambah-fasilitas').modal()
+            $('#tambah-fasilitas #title').html('Tambah Data')
+            $('#tambah-fasilitas #btnNama').html('Tambah')
+        }
+
+        function simpan_fasilitas()
+        {
+            var icon_fasilitas = $('#icon_fasilitas').prop('files')[0];
+            var nama_fasilitas = $('#nama_fasilitas').val();
+            var id = $('#id').val();
+            var form_data = new FormData();
+
+            form_data.append("_token", "{{ csrf_token() }}");
+            form_data.append("_method", "POST");
+            form_data.append('icon_fasilitas', icon_fasilitas);
+            form_data.append('nama_fasilitas', nama_fasilitas);
+            form_data.append('id', id);
+
             $.ajax({
-                url: "{{route('admin.akomodasi.fasilitas')}}",
+                type: "POST",
+                url: "{{route('admin.master-data.fasilitas-akomodasi.tambah')}}",
+                contentType: 'multipart/form-data',
+                data: form_data,
+                processData: false,
+                contentType: false,
+                dataType: 'JSON',
+                success: function(data) {
+                    location.reload();
+                    console.log(data);
+                },
+                error: function(e) {
+                    console.log(e.responseText);
+                }
+            });
+        }
+
+        function fasilitas(id) {
+            $.ajax({
+                url: "{{ route('admin.akomodasi.fasilitas') }}",
                 type: "POST",
                 dataType: "HTML",
-                data: {'id': id, '_token': '{{csrf_token()}}'},
-                success: function(res)
-                {
+                data: {
+                    'id': id,
+                    '_token': '{{ csrf_token() }}'
+                },
+                success: function(res) {
                     $('#isiTabel').html(res)
                     $('#addFasilitas').modal('show');
                 }
             })
         }
 
-        function tambahFasilitas()
-        {
+        function tambahFasilitas() {
             $('#tambahfasilitas').modal('show')
         }
 
-        var map = L.map('map').setView([0,0], 13);
-        var marker = L.marker([0,0]).addTo(map);
+        var map = L.map('map').setView([0, 0], 13);
+        var marker = L.marker([0, 0]).addTo(map);
         var popup = L.popup();
         var markersLayer = new L.LayerGroup();
         map.addLayer(markersLayer);
 
         var controlSearch = new L.Control.Search({
-            position:'topright',
+            position: 'topright',
             layer: markersLayer,
             initial: false,
             zoom: 18,
@@ -394,11 +523,11 @@
         }).addTo(map);
 
         function klik(e) {
-        // alert("kordiant" + e.latlng.lat);
+            // alert("kordiant" + e.latlng.lat);
             popup
-            .setLatLng(e.latlng)
-            .setContent(e.latlng.toString())
-            .openOn(map);
+                .setLatLng(e.latlng)
+                .setContent(e.latlng.toString())
+                .openOn(map);
             if (marker) {
                 map.removeLayer(marker);
             }
@@ -410,14 +539,14 @@
 
         function showLocation() {
 
-                // pas lokasi basobok, jalankan kode yg ado didalam function ko
-            var geolocation = navigator.geolocation.getCurrentPosition(function(pos){
+            // pas lokasi basobok, jalankan kode yg ado didalam function ko
+            var geolocation = navigator.geolocation.getCurrentPosition(function(pos) {
                 // kode dibawah ko dijalankan pas posisi gps basobok
-                    var lat = pos.coords.latitude; // ambiak lat gps
-                    var lng = pos.coords.longitude; // ambiak lng gps
-                    map.addControl( controlSearch );
-                    map.setView([lat,lng]); // ubah tampilan posisi peta ke posisi gps
-                    marker.setLatLng([lat,lng]); // pindahkan posisi marker ke posisi gps
+                var lat = pos.coords.latitude; // ambiak lat gps
+                var lng = pos.coords.longitude; // ambiak lng gps
+                map.addControl(controlSearch);
+                map.setView([lat, lng]); // ubah tampilan posisi peta ke posisi gps
+                marker.setLatLng([lat, lng]); // pindahkan posisi marker ke posisi gps
             });
 
         }
@@ -426,30 +555,29 @@
 
         showLocation()
 
-        function tampilfoto()
-        {
+        function tampilfoto() {
             var fileInput = document.getElementById('thumbnail');
             var filePath = fileInput.value;
             var extensions = /(\.jpg|\.png)$/i;
             var ukuran = fileInput.files[0].size;
-            if(ukuran > 1000000)
-            {
+            if (ukuran > 1000000) {
                 alert('ukuran terlalu besar. Maksimal 1MB')
                 fileInput.value = '';
                 document.getElementById('tampilFoto').innerHTML = '';
-                    return false;
-            }else{
-                if(!extensions.exec(filePath)){
+                return false;
+            } else {
+                if (!extensions.exec(filePath)) {
                     alert('Silakan unggah file yang memiliki ekstensi .jpg/.png.');
                     fileInput.value = '';
                     document.getElementById('tampilFoto').innerHTML = '';
                     return false;
-                }else{
+                } else {
                     //Image preview
                     if (fileInput.files && fileInput.files[0]) {
                         var reader = new FileReader();
                         reader.onload = function(e) {
-                            document.getElementById('tampilFoto').innerHTML = '<img src="'+e.target.result+'" width="60%"/>';
+                            document.getElementById('tampilFoto').innerHTML = '<img src="' + e.target.result +
+                                '" width="60%"/>';
                         };
                         reader.readAsDataURL(fileInput.files[0]);
                     }

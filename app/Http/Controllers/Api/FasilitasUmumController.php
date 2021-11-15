@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Helper\ApiResponse;
 use Illuminate\Http\Request;
 use App\Models\FasilitasUmum;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class FasilitasUmumController extends Controller

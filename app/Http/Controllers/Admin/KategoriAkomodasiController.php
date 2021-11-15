@@ -16,7 +16,7 @@ class KategoriAkomodasiController extends Controller
     {
         //
         $kategoriAkomodasis = DB::table('kategori_akomodasi')->orderBy("nama_kategori_akomodasi", "asc")->paginate(10);
-        return view('admin.kategori.index', compact('kategoriAkomodasis'));
+        return view('admin.akomodasi.kategori.index', compact('kategoriAkomodasis'));
     }
 
     public function create(Request $request)
@@ -27,7 +27,7 @@ class KategoriAkomodasiController extends Controller
                 'nama_kategori' => 'required|string|unique:kategori_akomodasi,nama_kategori_akomodasi',
                 'icon_kategori' => 'nullable|image',
             ]);
-    
+
             if($validator->fails()) {
                 return ['status' => false, 'msg' => $validator->errors()->first()];
             }
@@ -35,7 +35,7 @@ class KategoriAkomodasiController extends Controller
             $file_upload = $request->file("icon_kategori");
             $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
             $file_location = $file_upload->storeAs("public/kategori_akomodasi", $file_name);
-    
+
             $simpan = DB::table('kategori_akomodasi')->insert([
                 'nama_kategori_akomodasi' => $request->nama_kategori,
                 'slug_kategori_akomodasi' => str_replace('+', '-', urlencode($request->nama_kategori)),

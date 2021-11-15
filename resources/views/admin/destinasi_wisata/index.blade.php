@@ -36,32 +36,34 @@
                                         <th style="width:10%">Thumbnail</th>
                                         <th style="width:10%">Kategori</th>
                                         <th style="width:10%">Akomodasi</th>
-                                        <th style="width:10%">Kelas</th>
-                                        <th style="width:10%">Tipe</th>
-                                        <th style="width:10%">Harga</th>
-                                        <th style="width:10%">lokasi</th>
+                                        <th style="width:10%">HTM Dewasa</th>
+                                        <th style="width:10%">HTM Anak</th>
+                                        <th style="width:10%">Biaya Parkir Roda 2</th>
+                                        <th style="width:10%">Biaya Parkir Roda 4</th>
+                                        <th style="width:10%">Lokasi</th>
                                         <!-- <th style="width:18%">Keterangan</th> -->
                                         <th style="width:10%">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($akomodasi as $i => $a)
+                                    @foreach($destinasi_wisata as $i => $d)
                                     <tr>
                                         <td>{{$i+1}}</td>
-                                        <td><img src="{{ asset('storage/thumbnail/'.$a->thumbnail_akomodasi) }}" alt="{{ $a->thumbnail_akomodasi }}" class="img-fluid" width="100px"></td>
-                                        <td>{{$a->nama_akomodasi}}</td>
-                                        <td>{{$a->nama_kategori_akomodasi}}</td>
-                                        <td>{{$a->kelas}}</td>
-                                        <td>{{$a->tipe}}</td>
-                                        <td>Rp.{{number_format($a->harga)}}</td>
+                                        <td><img src="{{ asset('storage/thumbnail/'.$d->thumbnail_destinasi_wisata) }}" alt="{{ $d->thumbnail_destinasi_wisata }}" class="img-fluid" width="100px"></td>
+                                        <td>{{$d->nama_kategori_wisata}}</td>
+                                        <td>{{$d->nama_wisata}}</td>
+                                        <td>{{number_format($d->harga_tiket_dewasa)}}</td>
+                                        <td>{{number_format($d->harga_tiket_anak)}}</td>
+                                        <td>{{number_format($d->biaya_parkir_roda_2)}}</td>
+                                        <td>{{number_format($d->biaya_parkir_roda_4)}}</td>
                                         <td>
-                                            <iframe width="300" height="170" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=<?= $a->lat; ?>,<?= $a->long; ?>&hl=in&z=14&amp;output=embed"></iframe>
+                                            <iframe width="300" height="170" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=<?= $d->lat; ?>,<?= $d->long; ?>&hl=in&z=14&amp;output=embed"></iframe>
                                         </td>
                                         <td>
                                             <button style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>
-                                            <button onclick="fasilitas('<?= $a->id_akomodasi ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-plus"></i></button>
-                                            <button onclick="edit('<?= $a->id_akomodasi ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></button>
-                                            <button onclick="hapus('<?= $a->id_akomodasi ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
+                                            <button onclick="fasilitas('<?= $d->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-plus"></i></button>
+                                            <button onclick="edit('<?= $d->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></button>
+                                            <button onclick="hapus('<?= $d->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -78,7 +80,7 @@
     <!-- /.content -->
 
     <!-- Modal -->
-    <div class="modal fade" id="addAkomoadasi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="addDestinasiWisata" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
@@ -100,7 +102,7 @@
                                     <select name="kategori" id="kategori" class="form-control">
                                         <option value="">-PILIH KATEGORI-</option>
                                         @foreach($kategori as $a)
-                                        <option value="{{$a->id}}">{{$a->nama_kategori_akomodasi}}</option>
+                                        <option value="{{$d->id}}">{{$d->nama_kategori_wisata}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -157,7 +159,7 @@
     </div>
 
     <!-- Modal Dertail -->
-    <div class="modal fade" id="detalAkomodasi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="detailAkomodasi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
@@ -246,7 +248,7 @@
         function tampil()
         {
             $('#tampilFoto').html(`<img src="../img/noimages.png" width="60%"/>`)
-            $('#addAkomoadasi').modal('show')
+            $('#addDestinasiWisata').modal('show')
             $('#title').html('Tambah Akomodasi')
         }
 
@@ -278,7 +280,7 @@
 
             $.ajax({
                 type: "POST",
-                url: '{{route("admin.akomodasi.tambah")}}',
+                url: '{{route("akomodasi.tambah")}}',
                 contentType: 'multipart/form-data',
                 data: form_data,
                 processData: false,
@@ -298,7 +300,7 @@
             const harga = AutoNumeric.getAutoNumericElement('#harga')
 
             $.ajax({
-                url: '{{route("admin.akomodasi.edit")}}',
+                url: '{{route("akomodasi.edit")}}',
                 dataType: "json",
                 type: 'POST',
                 data:{
@@ -307,14 +309,14 @@
                 },
                 success: function(res){
                     console.log(res);
-                    $('#id').val(res.data.id_akomodasi);
-                    $('#kategori').val(res.data.kategori_akomodasi_id);
+                    $('#id').val(res.data.id);
+                    $('#kategori').val(res.data.kategori_wisata_id);
                     $('#akomodasi').val(res.data.nama_akomodasi);
                     $('#kelas').val(res.data.kelas);
                     $('#tipe').val(res.data.tipe);
                     $('#lat').val(res.data.lat);
                     $('#lng').val(res.data.long);
-                    $('#tampilFoto').html(`<img src="{{ asset('storage/thumbnail/${res.data.thumbnail_akomodasi}') }}" width="60%"/>`)
+                    $('#tampilFoto').html(`<img src="{{ asset('storage/thumbnail/${res.data.thumbnail_destinasi_wisata}') }}" width="60%"/>`)
                     if (marker)
                     {
                         map.removeLayer(marker);
@@ -322,7 +324,7 @@
                     marker = new L.Marker([res.data.lat,res.data.long]).addTo(map);
                     $(".note").summernote("code", res.data.keterangan);
                     harga.set(res.data.harga);
-                    $('#addAkomoadasi').modal('show')
+                    $('#addDestinasiWisata').modal('show')
                     $('#title').html('Edit Akomodasi')
                 }
             })
@@ -333,7 +335,7 @@
             var pesan = confirm("Yakin Ingin Menghapus Data!");
             if(pesan){
                 $.ajax({
-                    url: "{{route('admin.akomodasi.delete')}}",
+                    url: "{{route('akomodasi.delete')}}",
                     type:"POST",
                     dataType: "JSON",
                     data:{'id':id,"_token":"{{csrf_token()}}"},
@@ -351,7 +353,7 @@
         function fasilitas(id)
         {
             $.ajax({
-                url: "{{route('admin.akomodasi.fasilitas')}}",
+                url: "{{route('akomodasi.fasilitas')}}",
                 type: "POST",
                 dataType: "HTML",
                 data: {'id': id, '_token': '{{csrf_token()}}'},
