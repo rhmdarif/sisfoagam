@@ -85,4 +85,13 @@ class FasilitasAkomodasiController extends Controller
             return response()->json(['pesan' => true, "msg" => "kategori gagal dihapus"]);
         }
     }
+
+    public function select2Fasilitas(Request $request)
+    {
+        $q = $request->search ?? "";
+        $fasilitas = DB::table('fasilitas_akomodasi')->where("nama_fasilitas_akomodasi", "like", "%".$q."%")->limit(10)->get()->map(function($data) {
+            return ['id' => $data->id, "text" => $data->nama_fasilitas_akomodasi];
+        });
+        return ['result' => $fasilitas, "pagination" => ["more" => true]];
+    }
 }

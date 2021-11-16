@@ -14,6 +14,11 @@ class Akomodasi extends Model
     protected $table = "akomodasi";
     protected $appends = ['jarak', 'rating'];
 
+    public function getThumbnailUrlAttribute()
+    {
+        return url('/storage/akomodasi/'.$this->thumbnail);
+    }
+
     public function getJarakAttribute()
     {
         $request = request();

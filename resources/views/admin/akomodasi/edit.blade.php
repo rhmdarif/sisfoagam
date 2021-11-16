@@ -23,7 +23,7 @@
         </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
-
+    {{-- @dd($data) --}}
     <!-- Main content -->
     <div class="content">
         <div class="container-fluid">
@@ -33,7 +33,7 @@
                         <div class="card-body">
                             <form action="{{ route('admin.akomodasi.tambah') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
-                                <input type="hidden" name="id" id="id">
+                                <input type="hidden" name="id" id="id" value="{{ $data->id }}">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -42,51 +42,52 @@
                                             <select name="kategori" id="kategori" class="form-control">
                                                 <option value="">-PILIH KATEGORI-</option>
                                                 @foreach ($kategori as $a)
-                                                    <option value="{{ $a->id }}">{{ $a->nama_kategori_akomodasi }}
+                                                    <option value="{{ $a->id }}" {{ ($data->id == $a->id)? "selected" : "" }}>{{ $a->nama_kategori_akomodasi }}
                                                     </option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div class="form-group">
                                             <label for="">Akomodasi</label>
-                                            <input type="text" name="akomodasi" id="akomodasi" class="form-control"
+                                            <input type="text" name="akomodasi" id="akomodasi" class="form-control" value="{{ $data->nama_akomodasi }}"
                                                 placeholder="Akomodasi">
                                         </div>
                                         <div class="form-group">
                                             <label for="">Kelas</label>
-                                            <input type="text" name="kelas" id="kelas" class="form-control" placeholder="Kelas">
+                                            <input type="text" name="kelas" id="kelas" class="form-control" placeholder="Kelas" value="{{ $data->kelas }}">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="">Tipe</label>
-                                            <input type="text" name="tipe" id="tipe" class="form-control" placeholder="Tipe">
+                                            <input type="text" name="tipe" id="tipe" class="form-control" placeholder="Tipe" value="{{ $data->tipe }}">
                                         </div>
                                         <div class="form-group">
                                             <label for="">Harga</label>
-                                            <input type="text" name="harga" id="harga" class="form-control" placeholder="Harga">
+                                            <input type="text" name="harga" id="harga" class="form-control" placeholder="Harga" value="{{ $data->harga ?? 0 }}">
                                         </div>
                                         <div class="form-group">
                                             <label for="">Thumbnail</label>
                                             <input type="file" name="thumbnail" id="thumbnail"
                                                 onchange="return tampilfoto()" class="form-control">
-                                            <input type="hidden" name="lat" id="lat" class="form-control">
-                                            <input type="hidden" name="lng" id="lng" class="form-control">
+                                            <input type="hidden" id="lat" class="form-control" value="{{ $data->lat }}">
+                                            <input type="hidden" id="lng" class="form-control" value="{{ $data->long }}">
                                         </div>
                                     </div>
                                     <div class="col-md-4 text-center">
-                                        <div style="margin-top:30px" id="tampilFoto"></div>
+                                        <div style="margin-top:30px" id="tampilFoto">
+                                            <img src="{{ storage_url('akomodasi', $data->thumbnail_akomodasi) }}" width="60%"/>
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="">Fasilitas</label>
                                             <button type="button" class="btn btn-sm btn-primary float-right mb-2" onclick="tampil_fasilitas()">Tambah</button>
-                                            <select name="fasilitas[]" id="fasilitas" class="form-control sl2multi" multiple style="width: 100% !important">
-                                            </select>
+                                            <select name="fasilitas[]" id="fasilitas" class="form-control sl2multi" multiple style="width: 100% !important"></select>
                                         </div>
                                         <div class="form-group">
                                             <label for="">Keterangan</label>
-                                            <textarea name="keterangan" id="keterangan" class="note"></textarea>
+                                            <textarea name="keterangan" id="keterangan" class="note">{{ $data->keterangan }}</textarea>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -97,7 +98,7 @@
                                     </div>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary">Tambahkan</button>
+                                <button type="submit" class="btn btn-primary">Simpan</button>
                             </form>
                         </div>
                     </div>
@@ -107,7 +108,6 @@
         </div><!-- /.container-fluid -->
     </div>
     <!-- /.content -->
-
 
     <!-- Modal -->
     <div class="modal fade" id="tambah-fasilitas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -168,8 +168,25 @@
                     // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
                 }
             });
+
+            fasilitas_selected();
         });
 
+        function fasilitas_selected() {
+
+            // Fetch the preselected item, and add to the control
+            var fasilitasSelect = $('select.sl2multi');
+            $.ajax({
+                type: 'GET',
+                url: '{{ route("admin.akomodasi.fasilitas_select2", $data->id) }}'
+            }).then(function (data) {
+                // create the option and append to Select2
+                data.forEach(e => {
+                    let option = new Option(e.text, e.id, true, true);
+                    fasilitasSelect.append(option).trigger('change');
+                });
+            });
+        }
 
         var harga = new AutoNumeric('#harga', {
             currencySymbol: 'Rp.',
@@ -182,103 +199,6 @@
             $('#addAkomoadasi').modal('show')
             $('#title').html('Tambah Akomodasi')
         }
-
-        function simpan() {
-            var id = $('#id').val();
-            var kategori = $('#kategori').val();
-            var akomodasi = $('#akomodasi').val();
-            var kelas = $('#kelas').val();
-            var tipe = $('#tipe').val();
-            var lat = $('#lat').val();
-            var lng = $('#lng').val();
-            var keterangan = $('#keterangan').val();
-            var thumbnail = $('#thumbnail').prop('files')[0];
-            let form_data = new FormData();
-
-            form_data.append("_token", "{{ csrf_token() }}");
-            form_data.append("_method", "POST");
-            form_data.append("kategori", kategori);
-            form_data.append("akomodasi", akomodasi);
-            form_data.append("kelas", kelas);
-            form_data.append("tipe", tipe);
-            form_data.append("harga", harga.getNumber());
-            form_data.append("lat", lat);
-            form_data.append("lng", lng);
-            form_data.append("keterangan", keterangan);
-            form_data.append("thumbnail", thumbnail);
-            form_data.append("id", id);
-
-            $.ajax({
-                type: "POST",
-                url: "{{ route('admin.akomodasi.tambah') }}",
-                contentType: 'multipart/form-data',
-                data: form_data,
-                processData: false,
-                contentType: false,
-                dataType: 'JSON',
-                success: function(data) {
-                    if (data.pesan == 'berhasil') {
-                        window.location.reload();
-                    }
-                }
-            })
-        }
-
-        function edit(id) {
-            const harga = AutoNumeric.getAutoNumericElement('#harga')
-
-            $.ajax({
-                url: "{{ route('admin.akomodasi.edit') }}",
-                dataType: "json",
-                type: 'POST',
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    "id": id
-                },
-                success: function(res) {
-                    console.log(res);
-                    $('#id').val(res.data.id_akomodasi);
-                    $('#kategori').val(res.data.kategori_akomodasi_id);
-                    $('#akomodasi').val(res.data.nama_akomodasi);
-                    $('#kelas').val(res.data.kelas);
-                    $('#tipe').val(res.data.tipe);
-                    $('#lat').val(res.data.lat);
-                    $('#lng').val(res.data.long);
-                    $('#tampilFoto').html(
-                        `<img src="{{ asset('storage/thumbnail/${res.data.thumbnail_akomodasi}') }}" width="60%"/>`
-                    )
-                    if (marker) {
-                        map.removeLayer(marker);
-                    }
-                    marker = new L.Marker([res.data.lat, res.data.long]).addTo(map);
-                    $(".note").summernote("code", res.data.keterangan);
-                    harga.set(res.data.harga);
-                    $('#addAkomoadasi').modal('show')
-                    $('#title').html('Edit Akomodasi')
-                }
-            })
-        }
-
-        function hapus(id) {
-            var pesan = confirm("Yakin Ingin Menghapus Data!");
-            if (pesan) {
-                $.ajax({
-                    url: "{{ route('admin.akomodasi.delete') }}",
-                    type: "POST",
-                    dataType: "JSON",
-                    data: {
-                        'id': id,
-                        "_token": "{{ csrf_token() }}"
-                    },
-                    success: function(data) {
-                        if (data.pesan == 'berhasil') {
-                            window.location.reload();
-                        }
-                    }
-                })
-            }
-        }
-
 
         function tampil_fasilitas()
         {
