@@ -86,6 +86,7 @@ Route::any('/search', [SearchController::class, 'home']);
 
 // GALERY
 Route::any('/galery/{kategori}/{slug}', [GaleryController::class, 'index']);
+Route::any('/galery/parawisata', [GaleryController::class, 'gallery_parawisata']);
 
 
 // AUTH
