@@ -26,7 +26,7 @@
                 <div class="col-lg-12">
                     <div class="card card-outline card-primary">
                         <div class="card-header">
-                            <button type="button" class="btn btn-primary" onclick="tampil()">Tambah Data</button>
+                            <a href="{{ route('admin.destinasi-wisata.create') }}" class="btn btn-primary" >Tambah Data</a>
                         </div>
                         <div class="card-body">
                             <table id="table1" class="table table-striped">
@@ -49,8 +49,8 @@
                                     @foreach($destinasi_wisata as $i => $d)
                                     <tr>
                                         <td>{{$i+1}}</td>
-                                        <td><img src="{{ asset('storage/thumbnail/'.$d->thumbnail_destinasi_wisata) }}" alt="{{ $d->thumbnail_destinasi_wisata }}" class="img-fluid" width="100px"></td>
-                                        <td>{{$d->nama_kategori_wisata}}</td>
+                                        <td><img src="{{ storage_url("destinasi", $d->thumbnail_destinasi_wisata) }}" alt="{{ $d->thumbnail_destinasi_wisata }}" class="img-fluid" width="100px"></td>
+                                        <td>{{$d->kategori->nama_kategori_wisata}}</td>
                                         <td>{{$d->nama_wisata}}</td>
                                         <td>{{number_format($d->harga_tiket_dewasa)}}</td>
                                         <td>{{number_format($d->harga_tiket_anak)}}</td>
@@ -62,7 +62,7 @@
                                         <td>
                                             <button style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>
                                             <button onclick="fasilitas('<?= $d->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-plus"></i></button>
-                                            <button onclick="edit('<?= $d->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></button>
+                                            <a href="{{ route('admin.destinasi-wisata.edit', $d->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
                                             <button onclick="hapus('<?= $d->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
                                         </td>
                                     </tr>
@@ -78,143 +78,6 @@
         </div><!-- /.container-fluid -->
     </div>
     <!-- /.content -->
-
-    <!-- Modal -->
-    <div class="modal fade" id="addDestinasiWisata" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">
-                        <div id="title"></div>
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" name="id" id="id">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="">Kategori</label>
-                                    <select name="kategori" id="kategori" class="form-control">
-                                        <option value="">-PILIH KATEGORI-</option>
-                                        @foreach($kategori as $a)
-                                        <option value="{{$d->id}}">{{$d->nama_kategori_wisata}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="">Akomodasi</label>
-                                    <input type="text" id="akomodasi" class="form-control" placeholder="Akomodasi">
-                                </div>
-                                <div class="form-group">
-                                    <label for="">Kelas</label>
-                                    <input type="text" id="kelas" class="form-control" placeholder="Kelas">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="">Tipe</label>
-                                    <input type="text" id="tipe" class="form-control" placeholder="Tipe">
-                                </div>
-                                <div class="form-group">
-                                    <label for="">Harga</label>
-                                    <input type="text" id="harga" class="form-control" placeholder="Harga">
-                                </div>
-                                <div class="form-group">
-                                    <label for="">Thumbnail</label>
-                                    <input type="file" name="thumbnail" id="thumbnail" onchange="return tampilfoto()" class="form-control">
-                                    <input type="hidden" id="lat" class="form-control">
-                                    <input type="hidden" id="lng" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-md-4 text-center">
-                                <div style="margin-top:30px" id="tampilFoto"></div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="">Keterangan</label>
-                                    <textarea name="" id="keterangan" class="note"></textarea>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="">Lokasi</label>
-                                    <div style="height: 337px;" id="map"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <div align="right">
-                        <button type="button" onclick="simpan()" class="btn btn-primary">Simpan</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Dertail -->
-    <div class="modal fade" id="detailAkomodasi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">
-                        <div id="title"></div>
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal fasilitas -->
-    <div class="modal fade" id="addFasilitas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">
-                        <div id="fastitle">Failitas</div>
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="card card-outline card-primary">
-                        <div class="card-header">
-                            <button onclick="tambahFasilitas()" type="button" class="btn btn-primary">Tambah Fasilitas</button>
-                        </div>
-                        <div class="card-body">
-                            <table id="table1" class="table">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Akomodasi</th>
-                                        <th>Fasilitas</th>
-                                        <th>Icon</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="isiTabel"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Modal tambah fasilitas -->
     <div class="modal fade" id="tambahfasilitas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -250,124 +113,6 @@
             $('#tampilFoto').html(`<img src="../img/noimages.png" width="60%"/>`)
             $('#addDestinasiWisata').modal('show')
             $('#title').html('Tambah Akomodasi')
-        }
-
-        function simpan()
-        {
-            var id = $('#id').val();
-            var kategori = $('#kategori').val();
-            var akomodasi = $('#akomodasi').val();
-            var kelas = $('#kelas').val();
-            var tipe = $('#tipe').val();
-            var lat = $('#lat').val();
-            var lng = $('#lng').val();
-            var keterangan = $('#keterangan').val();
-            var thumbnail = $('#thumbnail').prop('files')[0];
-            let form_data = new FormData();
-
-            form_data.append("_token", "{{ csrf_token() }}");
-            form_data.append("_method", "POST");
-            form_data.append("kategori", kategori);
-            form_data.append("akomodasi", akomodasi);
-            form_data.append("kelas", kelas);
-            form_data.append("tipe", tipe);
-            form_data.append("harga", harga.getNumber());
-            form_data.append("lat", lat);
-            form_data.append("lng", lng);
-            form_data.append("keterangan", keterangan);
-            form_data.append("thumbnail", thumbnail);
-            form_data.append("id", id);
-
-            $.ajax({
-                type: "POST",
-                url: '{{route("akomodasi.tambah")}}',
-                contentType: 'multipart/form-data',
-                data: form_data,
-                processData: false,
-                contentType: false,
-                dataType: 'JSON',
-                success: function(data) {
-                    if(data.pesan == 'berhasil')
-                    {
-                        window.location.reload();
-                    }
-                }
-            })
-        }
-
-        function edit(id)
-        {
-            const harga = AutoNumeric.getAutoNumericElement('#harga')
-
-            $.ajax({
-                url: '{{route("akomodasi.edit")}}',
-                dataType: "json",
-                type: 'POST',
-                data:{
-                    "_token": "{{ csrf_token() }}",
-                    "id": id
-                },
-                success: function(res){
-                    console.log(res);
-                    $('#id').val(res.data.id);
-                    $('#kategori').val(res.data.kategori_wisata_id);
-                    $('#akomodasi').val(res.data.nama_akomodasi);
-                    $('#kelas').val(res.data.kelas);
-                    $('#tipe').val(res.data.tipe);
-                    $('#lat').val(res.data.lat);
-                    $('#lng').val(res.data.long);
-                    $('#tampilFoto').html(`<img src="{{ asset('storage/thumbnail/${res.data.thumbnail_destinasi_wisata}') }}" width="60%"/>`)
-                    if (marker)
-                    {
-                        map.removeLayer(marker);
-                    }
-                    marker = new L.Marker([res.data.lat,res.data.long]).addTo(map);
-                    $(".note").summernote("code", res.data.keterangan);
-                    harga.set(res.data.harga);
-                    $('#addDestinasiWisata').modal('show')
-                    $('#title').html('Edit Akomodasi')
-                }
-            })
-        }
-
-        function hapus(id)
-        {
-            var pesan = confirm("Yakin Ingin Menghapus Data!");
-            if(pesan){
-                $.ajax({
-                    url: "{{route('akomodasi.delete')}}",
-                    type:"POST",
-                    dataType: "JSON",
-                    data:{'id':id,"_token":"{{csrf_token()}}"},
-                    success: function(data)
-                    {
-                        if(data.pesan == 'berhasil')
-                        {
-                            window.location.reload();
-                        }
-                    }
-                })
-            }
-        }
-
-        function fasilitas(id)
-        {
-            $.ajax({
-                url: "{{route('akomodasi.fasilitas')}}",
-                type: "POST",
-                dataType: "HTML",
-                data: {'id': id, '_token': '{{csrf_token()}}'},
-                success: function(res)
-                {
-                    $('#isiTabel').html(res)
-                    $('#addFasilitas').modal('show');
-                }
-            })
-        }
-
-        function tambahFasilitas()
-        {
-            $('#tambahfasilitas').modal('show')
         }
 
         var map = L.map('map').setView([0,0], 13);

@@ -26,7 +26,7 @@
                 <div class="col-lg-12">
                     <div class="card card-outline card-primary">
                         <div class="card-header">
-                            <button type="button" class="btn btn-primary" onclick="tampil()">Tambah Data</button>
+                            <a href="{{ route('admin.akomodasi.add') }}" class="btn btn-primary" >Tambah Data</a>
                         </div>
                         <div class="card-body">
                             <table id="table1" class="table table-striped">
@@ -60,7 +60,7 @@
                                         <td>
                                             <button style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>
                                             <button onclick="fasilitas('<?= $a->id_akomodasi ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-plus"></i></button>
-                                            <button onclick="edit('<?= $a->id_akomodasi ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></button>
+                                            <button onclick="location.href='<?= route('admin.akomodasi.edit-page', $a->id_akomodasi) ?>'" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></button>
                                             <button onclick="hapus('<?= $a->id_akomodasi ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
                                         </td>
                                     </tr>

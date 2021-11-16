@@ -87,14 +87,14 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="{{ route('admin.destinasi-wisata.home') }}" class="nav-link">
                         <i class="nav-icon fas fa-hotel"></i>
                         <p>
                             Destinasi Wisata
                         </p>
                     </a>
-                </li>
+                </li> --}}
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

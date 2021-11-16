@@ -42,8 +42,7 @@
                                             <select name="kategori" id="kategori" class="form-control">
                                                 <option value="">-PILIH KATEGORI-</option>
                                                 @foreach ($kategori as $a)
-                                                    <option value="{{ $a->id }}">{{ $a->nama_kategori_akomodasi }}
-                                                    </option>
+                                                    <option value="{{ $a->id }}">{{ $a->nama_kategori_wisata }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -144,7 +143,7 @@
 
             $('select.sl2multi').select2({
                 ajax: {
-                    url: "{{ route('admin.select2.fasilitas-akomodasi') }}",
+                    url: "{{ route('admin.select2.fasilitas-destinasi-wisata') }}",
                     dataType: 'json',
                     data: function (params) {
                         var query = {

@@ -10,6 +10,18 @@ class DestinasiWisata extends Model
 {
     use HasFactory;
     protected $table = "destinasi_wisata";
+    protected $fillable = [
+                            'kategori_wisata_id',
+                            'nama_wisata',
+                            'harga_tiket_dewasa',
+                            'harga_tiket_anak',
+                            'biaya_parkir_roda_2',
+                            'biaya_parkir_roda_4',
+                            'lat',
+                            'long',
+                            'slug_destinasi',
+                            'keterangan'
+                        ];
     protected $appends = ['jarak', 'rating'];
 
 

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class AkomodasiController extends Controller
 {
@@ -21,15 +22,6 @@ class AkomodasiController extends Controller
         return view('admin.akomodasi.index',$data);
     }
 
-    public function select2Fasilitas(Request $request)
-    {
-        $q = $request->search ?? "";
-        $fasilitas = DB::table('fasilitas_akomodasi')->where("nama_fasilitas_akomodasi", "like", "%".$q."%")->get()->map(function($data) {
-            return ['id' => $data->id, "text" => $data->nama_fasilitas_akomodasi];
-        });
-        return ['result' => $fasilitas, "pagination" => ["more" => true]];
-    }
-
     public function add()
     {
         $data['kategori'] = DB::table('kategori_akomodasi')->get();
@@ -39,64 +31,110 @@ class AkomodasiController extends Controller
 
     public function create(Request $r)
     {
+
+        $validator = Validator::make($r->all(), [
+            'kategori' => 'required|exists:kategori_akomodasi,id',
+            'akomodasi' => 'required|string',
+            'kelas' => 'required|string',
+            'tipe' => 'required|string',
+            'harga' => 'required|string',
+            'keterangan' => 'nullable|string',
+            'lat' => 'nullable',
+            'lng' => 'nullable',
+            'thumbnail' => 'required_if:id,NULL|image'
+        ]);
+
+        if($validator->fails()) {
+            return response()->json(['pesan' => $validator->errors()->first()]);
+        }
+
+        $harga = preg_replace("/[^0-9]/", '', $r->harga);
+
+        // return $r;
         if($r->id == NULL)
         {
-            $file_upload = $r->file("thumbnail");
-            $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
-            $file_location = $file_upload->storeAs("public/thumbnail", $file_name);
+            if($r->has("thumbnail")) {
+                $file_upload = $r->file("thumbnail");
+                $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
+                $file_location = $file_upload->storeAs("public/thumbnail", $file_name);
+            }
 
-            $simpan = DB::table('akomodasi')->insert([
+            $simpan = DB::table('akomodasi')->insertGetId([
                 'kategori_akomodasi_id' => $r->kategori,
                 'nama_akomodasi' => $r->akomodasi,
                 'kelas' => $r->kelas,
                 'tipe' => $r->tipe,
-                'harga' => $r->harga,
+                'harga' => $harga,
                 'keterangan' => $r->keterangan,
                 'lat' => $r->lat,
                 'long' => $r->lng,
                 'slug_akomodasi' => str_replace('+', '-', urlencode($r->akomodasi)),
-                'thumbnail_akomodasi' => $file_name,
+                'thumbnail_akomodasi' => $file_name ?? "",
             ]);
         }else{
             $datacek = DB::table('akomodasi')->where('id', $r->id)->first();
-            if($r->thumbnail != 'undefined') {
-                $file_upload = $r->file("thumbnail");
-                $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
-                $file_location = $file_upload->storeAs("public/thumbnail", $file_name);
-                Storage::delete(["public/thumbnail/".$datacek->thumbnail_akomodasi]);
 
-                $update = array(
-                    'kategori_akomodasi_id' => $r->kategori,
-                    'nama_akomodasi' => $r->akomodasi,
-                    'kelas' => $r->kelas,
-                    'tipe' => $r->tipe,
-                    'harga' => $r->harga,
-                    'keterangan' => $r->keterangan,
-                    'lat' => $r->lat,
-                    'long' => $r->lng,
-                    'slug_akomodasi' => str_replace('+', '-', urlencode($r->akomodasi)),
-                    'thumbnail_akomodasi' => $file_name,
-                );
-            }else{
-                $update = array(
-                    'kategori_akomodasi_id' => $r->kategori,
-                    'nama_akomodasi' => $r->akomodasi,
-                    'kelas' => $r->kelas,
-                    'tipe' => $r->tipe,
-                    'harga' => $r->harga,
-                    'keterangan' => $r->keterangan,
-                    'lat' => $r->lat,
-                    'long' => $r->lng,
-                    'slug_akomodasi' => str_replace('+', '-', urlencode($r->akomodasi)),
-                );
+            if($datacek != NULL) {
+                if($r->has('thumbnail')) {
+                    $file_upload = $r->file("thumbnail");
+                    $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
+                    $file_location = $file_upload->storeAs("public/thumbnail", $file_name);
+                    Storage::delete(["public/thumbnail/".$datacek->thumbnail_akomodasi]);
+
+                    $update = array(
+                        'kategori_akomodasi_id' => $r->kategori,
+                        'nama_akomodasi' => $r->akomodasi,
+                        'kelas' => $r->kelas,
+                        'tipe' => $r->tipe,
+                        'harga' => $harga,
+                        'keterangan' => $r->keterangan,
+                        'lat' => $r->lat,
+                        'long' => $r->lng,
+                        'slug_akomodasi' => str_replace('+', '-', urlencode($r->akomodasi)),
+                        'thumbnail_akomodasi' => $file_name,
+                    );
+                }else{
+                    $update = array(
+                        'kategori_akomodasi_id' => $r->kategori,
+                        'nama_akomodasi' => $r->akomodasi,
+                        'kelas' => $r->kelas,
+                        'tipe' => $r->tipe,
+                        'harga' => $harga,
+                        'keterangan' => $r->keterangan,
+                        'lat' => $r->lat,
+                        'long' => $r->lng,
+                        'slug_akomodasi' => str_replace('+', '-', urlencode($r->akomodasi)),
+                    );
+                }
+                $simpan = DB::table('akomodasi')->where('id', $r->id)->update($update);
             }
-            $simpan = DB::table('akomodasi')->where('id', $r->id)->update($update);
         }
-        if($simpan == TRUE)
+        if($simpan)
         {
-            return response()->json(['pesan' => 'berhasil']);
+
+            if(count($r->fasilitas)) {
+                DB::table('akomodasi_fasilitas_akomodasi')->where('akomodasi_id', $r->id ?? $simpan)->delete();
+
+                foreach ($r->fasilitas as $fasilitas) {
+                    $data_fasilitas[] = ['akomodasi_id' => $r->id ?? $simpan, 'fasilitas_akomodasi_id' => $fasilitas];
+                }
+
+                DB::table('akomodasi_fasilitas_akomodasi')->insert($data_fasilitas);
+            }
+
+            if($r->ajax()) {
+                return response()->json(['pesan' => 'berhasil']);
+            } else {
+                return back()->with("success", "berhasil");
+            }
         }else{
-            return response()->json(['pesan' => 'error']);
+
+            if($r->ajax()) {
+                return response()->json(['pesan' => 'error']);
+            } else {
+                return back()->with("error", "error");
+            }
+
         }
     }
 
@@ -108,6 +146,28 @@ class AkomodasiController extends Controller
         ->where('akomodasi.id',$r->id)
         ->first();
         return response()->json(['data' => $data]);
+    }
+
+    public function fasilitas_select2($id)
+    {
+        return DB::table('akomodasi_fasilitas_akomodasi')
+                                        ->select("fasilitas_akomodasi.id", "fasilitas_akomodasi.nama_fasilitas_akomodasi as text")
+                                        ->join("fasilitas_akomodasi", "fasilitas_akomodasi.id", "=", "akomodasi_fasilitas_akomodasi.fasilitas_akomodasi_id")
+                                        ->where('akomodasi_id', $id)->get();
+    }
+    public function edit_page($id)
+    {
+        $data['data'] = DB::table('akomodasi')
+        ->join('kategori_akomodasi','akomodasi.kategori_akomodasi_id','kategori_akomodasi.id')
+        ->select('akomodasi.id as id_akomodasi','akomodasi.*','kategori_akomodasi.*')
+        ->where('akomodasi.id', $id)
+        ->first();
+
+        // return $data;
+        $data['kategori'] = DB::table('kategori_akomodasi')->get();
+        $data['fasilitas'] = DB::table('fasilitas_akomodasi')->get();
+
+        return view('admin.akomodasi.edit', $data);
     }
 
     public function delete(Request $r)

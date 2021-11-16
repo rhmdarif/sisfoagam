@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\MasterData\DestinasiWisata;
 
 use App\Http\Controllers\Controller;
-use App\Models\DestinasiWisata;
+use App\Models\FasilitasWisata;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-class DestinasiWisataController extends Controller
+class FasilitasController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,14 +16,7 @@ class DestinasiWisataController extends Controller
     public function index()
     {
         //
-
-        $data = [
-            'destinasi_wisata' => DestinasiWisata::with(['kategori' => function($kategori) {
-                return $kategori->select("id","nama_kategori_wisata");
-            }])->get()
-        ];
-
-        return view('admin.destinasi_wisata.index', $data);
+        return view("admin.destinasi_wisata.fasilitas.index");
     }
 
     /**
@@ -35,12 +27,6 @@ class DestinasiWisataController extends Controller
     public function create()
     {
         //
-        $data = [
-            'fasilitas' => DB::table('fasilitas_wisata')->get(),
-            'kategori' => DB::table('kategori_wisata')->get()
-        ];
-
-        return view('admin.destinasi_wisata.create', $data);
     }
 
     /**
@@ -57,10 +43,10 @@ class DestinasiWisataController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\DestinasiWisata  $destinasiWisata
+     * @param  \App\Models\FasilitasWisata  $fasilitasWisata
      * @return \Illuminate\Http\Response
      */
-    public function show(DestinasiWisata $destinasiWisata)
+    public function show(FasilitasWisata $fasilitasWisata)
     {
         //
     }
@@ -68,10 +54,10 @@ class DestinasiWisataController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\DestinasiWisata  $destinasiWisata
+     * @param  \App\Models\FasilitasWisata  $fasilitasWisata
      * @return \Illuminate\Http\Response
      */
-    public function edit(DestinasiWisata $destinasiWisata)
+    public function edit(FasilitasWisata $fasilitasWisata)
     {
         //
     }
@@ -80,10 +66,10 @@ class DestinasiWisataController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\DestinasiWisata  $destinasiWisata
+     * @param  \App\Models\FasilitasWisata  $fasilitasWisata
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, DestinasiWisata $destinasiWisata)
+    public function update(Request $request, FasilitasWisata $fasilitasWisata)
     {
         //
     }
@@ -91,10 +77,10 @@ class DestinasiWisataController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\DestinasiWisata  $destinasiWisata
+     * @param  \App\Models\FasilitasWisata  $fasilitasWisata
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DestinasiWisata $destinasiWisata)
+    public function destroy(FasilitasWisata $fasilitasWisata)
     {
         //
     }

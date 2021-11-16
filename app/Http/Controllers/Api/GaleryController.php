@@ -46,4 +46,10 @@ class GaleryController extends Controller
                     ->get();
         return response()->json(ApiResponse::Ok($data, 200, "Ok"));
     }
+
+    public function gallery_parawisata()
+    {
+        $limit = request()->limit ?? 10;
+        return DB::table('galeri_parawisata')->orderBy("created_at", "desc")->paginate($limit);
+    }
 }
