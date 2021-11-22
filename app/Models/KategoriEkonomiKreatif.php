@@ -9,4 +9,5 @@ class KategoriEkonomiKreatif extends Model
 {
     use HasFactory;
     protected $table = "kategori_ekonomi_kreatif";
+    protected $fillable = ['nama_kategori_kreatif', 'icon_kategori_kreatif', 'slug_kategori_kreatif'];
 }

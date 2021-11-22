@@ -64,13 +64,53 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('admin.master-data.fasilitas-akomodasi.home') }}" class="nav-link">
+                                    <a href="{{ route('admin.master-data.akomodasi.fasilitas.index') }}" class="nav-link">
                                         <i class="far fa-dot-circle nav-icon"></i>
                                         <p>Fasilitas</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('admin.master-data.kategori-akomodasi.home') }}" class="nav-link">
+                                    <a href="{{ route('admin.master-data.akomodasi.kategori.index') }}" class="nav-link">
+                                        <i class="far fa-dot-circle nav-icon"></i>
+                                        <p>Kategori</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>
+                                    Destinasi
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.master-data.destinasi-wisata.fasilitas.index') }}" class="nav-link">
+                                        <i class="far fa-dot-circle nav-icon"></i>
+                                        <p>Fasilitas</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.master-data.destinasi-wisata.kategori.index') }}" class="nav-link">
+                                        <i class="far fa-dot-circle nav-icon"></i>
+                                        <p>Kategori</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>
+                                    Ekonomi Kreatif
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.master-data.ekonomi-kreatif.kategori.index') }}" class="nav-link">
                                         <i class="far fa-dot-circle nav-icon"></i>
                                         <p>Kategori</p>
                                     </a>
@@ -87,14 +127,30 @@
                         </p>
                     </a>
                 </li>
-                {{-- <li class="nav-item">
-                    <a href="{{ route('admin.destinasi-wisata.home') }}" class="nav-link">
+                <li class="nav-item">
+                    <a href="{{ route('admin.destinasi-wisata.index') }}" class="nav-link">
                         <i class="nav-icon fas fa-hotel"></i>
                         <p>
                             Destinasi Wisata
                         </p>
                     </a>
-                </li> --}}
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.ekonomi-kreatif.index') }}" class="nav-link">
+                        <i class="nav-icon fas fa-hotel"></i>
+                        <p>
+                            Ekonomi Kreatif
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.berita-parawisata.index') }}" class="nav-link">
+                        <i class="nav-icon fas fa-hotel"></i>
+                        <p>
+                            Berita Parawisata
+                        </p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

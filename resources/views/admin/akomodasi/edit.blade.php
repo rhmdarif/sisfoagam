@@ -4,6 +4,8 @@
     <!-- Select2 -->
     <link rel="stylesheet" href="{{ url('admin/assets') }}/plugins/select2/css/select2.min.css">
     <link rel="stylesheet" href="{{ url('admin/assets') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+
+    <link type="text/css" rel="stylesheet" href="{{ url('/') }}/admin/assets/plugins/image-uploader/image-uploader.min.css">
 @endpush
 @section('content')
     <!-- Content Header (Page header) -->
@@ -38,11 +40,10 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="">Kategori</label>
-                                            <button type="button" class="btn btn-sm btn-primary float-right mb-2">Tambah</button>
                                             <select name="kategori" id="kategori" class="form-control">
                                                 <option value="">-PILIH KATEGORI-</option>
                                                 @foreach ($kategori as $a)
-                                                    <option value="{{ $a->id }}" {{ ($data->id == $a->id)? "selected" : "" }}>{{ $a->nama_kategori_akomodasi }}
+                                                    <option value="{{ $a->id }}" {{ ($data->kategori_akomodasi_id == $a->id)? "selected" : "" }}>{{ $a->nama_kategori_akomodasi }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -76,7 +77,7 @@
                                     </div>
                                     <div class="col-md-4 text-center">
                                         <div style="margin-top:30px" id="tampilFoto">
-                                            <img src="{{ storage_url('akomodasi', $data->thumbnail_akomodasi) }}" width="60%"/>
+                                            <img src="{{ storage_url($data->thumbnail_akomodasi) }}" width="60%"/>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -95,6 +96,10 @@
                                             <label for="">Lokasi</label>
                                             <div style="height: 337px;" id="map"></div>
                                         </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="input-images"></div>
                                     </div>
                                 </div>
 
@@ -135,8 +140,49 @@
 @push('js')
     <!-- Select2 -->
     <script src="{{ url('admin/assets') }}/plugins/select2/js/select2.full.min.js"></script>
+    <script src="{{ url('/') }}/admin/assets/plugins/image-uploader/image-uploader.min.js"></script>
     <script>
-        $(function() {
+
+
+        function loadMedia() {
+                // $.get("{{ route('admin.akomodasi.media', $data->id) }}", (result) => {
+                //     console.log(result);
+                    let json = {!! json_encode($data->fotovideo) !!}
+                    let preloaded = [];
+
+                    json.forEach((e, i) => {
+                        preloaded.push({id: e.id, src: "{{ url('/') }}/storage/foto_video_akomodasi/"+e.file});
+                    });
+
+                    $('.input-images').imageUploader({
+                        preloaded: preloaded,
+                        imagesInputName: 'photos',
+                        preloadedInputName: 'old'
+                    });
+
+                //     console.log(preloaded);
+                // })
+            }
+
+        $(document).ready(() => {
+            // $('.input-images').imageUploader({ imagesInputName: 'photos' });
+
+            loadMedia();
+            // let preloaded = [
+            //     {id: 1, src: 'https://picsum.photos/500/500?random=1'},
+            //     {id: 2, src: 'https://picsum.photos/500/500?random=2'},
+            //     {id: 3, src: 'https://picsum.photos/500/500?random=3'},
+            //     {id: 4, src: 'https://picsum.photos/500/500?random=4'},
+            //     {id: 5, src: 'https://picsum.photos/500/500?random=5'},
+            //     {id: 6, src: 'https://picsum.photos/500/500?random=6'},
+            // ];
+
+            // $('.input-images-2').imageUploader({
+            //     preloaded: preloaded,
+            //     imagesInputName: 'photos',
+            //     preloadedInputName: 'old'
+            // });
+
             //Initialize Select2 Elements
             // $('.select2bs4').select2({
             //     theme: 'bootstrap4'
@@ -180,6 +226,7 @@
                 type: 'GET',
                 url: '{{ route("admin.akomodasi.fasilitas_select2", $data->id) }}'
             }).then(function (data) {
+                console.log(data)
                 // create the option and append to Select2
                 data.forEach(e => {
                     let option = new Option(e.text, e.id, true, true);
@@ -222,7 +269,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "{{route('admin.master-data.fasilitas-akomodasi.tambah')}}",
+                url: "{{route('admin.master-data.akomodasi.fasilitas.store')}}",
                 contentType: 'multipart/form-data',
                 data: form_data,
                 processData: false,

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Admin\MasterData\DestinasiWisata;
 
-use App\Http\Controllers\Controller;
-use App\Models\KategoriWisata;
 use Illuminate\Http\Request;
+use App\Models\KategoriWisata;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class KategoriController extends Controller
 {
@@ -16,6 +18,10 @@ class KategoriController extends Controller
     public function index()
     {
         //
+        $data = [
+            'kategori' => KategoriWisata::all()
+        ];
+        return view("admin.master_data.destinasi_wisata.kategori.index", $data);
     }
 
     /**
@@ -37,26 +43,49 @@ class KategoriController extends Controller
     public function store(Request $request)
     {
         //
+        $validator = Validator::make($request->all(), [
+            'nama_kategori' => 'required|string',
+            'icon_kategori' => 'required|image'
+        ]);
+
+        if($validator->fails()) {
+            return ['status' => false, 'msg' => $validator->errors()->first()];
+        }
+
+        $file_upload = $request->file("icon_kategori");
+        $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
+        $file_location = $file_upload->storeAs("public/kategori_wisata", $file_name);
+
+        $slug = str_replace("+", "-", urlencode($request->nama_kategori));
+        KategoriWisata::updateOrCreate(
+                            ['nama_kategori_wisata' => $request->nama_kategori],
+                            [
+                                'icon_kategori_wisata' => substr($file_location, 7),
+                                'slug_kategori_wisata' => $slug,
+                            ]
+                        );
+        return ['status' => true, 'msg' => "kategori berhasil ditambahkan"];
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\KategoriWisata  $kategoriWisata
+     * @param  \App\Models\KategoriWisata  $kategori
      * @return \Illuminate\Http\Response
      */
-    public function show(KategoriWisata $kategoriWisata)
+    public function show(KategoriWisata $kategori)
     {
         //
+        return $kategori;
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\KategoriWisata  $kategoriWisata
+     * @param  \App\Models\KategoriWisata  $kategori
      * @return \Illuminate\Http\Response
      */
-    public function edit(KategoriWisata $kategoriWisata)
+    public function edit(KategoriWisata $kategori)
     {
         //
     }
@@ -65,22 +94,57 @@ class KategoriController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\KategoriWisata  $kategoriWisata
+     * @param  \App\Models\KategoriWisata  $kategori
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, KategoriWisata $kategoriWisata)
+    public function update(Request $request, KategoriWisata $kategori)
     {
         //
+        $validator = Validator::make($request->all(), [
+            'nama_kategori' => 'required|string',
+            'icon_kategori' => 'nullable|image'
+        ]);
+
+        if($validator->fails()) {
+            return ['status' => false, 'msg' => $validator->errors()->first()];
+        }
+
+
+        $slug = str_replace("+", "-", urlencode($request->nama_kategori));
+        $update = [
+                        'nama_kategori_wisata' => $request->nama_kategori,
+                        'slug_kategori_wisata' => $slug
+                    ];
+        if($request->hasFile('icon_kategori')) {
+
+            $file_upload = $request->file("icon_kategori");
+            $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
+            $file_location = $file_upload->storeAs("public/kategori_wisata", $file_name);
+
+            Storage::disk('public')->delete($kategori->icon_kategori_wisata);
+
+            $update['icon_kategori_wisata'] = substr($file_location, 7);
+        }
+
+        $kategori->update($update);
+
+        $kategori->update(
+                            ['nama_kategori_wisata' => $request->nama_kategori],
+                            ['icon_kategori_wisata' => $request->icon_kategori]
+                        );
+        return ['status' => true, 'msg' => "kategori berhasil diperbaharui"];
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\KategoriWisata  $kategoriWisata
+     * @param  \App\Models\KategoriWisata  $kategori
      * @return \Illuminate\Http\Response
      */
-    public function destroy(KategoriWisata $kategoriWisata)
+    public function destroy(KategoriWisata $kategori)
     {
         //
+        $kategori->delete();
+        return ['status' => true, 'msg' => "Kategori berhasil dihapus"];
     }
 }

@@ -25,20 +25,18 @@ Route::prefix('admin')->as("admin.")->group(function () {
 
 
         Route::prefix('master-data')->as('master-data.')->group(function () {
-            Route::prefix('kategori-akomodasi')->as('kategori-akomodasi.')->group(function () {
-                Route::get('home', [Admin\KategoriAkomodasiController::class, 'index'])->name('home');
-                Route::post('tambah', [Admin\KategoriAkomodasiController::class, 'create'])->name('tambah');
-                Route::post('edit', [Admin\KategoriAkomodasiController::class, 'edit'])->name('edit');
-                Route::post('update', [Admin\KategoriAkomodasiController::class, 'update'])->name('update');
-                Route::post('delete', [Admin\KategoriAkomodasiController::class, 'delete'])->name('delete');
+            Route::prefix("akomodasi")->as("akomodasi.")->group(function () {
+                Route::resource('kategori', Admin\MasterData\Akomodasi\KategoriController::class);
+                Route::resource('fasilitas', Admin\MasterData\Akomodasi\FasilitasController::class);
             });
 
-            Route::prefix('fasilitas-akomodasi')->as('fasilitas-akomodasi.')->group(function () {
-                Route::get('home', [Admin\FasilitasAkomodasiController::class, 'index'])->name('home');
-                Route::post('tambah', [Admin\FasilitasAkomodasiController::class, 'create'])->name('tambah');
-                Route::post('edit', [Admin\FasilitasAkomodasiController::class, 'edit'])->name('edit');
-                Route::post('update', [Admin\FasilitasAkomodasiController::class, 'update'])->name('update');
-                Route::post('delete', [Admin\FasilitasAkomodasiController::class, 'delete'])->name('delete');
+            Route::prefix("destinasi-wisata")->as("destinasi-wisata.")->group(function () {
+                Route::resource('kategori', Admin\MasterData\DestinasiWisata\KategoriController::class);
+                Route::resource('fasilitas', Admin\MasterData\DestinasiWisata\FasilitasController::class);
+            });
+
+            Route::prefix("ekonomi-kreatif")->as("ekonomi-kreatif.")->group(function () {
+                Route::resource('kategori', Admin\MasterData\EkonomiKreatif\KategoriController::class);
             });
         });
 
@@ -50,7 +48,8 @@ Route::prefix('admin')->as("admin.")->group(function () {
             Route::post('edit', [Admin\AkomodasiController::class, 'edit'])->name('edit');
             Route::post('delete', [Admin\AkomodasiController::class, 'delete'])->name('delete');
             Route::post('fasilitas', [Admin\AkomodasiController::class, 'fasilitas'])->name('fasilitas');
-            Route::get('fasilitas_select2/{id}', [Admin\AkomodasiController::class, 'fasilitas_select2'])->name('fasilitas_select2');
+            Route::get('{id}/fasilitas', [Admin\AkomodasiController::class, 'fasilitas_select2'])->name('fasilitas_select2');
+            Route::get('{id}/media', [Admin\AkomodasiController::class, 'media'])->name('media');
         });
 
         // Route::prefix('destinasi-wisata')->as('destinasi-wisata.')->group(function (){
@@ -61,10 +60,23 @@ Route::prefix('admin')->as("admin.")->group(function () {
         //     Route::post('fasilitas', [Admin\DestinasiWisataController::class, 'fasilitas'])->name('fasilitas');
         // });
 
+
+        // EKONOMI KREATIF
+        Route::get('ekonomi-kreatif/{id}/fasilitas', [Admin\EkonomiKreatifController::class, 'fasilitas_select2'])->name('ekonomi-kreatif.fasilitas_select2');
+        Route::get('ekonomi-kreatif/{id}/media', [Admin\EkonomiKreatifController::class, 'media'])->name('ekonomi-kreatif.media');
+        Route::resource('ekonomi-kreatif', Admin\EkonomiKreatifController::class);
+
+        // DESTINASI WISATA
+        Route::get('destinasi-wisata/{id}/fasilitas', [Admin\DestinasiWisataController::class, 'fasilitas_select2'])->name('destinasi-wisata.fasilitas_select2');
+        Route::get('destinasi-wisata/{id}/media', [Admin\DestinasiWisataController::class, 'media'])->name('destinasi-wisata.media');
         Route::resource('destinasi-wisata', Admin\DestinasiWisataController::class);
+
+        // BERITA PARAWISATA
+        Route::resource('berita-parawisata', Admin\BeritaParawisataController::class);
     });
 
     Route::prefix('select2')->as('select2.')->group(function () {
         Route::any('fasilitas-akomodasi', [Admin\FasilitasAkomodasiController::class, 'select2Fasilitas'])->name('fasilitas-akomodasi');
+        Route::any('fasilitas-wisata', [Admin\MasterData\DestinasiWisata\FasilitasController::class, 'select2'])->name('fasilitas-wisata');
     });
 });

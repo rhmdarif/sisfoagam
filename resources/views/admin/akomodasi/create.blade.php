@@ -4,6 +4,8 @@
     <!-- Select2 -->
     <link rel="stylesheet" href="{{ url('admin/assets') }}/plugins/select2/css/select2.min.css">
     <link rel="stylesheet" href="{{ url('admin/assets') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+
+    <link type="text/css" rel="stylesheet" href="{{ url('/') }}/admin/assets/plugins/image-uploader/image-uploader.min.css">
 @endpush
 @section('content')
     <!-- Content Header (Page header) -->
@@ -38,7 +40,6 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="">Kategori</label>
-                                            <button type="button" class="btn btn-sm btn-primary float-right mb-2">Tambah</button>
                                             <select name="kategori" id="kategori" class="form-control">
                                                 <option value="">-PILIH KATEGORI-</option>
                                                 @foreach ($kategori as $a)
@@ -95,6 +96,10 @@
                                             <div style="height: 337px;" id="map"></div>
                                         </div>
                                     </div>
+
+                                    <div class="col-md-12">
+                                        <div class="input-images"></div>
+                                    </div>
                                 </div>
 
                                 <button type="submit" class="btn btn-primary">Tambahkan</button>
@@ -135,12 +140,16 @@
 @push('js')
     <!-- Select2 -->
     <script src="{{ url('admin/assets') }}/plugins/select2/js/select2.full.min.js"></script>
+    <script src="{{ url('/') }}/admin/assets/plugins/image-uploader/image-uploader.min.js"></script>
+
+    @include('layouts.toastr-notif')
     <script>
         $(function() {
             //Initialize Select2 Elements
             // $('.select2bs4').select2({
             //     theme: 'bootstrap4'
             // })
+            $('.input-images').imageUploader({ imagesInputName: 'photos' });
 
             $('select.sl2multi').select2({
                 ajax: {
@@ -302,7 +311,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "{{route('admin.master-data.fasilitas-akomodasi.tambah')}}",
+                url: "{{route('admin.master-data.akomodasi.fasilitas.store')}}",
                 contentType: 'multipart/form-data',
                 data: form_data,
                 processData: false,

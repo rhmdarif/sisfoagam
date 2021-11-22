@@ -11,7 +11,5 @@
     <div class="form-group text-center">
         <div id="tampilFoto"></div>
     </div>
-    <button type="button" onclick="simpan()" style="width:80px" class="btn btn-primary float-right">
-        <div id="btnNama"></div>
-    </button>
+    <button type="submit" style="width:80px" id="btnNama" class="btn btn-primary float-right">Submit</button>
 </form>

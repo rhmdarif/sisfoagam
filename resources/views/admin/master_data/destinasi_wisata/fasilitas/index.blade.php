@@ -26,7 +26,7 @@
                 <div class="col-lg-12">
                     <div class="card card-outline card-primary">
                         <div class="card-header">
-                            <button type="button" class="btn btn-primary" onclick="tampil()">Tambah Data</button>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tambah-fasilitas">Tambah Data</button>
                         </div>
                         <div class="card-body">
                             <table class="table" id="table1" class="table table-bordered table-striped">
@@ -39,11 +39,11 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($fasilitasAkomodasis as $i => $item)
+                                    @foreach ($fasilitas as $i => $item)
                                         <tr>
                                             <td>{{ $i+1 }}</td>
-                                            <td>{{ $item->nama_fasilitas_akomodasi }}</td>
-                                            <td><img src="{{ asset('storage/fasilitas_akomodasi/'. $item->icon_fasilitas_akomodasi) }}" alt="{{ $item->nama_fasilitas_akomodasi }}" class="img-fluid" width="60px"> </td>
+                                            <td>{{ $item->nama_fasilitas_wisata }}</td>
+                                            <td><img src="{{ storage_url($item->icon_fasilitas_wisata) }}" alt="{{ $item->nama_fasilitas_wisata }}" class="img-fluid" width="60px"> </td>
                                             <td>
                                                 <button style="width:80px;color:white" type="button" class="btn btn-warning p-1"
                                                     onclick="edits({{ $item->id }})">Edit</button>
@@ -74,12 +74,24 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    @include('admin.akomodasi.fasilitas.form')
+                    @include('admin.master_data.destinasi_wisata.fasilitas.form')
                 </div>
-                {{-- <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div> --}}
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="edit-fasilitas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @include('admin.master_data.destinasi_wisata.fasilitas.form')
+                </div>
             </div>
         </div>
     </div>
@@ -87,83 +99,110 @@
 
 @push('js')
     <script>
-        function tampil()
-        {
-            $('#tambah-fasilitas').modal()
-            $('#title').html('Tambah Data')
-            $('#btnNama').html('Tambah')
-        }
+        $(document).ready(() => {
+            $('#tambah-fasilitas form').submit((e) => {
+                e.preventDefault();
 
-        function simpan()
-        {
-            var icon_fasilitas = $('#icon_fasilitas').prop('files')[0];
-            var nama_fasilitas = $('#nama_fasilitas').val();
-            var id = $('#id').val();
-            var form_data = new FormData();
+                var form = $('#tambah-fasilitas form')[0];
+                var data = new FormData(form);
 
-            form_data.append("_token", "{{ csrf_token() }}");
-            form_data.append("_method", "POST");
-            form_data.append('icon_fasilitas', icon_fasilitas);
-            form_data.append('nama_fasilitas', nama_fasilitas);
-            form_data.append('id', id);
+                $('#tambah-fasilitas button[type=submit]').attr('disabled');
 
-            $.ajax({
-                type: "POST",
-                url: "{{route('master-data.fasilitas.tambah')}}",
-                contentType: 'multipart/form-data',
-                data: form_data,
-                processData: false,
-                contentType: false,
-                dataType: 'JSON',
-                success: function(data) {
-                    location.reload();
-                    console.log(data);
-                },
-                error: function(e) {
-                    console.log(e.responseText);
-                }
-            });
-        }
+                $.ajax({
+                    url: "{{ route('admin.master-data.destinasi-wisata.fasilitas.store') }}",
+                    enctype: 'multipart/form-data',
+                    type: "POST",
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    timeout: 800000,
+                    success: function (hasil) {
+                        // hasil = JSON.parse(hasil);
+                        console.log("SUCCESS : ", hasil);
+                        $.toast({
+                            heading: 'Success',
+                            text: hasil.msg,
+                            showHideTransition: 'slide',
+                            icon: 'success',
+                            position: 'top-right'
+                        });
+                    },
+                    error: function (e) {
+                        console.log("ERROR : ", e);
+                    },
+                    complete: function() {
+                        $('#tambah-fasilitas button[type=submit]').removeAttr('disabled');
+                        $('#tambah-fasilitas').modal("hide");
+                    }
+                })
+            })
+            $('#edit-fasilitas form').submit((e) => {
+                e.preventDefault();
+
+                var form = $('#edit-fasilitas form')[0];
+                var data = new FormData(form);
+                data.append("_method", "PUT");
+
+                $('#edit-fasilitas button[type=submit]').attr('disabled');
+
+                $.ajax({
+                    url: "{{ route('admin.master-data.destinasi-wisata.fasilitas.index') }}/"+$('#edit-fasilitas #id').val(),
+                    enctype: 'multipart/form-data',
+                    type: "POST",
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    timeout: 800000,
+                    success: function (hasil) {
+                        console.log("SUCCESS : ", hasil);
+                    },
+                    error: function (e) {
+                        console.log("ERROR : ", e);
+                    },
+                    complete: function() {
+                        $('#tambah-fasilitas button[type=submit]').removeAttr('disabled');
+                        $('#tambah-fasilitas').modal("hide");
+                    }
+                })
+            })
+
+        });
 
         function edits(id)
         {
             $.ajax({
-                url:'{{route("master-data.fasilitas.edit")}}',
-                type:'post',
-                data:{
-                    'id':id,
-                    '_token': "{{ csrf_token() }}"
-                },
+                url:'{{route("admin.master-data.destinasi-wisata.fasilitas.index")}}/'+id,
+                type:'get',
                 dataType: 'json',
                 success: function(data) {
                     console.log(data)
-                    $('#nama_fasilitas').val(data.data.nama_fasilitas_akomodasi)
-                    $('#tampilFoto').html(`<img src="{{ asset('storage/fasilitas_akomodasi/${data.data.icon_fasilitas_akomodasi}') }}" width="30%"/>`)
-                    $('#id').val(data.data.id)
-                    $('#label').html("Edit Data")
-                    $('#btnNama').html("Edit")
-                    $('#tambah-fasilitas').modal('show');
+                    $('#edit-fasilitas #nama_fasilitas').val(data.nama_fasilitas_wisata)
+                    $('#edit-fasilitas #tampilFoto').html(`<img src="{{ url('storage') }}/${data.icon_fasilitas_wisata}" width="30%"/>`)
+                    $('#edit-fasilitas #id').val(data.id)
+                    $('#edit-fasilitas #title').html("Edit Data")
+                    $('#edit-fasilitas #btnNama').html("Edit")
+                    $('#edit-fasilitas').modal('show');
                 }
             })
         }
 
         function deletes(id)
         {
-            var ids = id;
             var pesan = confirm("Yakin Ingin Menghapus Data!");
             if(pesan){
                 $.ajax({
-                    url:"{{ route('master-data.fasilitas.delete') }}",
+                    url:"{{ route('admin.master-data.destinasi-wisata.fasilitas.index') }}/"+id,
                     type:'POST',
                     data: {
-                        id:id,
-                        '_token': "{{ csrf_token() }}"
+                        '_method':"DELETE"
                     },
                     dataType: 'JSON',
                     success: function(data) {
                         location.reload();
                     }
-                })
+                });
             }
         }
 

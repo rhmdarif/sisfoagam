@@ -48,7 +48,7 @@
                                     @foreach($akomodasi as $i => $a)
                                     <tr>
                                         <td>{{$i+1}}</td>
-                                        <td><img src="{{ asset('storage/thumbnail/'.$a->thumbnail_akomodasi) }}" alt="{{ $a->thumbnail_akomodasi }}" class="img-fluid" width="100px"></td>
+                                        <td><img src="{{ storage_url($a->thumbnail_akomodasi) }}" alt="{{ $a->thumbnail_akomodasi }}" class="img-fluid" width="100px"></td>
                                         <td>{{$a->nama_akomodasi}}</td>
                                         <td>{{$a->nama_kategori_akomodasi}}</td>
                                         <td>{{$a->kelas}}</td>

@@ -20,7 +20,8 @@ class DestinasiWisata extends Model
                             'lat',
                             'long',
                             'slug_destinasi',
-                            'keterangan'
+                            'keterangan',
+                            'thumbnail_destinasi_wisata'
                         ];
     protected $appends = ['jarak', 'rating'];
 
