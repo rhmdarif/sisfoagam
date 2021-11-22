@@ -1,0 +1,292 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use Illuminate\Http\Request;
+use App\Models\DestinasiWisata;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use App\Models\DestinasiWisataFotoVidioWisata;
+
+class DestinasiWisataController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        //
+
+        $data = [
+            'destinasi_wisata' => DestinasiWisata::with(['kategori' => function($kategori) {
+                return $kategori->select("id","nama_kategori_wisata");
+            }])->get()
+        ];
+
+        return view('admin.destinasi_wisata.index', $data);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+        $data = [
+            'kategori' => DB::table('kategori_wisata')->get()
+        ];
+
+        return view('admin.destinasi_wisata.create', $data);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+        // return $request->all();
+
+        $validator = Validator::make($request->all(), [
+            'kategori' => 'required|exists:kategori_wisata,id',
+            'destinasi_wisata' => 'required|string|unique:destinasi_wisata,nama_wisata',
+            'harga_tiket_dewasa' => 'required|string',
+            'harga_tiket_anak' => 'required|string',
+            'biaya_parkir_r4' => 'required|string',
+            'biaya_parkir_r2' => 'required|string',
+            'lat' => 'required|string',
+            'lng' => 'required|string',
+            'thumbnail' => 'required|image',
+        ]);
+
+        if($validator->fails()) {
+            return back()->with("error", $validator->errors()->first())->withInput();
+        }
+
+        $harga_tiket_dewasa  = preg_replace("/[^0-9]/", '', explode(",", $request->harga_tiket_dewasa)[0]);
+        $harga_tiket_anak  = preg_replace("/[^0-9]/", '', explode(",", $request->harga_tiket_anak)[0]);
+        $biaya_parkir_r2  = preg_replace("/[^0-9]/", '', explode(",", $request->biaya_parkir_r2)[0]);
+        $biaya_parkir_r4  = preg_replace("/[^0-9]/", '', explode(",", $request->biaya_parkir_r4)[0]);
+
+
+        if($request->has("thumbnail")) {
+            $file_upload = $request->file("thumbnail");
+            $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
+            $file_location = $file_upload->storeAs("public/destinasi_wisata", $file_name);
+        }
+
+        $destinasi_wisata = DestinasiWisata::create([
+            'kategori_wisata_id' => $request->kategori,
+            'nama_wisata' => $request->destinasi_wisata,
+            'harga_tiket_dewasa' => $harga_tiket_dewasa,
+            'harga_tiket_anak' => $harga_tiket_anak,
+            'biaya_parkir_roda_2' => $biaya_parkir_r2,
+            'biaya_parkir_roda_4' => $biaya_parkir_r4,
+            'lat' => $request->lat,
+            'long' => $request->lng,
+            'slug_destinasi' => str_replace('+', '-', urlencode($request->destinasi_wisata)),
+            'keterangan' => $request->keterangan ?? "",
+            'thumbnail_destinasi_wisata' => substr($file_location, 7)
+        ]);
+
+        if(count($request->fasilitas)) {
+            DB::table('destinasi_wisata_fasilitas_wisata')->where('destinasi_wisata_id', $destinasi_wisata->id)->delete();
+
+            foreach ($request->fasilitas as $fasilitas) {
+                $data_fasilitas[] = ['destinasi_wisata_id' => $request->id ?? $destinasi_wisata->id, 'fasilitas_wisata_id' => $fasilitas];
+            }
+
+            DB::table('destinasi_wisata_fasilitas_wisata')->insert($data_fasilitas);
+        }
+
+        if($request->hasfile('photos')) {
+            $photos= [];
+            foreach ($request->file('photos') as $key => $photo) {
+                $name = $destinasi_wisata->id."-".$key."-".time().'.'.$photo->extension();
+                // $photo->move(storage_path('app/public').'/akomodasi/', $name);
+                $location = $photo->storeAs("public/destinasi_wisata_foto_vidio_wisata", $name);
+                $mime = $photo->getMimeType();
+                if(preg_match("/image/i", $mime)) {
+                    $kategori = "foto";
+                } else if(preg_match("/image/i", $mime)) {
+                    $kategori = "video";
+                }
+
+                if(isset($kategori)) {
+                    $photos[] = [
+                        'destinasi_wisata_id' => $destinasi_wisata->id,
+                        'kategori' => $kategori,
+                        'file' => substr($location, 7)
+                    ];
+                }
+            }
+            DB::table('destinasi_wisata_foto_vidio_wisata')->insert($photos);
+        }
+
+        return back()->with("success", "Destinasi berhasil ditambahkan");
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\DestinasiWisata  $destinasi_wisatum
+     * @return \Illuminate\Http\Response
+     */
+    public function show(DestinasiWisata $destinasi_wisatum)
+    {
+        //
+        return $destinasi_wisatum;
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\DestinasiWisata  $destinasi_wisatum
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(DestinasiWisata $destinasi_wisatum)
+    {
+        //
+        $data = [
+            'kategori' => DB::table('kategori_wisata')->get(),
+            'destinasi_wisata' => $destinasi_wisatum
+        ];
+
+        return view('admin.destinasi_wisata.edit', $data);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\DestinasiWisata  $destinasi_wisatum
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, DestinasiWisata $destinasi_wisatum)
+    {
+        //
+        $validator = Validator::make($request->all(), [
+            'kategori' => 'required|exists:kategori_wisata,id',
+            'destinasi_wisata' => 'required|string|unique:destinasi_wisata,nama_wisata,'.$destinasi_wisatum->id,
+            'harga_tiket_dewasa' => 'required|string',
+            'harga_tiket_anak' => 'required|string',
+            'biaya_parkir_r4' => 'required|string',
+            'biaya_parkir_r2' => 'required|string',
+            'lat' => 'required|string',
+            'lng' => 'required|string',
+            'thumbnail' => 'nullable|image',
+        ]);
+
+        if($validator->fails()) {
+            return back()->with("error", $validator->errors()->first())->withInput();
+        }
+
+        $harga_tiket_dewasa  = preg_replace("/[^0-9]/", '', explode(",", $request->harga_tiket_dewasa)[0]);
+        $harga_tiket_anak  = preg_replace("/[^0-9]/", '', explode(",", $request->harga_tiket_anak)[0]);
+        $biaya_parkir_r2  = preg_replace("/[^0-9]/", '', explode(",", $request->biaya_parkir_r2)[0]);
+        $biaya_parkir_r4  = preg_replace("/[^0-9]/", '', explode(",", $request->biaya_parkir_r4)[0]);
+
+        $update = [
+            'kategori_wisata_id' => $request->kategori,
+            'nama_wisata' => $request->destinasi_wisata,
+            'harga_tiket_dewasa' => $harga_tiket_dewasa,
+            'harga_tiket_anak' => $harga_tiket_anak,
+            'biaya_parkir_roda_2' => $biaya_parkir_r2,
+            'biaya_parkir_roda_4' => $biaya_parkir_r4,
+            'lat' => $request->lat,
+            'long' => $request->lng,
+            'slug_destinasi' => str_replace('+', '-', urlencode($request->destinasi_wisata)),
+            'keterangan' => $request->keterangan ?? "",
+        ];
+
+        if($request->has("thumbnail")) {
+            $file_upload = $request->file("thumbnail");
+            $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
+            $file_location = $file_upload->storeAs("public/destinasi_wisata", $file_name);
+
+            Storage::delete(["public/".$destinasi_wisatum->thumbnail_destinasi_wisata]);
+
+            $update['thumbnail_destinasi_wisata'] =  substr($file_location, 7);
+        }
+
+        $destinasi_wisatum->update($update);
+
+        if(count($request->fasilitas)) {
+            DB::table('destinasi_wisata_fasilitas_wisata')->where('destinasi_wisata_id', $destinasi_wisatum->id)->delete();
+
+            foreach ($request->fasilitas as $fasilitas) {
+                $data_fasilitas[] = ['destinasi_wisata_id' => $request->id ?? $destinasi_wisatum->id, 'fasilitas_wisata_id' => $fasilitas];
+            }
+
+            DB::table('destinasi_wisata_fasilitas_wisata')->insert($data_fasilitas);
+        }
+
+        if($request->filled('old')) {
+            $not_inc = DB::table('destinasi_wisata_foto_vidio_wisata')->where("destinasi_wisata_id", $destinasi_wisatum->id)->whereNotIn("id", $request->old)->get();
+            foreach ($not_inc as $key => $value) {
+                Storage::delete(["public/".$value->file]);
+            }
+            DB::table('destinasi_wisata_foto_vidio_wisata')->where("destinasi_wisata_id", $destinasi_wisatum->id)->whereNotIn("id", $request->old)->delete();
+        }
+
+        if($request->hasfile('photos')) {
+            $photos= [];
+            foreach ($request->file('photos') as $key => $photo) {
+                $name = $destinasi_wisatum->id."-".$key."-".time().'.'.$photo->extension();
+                // $photo->move(storage_path('app/public').'/akomodasi/', $name);
+                $photo->storeAs("public/destinasi_wisata_foto_vidio_wisata", $name);
+                $mime = $photo->getMimeType();
+                if(preg_match("/image/i", $mime)) {
+                    $kategori = "foto";
+                } else if(preg_match("/image/i", $mime)) {
+                    $kategori = "video";
+                }
+
+                if(isset($kategori)) {
+                    $photos[] = [
+                        'destinasi_wisata_id' => $destinasi_wisatum->id,
+                        'kategori' => $kategori,
+                        'file' => $name
+                    ];
+                }
+            }
+            DB::table('destinasi_wisata_foto_vidio_wisata')->insert($photos);
+        }
+
+        return back()->with("success", "Destinasi berhasil ditambahkan");
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\DestinasiWisata  $destinasi_wisatum
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(DestinasiWisata $destinasi_wisatum)
+    {
+        //
+    }
+
+    public function fasilitas_select2($id)
+    {
+        return DB::table('destinasi_wisata_fasilitas_wisata')
+                                        ->select("fasilitas_wisata.id", "fasilitas_wisata.nama_fasilitas_wisata as text")
+                                        ->join("fasilitas_wisata", "fasilitas_wisata.id", "=", "destinasi_wisata_fasilitas_wisata.fasilitas_wisata_id")
+                                        ->where('destinasi_wisata_fasilitas_wisata.destinasi_wisata_id', $id)->get();
+    }
+
+    public function media($id)
+    {
+        return DestinasiWisataFotoVidioWisata::where('destinasi_wisata_id', $id)->get();
+    }
+
+}
