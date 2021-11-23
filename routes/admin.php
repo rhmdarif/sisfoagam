@@ -73,6 +73,9 @@ Route::prefix('admin')->as("admin.")->group(function () {
 
         // BERITA PARAWISATA
         Route::resource('berita-parawisata', Admin\BeritaParawisataController::class);
+
+        // GALERY PARAWISATA
+        Route::resource('galeri-parawisata', Admin\GaleriParawisataController::class);
     });
 
     Route::prefix('select2')->as('select2.')->group(function () {

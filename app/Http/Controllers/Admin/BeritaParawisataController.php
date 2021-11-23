@@ -145,5 +145,7 @@ class BeritaParawisataController extends Controller
     public function destroy(BeritaParawisata $berita_parawisatum)
     {
         //
+        $berita_parawisatum->delete();
+        return ['pesan' => 'berhasil'];
     }
 }

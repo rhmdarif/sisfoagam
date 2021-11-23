@@ -6,12 +6,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Destinasi Wisata</h1>
+                    <h1 class="m-0">Berita Parawisata</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Destinasi Wisata</li>
+                        <li class="breadcrumb-item active">Berita Parawisata</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -26,43 +26,34 @@
                 <div class="col-lg-12">
                     <div class="card card-outline card-primary">
                         <div class="card-header">
-                            <a href="{{ route('admin.destinasi-wisata.create') }}" class="btn btn-primary" >Tambah Data</a>
+                            <a href="{{ route('admin.berita-parawisata.create') }}" class="btn btn-primary" >Tambah Data</a>
                         </div>
                         <div class="card-body">
                             <table id="table1" class="table table-striped">
                                 <thead>
                                     <tr>
                                         <th style="width:2%">No</th>
-                                        <th style="width:10%">Thumbnail</th>
-                                        <th style="width:10%">Kategori</th>
-                                        <th style="width:10%">Akomodasi</th>
-                                        <th style="width:10%">HTM Dewasa</th>
-                                        <th style="width:10%">HTM Anak</th>
-                                        <th style="width:10%">Biaya Parkir Roda 2</th>
-                                        <th style="width:10%">Biaya Parkir Roda 4</th>
-                                        <th style="width:10%">Lokasi</th>
+                                        <th style="width:10%">Jenis Event</th>
+                                        <th style="width:10%">Jadwal Pelaksanaan</th>
+                                        <th style="width:10%">Keterangan</th>
+                                        <th style="width:10%">Foto</th>
                                         <!-- <th style="width:18%">Keterangan</th> -->
                                         <th style="width:10%">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($destinasi_wisata as $i => $d)
+                                    @foreach($berita as $i => $d)
                                     <tr>
                                         <td>{{$i+1}}</td>
-                                        <td><img src="{{ storage_url($d->thumbnail_destinasi_wisata) }}" alt="{{ $d->thumbnail_destinasi_wisata }}" class="img-fluid" width="100px"></td>
-                                        <td>{{$d->kategori->nama_kategori_wisata}}</td>
-                                        <td>{{$d->nama_wisata}}</td>
-                                        <td>{{number_format($d->harga_tiket_dewasa)}}</td>
-                                        <td>{{number_format($d->harga_tiket_anak)}}</td>
-                                        <td>{{number_format($d->biaya_parkir_roda_2)}}</td>
-                                        <td>{{number_format($d->biaya_parkir_roda_4)}}</td>
+                                        <td>{{$d->jenis_event}}</td>
+                                        <td>{{$d->jadwal_pelaksanaan}}</td>
+                                        <td>{{ substr(strip_tags($d->keterangan), 0, 100) }}{{ strlen($d->keterangan) > 100? "..." : "" }}</td>
                                         <td>
-                                            <iframe width="300" height="170" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=<?= $d->lat; ?>,<?= $d->long; ?>&hl=in&z=14&amp;output=embed"></iframe>
+                                            <img src="{{ storage_url($d->foto) }}" alt="{{ $d->jenis_event }}" class="img-fluid" width="100px">
                                         </td>
                                         <td>
                                             <button style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>
-                                            <button onclick="fasilitas('<?= $d->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-plus"></i></button>
-                                            <a href="{{ route('admin.destinasi-wisata.edit', $d->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
+                                            <a href="{{ route('admin.berita-parawisata.edit', $d->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
                                             <button onclick="hapus('<?= $d->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
                                         </td>
                                     </tr>
@@ -209,7 +200,7 @@
             var pesan = confirm("Yakin Ingin Menghapus Data!");
             if(pesan){
                 $.ajax({
-                    url: "{{route('admin.destinasi-wisata.index')}}/"+id,
+                    url: "{{route('admin.berita-parawisata.index')}}/"+id,
                     type:"DELETE",
                     dataType: "JSON",
                     data:{'id':id,"_token":"{{csrf_token()}}"},

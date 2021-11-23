@@ -6,12 +6,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Akomodasi</h1>
+                    <h1 class="m-0">Ekonomi Kreatif</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Akomodasi</li>
+                        <li class="breadcrumb-item active">Ekonomi Kreatif</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -195,6 +195,26 @@
                         reader.readAsDataURL(fileInput.files[0]);
                     }
                 }
+            }
+        }
+
+        function hapus(id)
+        {
+            var pesan = confirm("Yakin Ingin Menghapus Data!");
+            if(pesan){
+                $.ajax({
+                    url: "{{route('admin.ekonomi-kreatif.index')}}/"+id,
+                    type:"DELETE",
+                    dataType: "JSON",
+                    data:{'id':id,"_token":"{{csrf_token()}}"},
+                    success: function(data)
+                    {
+                        if(data.pesan == 'berhasil')
+                        {
+                            window.location.reload();
+                        }
+                    }
+                })
             }
         }
     </script>
