@@ -74,7 +74,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    @include('admin.destinasi_wisata.kategori.form')
+                    @include('admin.master_data.akomodasi.kategori.form')
                 </div>
             </div>
         </div>
