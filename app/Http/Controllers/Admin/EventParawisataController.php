@@ -16,6 +16,7 @@ class EventParawisataController extends Controller
     public function index()
     {
         //
+        return view('admin.event_parawisata.index');
     }
 
     /**

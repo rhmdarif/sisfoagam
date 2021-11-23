@@ -274,6 +274,8 @@ class DestinasiWisataController extends Controller
     public function destroy(DestinasiWisata $destinasi_wisatum)
     {
         //
+        $destinasi_wisatum->delete();
+        return ['pesan' => 'berhasil'];
     }
 
     public function fasilitas_select2($id)

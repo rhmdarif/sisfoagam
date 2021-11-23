@@ -194,5 +194,25 @@
                 }
             }
         }
+
+        function hapus(id)
+        {
+            var pesan = confirm("Yakin Ingin Menghapus Data!");
+            if(pesan){
+                $.ajax({
+                    url: "{{route('admin.berita-parawisata.index')}}/"+id,
+                    type:"DELETE",
+                    dataType: "JSON",
+                    data:{'id':id,"_token":"{{csrf_token()}}"},
+                    success: function(data)
+                    {
+                        if(data.pesan == 'berhasil')
+                        {
+                            window.location.reload();
+                        }
+                    }
+                })
+            }
+        }
     </script>
 @endpush

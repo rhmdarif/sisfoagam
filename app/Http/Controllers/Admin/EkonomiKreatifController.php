@@ -117,27 +117,27 @@ class EkonomiKreatifController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\EkonomiKreatif  $ekonomiKreatif
+     * @param  \App\Models\EkonomiKreatif  $ekonomi_kreatif
      * @return \Illuminate\Http\Response
      */
-    public function show(EkonomiKreatif $ekonomiKreatif)
+    public function show(EkonomiKreatif $ekonomi_kreatif)
     {
         //
-        return $ekonomiKreatif;
+        return $ekonomi_kreatif;
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\EkonomiKreatif  $ekonomiKreatif
+     * @param  \App\Models\EkonomiKreatif  $ekonomi_kreatif
      * @return \Illuminate\Http\Response
      */
-    public function edit(EkonomiKreatif $ekonomiKreatif)
+    public function edit(EkonomiKreatif $ekonomi_kreatif)
     {
         //
         $data = [
             'kategori' =>  KategoriEkonomiKreatif::all(),
-            'ekonomi_kreatif' => $ekonomiKreatif
+            'ekonomi_kreatif' => $ekonomi_kreatif
         ];
 
         return view('admin.ekonomi_kreatif.edit', $data);
@@ -147,15 +147,15 @@ class EkonomiKreatifController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\EkonomiKreatif  $ekonomiKreatif
+     * @param  \App\Models\EkonomiKreatif  $ekonomi_kreatif
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, EkonomiKreatif $ekonomiKreatif)
+    public function update(Request $request, EkonomiKreatif $ekonomi_kreatif)
     {
         //
         $validator = Validator::make($request->all(), [
             'kategori' => 'required|exists:kategori_ekonomi_kreatif,id',
-            'ekonomi_kreatif' => 'required|string|unique:ekonomi_kreatif,nama_ekonomi_kreatif,'.$ekonomiKreatif->id,
+            'ekonomi_kreatif' => 'required|string|unique:ekonomi_kreatif,nama_ekonomi_kreatif,'.$ekonomi_kreatif->id,
             'harga' => 'required|string',
             'lat' => 'required|string',
             'lng' => 'required|string',
@@ -184,26 +184,26 @@ class EkonomiKreatifController extends Controller
             $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
             $file_location = $file_upload->storeAs("public/ekonomi_kreatif", $file_name);
 
-            Storage::delete(["public/".$ekonomiKreatif->thumbnail_ekonomi_kreatif]);
+            Storage::delete(["public/".$ekonomi_kreatif->thumbnail_ekonomi_kreatif]);
 
             $update['thumbnail_ekonomi_kreatif'] = substr($file_location, 7);
         }
 
-        $ekonomiKreatif->update($update);
+        $ekonomi_kreatif->update($update);
 
         if($request->filled('old')) {
-            $not_inc = DB::table('destinasi_wisata_foto_vidio_wisata')->where("destinasi_wisata_id", $ekonomiKreatif->id)->whereNotIn("id", $request->old)->get();
+            $not_inc = DB::table('destinasi_wisata_foto_vidio_wisata')->where("destinasi_wisata_id", $ekonomi_kreatif->id)->whereNotIn("id", $request->old)->get();
             foreach ($not_inc as $key => $value) {
                 Storage::delete(["public/".$value->file]);
             }
 
-            DB::table('destinasi_wisata_foto_vidio_wisata')->where("destinasi_wisata_id", $ekonomiKreatif->id)->whereNotIn("id", $request->old)->delete();
+            DB::table('destinasi_wisata_foto_vidio_wisata')->where("destinasi_wisata_id", $ekonomi_kreatif->id)->whereNotIn("id", $request->old)->delete();
         }
 
         if($request->hasfile('photos')) {
             $photos= [];
             foreach ($request->file('photos') as $key => $photo) {
-                $name = $ekonomiKreatif->id."-".$key."-".time().'.'.$photo->extension();
+                $name = $ekonomi_kreatif->id."-".$key."-".time().'.'.$photo->extension();
                 // $photo->move(storage_path('app/public').'/akomodasi/', $name);
                 $location = $photo->storeAs("public/foto_video_ekonomi_kreatif", $name);
                 $mime = $photo->getMimeType();
@@ -215,7 +215,7 @@ class EkonomiKreatifController extends Controller
 
                 if(isset($kategori)) {
                     $photos[] = [
-                        'ekonomi_kreatif_id' => $ekonomiKreatif->id,
+                        'ekonomi_kreatif_id' => $ekonomi_kreatif->id,
                         'kategori' => $kategori,
                         'file' => substr($location, 7)
                     ];
@@ -230,11 +230,13 @@ class EkonomiKreatifController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\EkonomiKreatif  $ekonomiKreatif
+     * @param  \App\Models\EkonomiKreatif  $ekonomi_kreatif
      * @return \Illuminate\Http\Response
      */
-    public function destroy(EkonomiKreatif $ekonomiKreatif)
+    public function destroy(EkonomiKreatif $ekonomi_kreatif)
     {
         //
+        $ekonomi_kreatif->delete();
+        return ['pesan' => 'berhasil'];
     }
 }
