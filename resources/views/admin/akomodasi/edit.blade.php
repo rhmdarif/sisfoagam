@@ -126,7 +126,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    @include('admin.akomodasi.fasilitas.form')
+                    @include('admin.master_data.akomodasi.fasilitas.form')
                 </div>
                 {{-- <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

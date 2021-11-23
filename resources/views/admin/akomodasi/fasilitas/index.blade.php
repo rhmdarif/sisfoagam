@@ -90,7 +90,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    @include('admin.destinasi_wisata.fasilitas.form')
+                    @include('admin.master_data.akomodasi.fasilitas.form')
                 </div>
             </div>
         </div>
