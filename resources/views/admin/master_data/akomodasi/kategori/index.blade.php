@@ -135,7 +135,8 @@
                         $('#tambah-kategori button[type=submit]').removeAttr('disabled');
                     }
                 })
-            })
+            });
+
             $('#edit-kategori form').submit((e) => {
                 e.preventDefault();
 

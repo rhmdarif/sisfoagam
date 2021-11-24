@@ -142,4 +142,13 @@ class KategoriController extends Controller
         $kategori->delete();
         return ['status' => true, 'msg' => "Kategori berhasil dihapus"];
     }
+
+    public function select2(Request $request)
+    {
+        $q = $request->search ?? "";
+        $kategori = KategoriAkomodasi::where("nama_kategori_akomodasi", "like", "%".$q."%")->limit(10)->get()->map(function($data) {
+            return ['id' => $data->id, "text" => $data->nama_kategori_akomodasi];
+        });
+        return ['result' => $kategori, "pagination" => ["more" => true]];
+    }
 }

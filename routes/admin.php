@@ -87,5 +87,9 @@ Route::prefix('admin')->as("admin.")->group(function () {
     Route::prefix('select2')->as('select2.')->group(function () {
         Route::any('fasilitas-akomodasi', [Admin\FasilitasAkomodasiController::class, 'select2Fasilitas'])->name('fasilitas-akomodasi');
         Route::any('fasilitas-wisata', [Admin\MasterData\DestinasiWisata\FasilitasController::class, 'select2'])->name('fasilitas-wisata');
+
+        Route::any('kategori-akomodasi', [Admin\MasterData\Akomodasi\KategoriController::class, 'select2'])->name('kategori-akomodasi');
+        Route::any('kategori-wisata', [Admin\MasterData\DestinasiWisata\KategoriController::class, 'select2'])->name('kategori-wisata');
+        Route::any('kategori-ekonomi', [Admin\MasterData\EkonomiKreatif\KategoriController::class, 'select2'])->name('kategori-ekonomi');
     });
 });

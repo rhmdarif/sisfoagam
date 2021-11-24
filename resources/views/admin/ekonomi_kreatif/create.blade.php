@@ -14,12 +14,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">ekonomi_kreatif</h1>
+                    <h1 class="m-0">Tambah Ekonomi Kreatif</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">ekonomi_kreatif</li>
+                        <li class="breadcrumb-item active">Tambah Ekonomi Kreatif</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -45,14 +45,8 @@
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label for="">Kategori</label>
-                                                    <button type="button"
-                                                        class="btn btn-sm btn-primary float-right mb-2">Tambah</button>
-                                                    <select name="kategori" id="kategori" class="form-control">
-                                                        <option value="">-PILIH KATEGORI-</option>
-                                                        @foreach ($kategori as $a)
-                                                            <option value="{{ $a->id }}">
-                                                                {{ $a->nama_kategori_kreatif }}</option>
-                                                        @endforeach
+                                                    <button type="button" class="btn btn-primary float-right btn-sm mb-2" data-toggle="modal" data-target="#tambah-kategori">Tambah</button>
+                                                    <select name="kategori" id="kategori" class="form-control select2bs4">
                                                     </select>
                                                 </div>
                                             </div>
@@ -186,9 +180,10 @@
             //     theme: 'bootstrap4'
             // })
 
-            $('select.sl2multi').select2({
+            $('select.select2bs4').select2({
+                theme: 'bootstrap4',
                 ajax: {
-                    url: "#",
+                    url: "{{ route('admin.select2.kategori-ekonomi') }}",
                     dataType: 'json',
                     data: function(params) {
                         var query = {
@@ -213,7 +208,6 @@
                 }
             });
         });
-
 
         var harga = new AutoNumeric('#harga', {
             currencySymbol: 'Rp.',
