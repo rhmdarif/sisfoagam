@@ -159,6 +159,22 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.fasilitas-umum.index') }}" class="nav-link">
+                        <i class="nav-icon fas fa-hotel"></i>
+                        <p>
+                            Fasilitas Umum
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.event-parawisata.index') }}" class="nav-link">
+                        <i class="nav-icon fas fa-hotel"></i>
+                        <p>
+                            Event Parawisata
+                        </p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

@@ -76,6 +76,12 @@ Route::prefix('admin')->as("admin.")->group(function () {
 
         // GALERY PARAWISATA
         Route::resource('galeri-parawisata', Admin\GaleriParawisataController::class);
+
+        // EVENT PARAWISATA
+        Route::resource('event-parawisata', Admin\EventParawisataController::class);
+
+        // FASILITAS UMUM
+        Route::resource('fasilitas-umum', Admin\FasilitasUmumController::class);
     });
 
     Route::prefix('select2')->as('select2.')->group(function () {
