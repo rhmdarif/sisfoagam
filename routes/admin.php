@@ -68,6 +68,11 @@ Route::prefix('admin')->as("admin.")->group(function () {
         Route::get('ekonomi-kreatif/{id}/media', [Admin\EkonomiKreatifController::class, 'media'])->name('ekonomi-kreatif.media');
         Route::resource('ekonomi-kreatif', Admin\EkonomiKreatifController::class);
 
+        Route::prefix('ekonomi-kreatif')->as('ekonomi-kreatif.')->group(function(){
+           
+            Route::get('{id}/detail', [Admin\EkonomiKreatifController::class, 'detail'])->name('detail');
+        });
+
         // DESTINASI WISATA
         Route::get('destinasi-wisata/{id}/fasilitas', [Admin\DestinasiWisataController::class, 'fasilitas_select2'])->name('destinasi-wisata.fasilitas_select2');
         Route::get('destinasi-wisata/{id}/media', [Admin\DestinasiWisataController::class, 'media'])->name('destinasi-wisata.media');
@@ -76,6 +81,10 @@ Route::prefix('admin')->as("admin.")->group(function () {
 
         // BERITA PARAWISATA
         Route::resource('berita-parawisata', Admin\BeritaParawisataController::class);
+        Route::prefix('berita-pariwisata')->as('berita-pariwisata.')->group(function(){
+            Route::get('{id}/detail', [Admin\BeritaParawisataController::class, 'detail'])->name('detail');
+        });
+
 
         // GALERY PARAWISATA
         Route::resource('galeri-parawisata', Admin\GaleriParawisataController::class);

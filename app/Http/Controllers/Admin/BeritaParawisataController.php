@@ -7,6 +7,7 @@ use App\Models\BeritaParawisata;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use DB;
 
 class BeritaParawisataController extends Controller
 {
@@ -147,5 +148,14 @@ class BeritaParawisataController extends Controller
         //
         $berita_parawisatum->delete();
         return ['pesan' => 'berhasil'];
+    }
+
+    public function detail($id)
+    {
+     
+        $data['berita_parawisata'] = DB::table('berita_parawisata')->get();
+
+        return view('admin.berita_parawisata.detail',$data);
+
     }
 }
