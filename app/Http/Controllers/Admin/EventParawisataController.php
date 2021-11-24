@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\EventParawisata;
 use Illuminate\Http\Request;
+use App\Models\EventParawisata;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class EventParawisataController extends Controller
 {
@@ -16,7 +18,8 @@ class EventParawisataController extends Controller
     public function index()
     {
         //
-        return view('admin.event_parawisata.index');
+        $events = EventParawisata::all();
+        return view('admin.event_parawisata.index', ['events' => $events]);
     }
 
     /**
@@ -27,6 +30,7 @@ class EventParawisataController extends Controller
     public function create()
     {
         //
+        return view("admin.event_parawisata.create");
     }
 
     /**
@@ -38,50 +42,116 @@ class EventParawisataController extends Controller
     public function store(Request $request)
     {
         //
+        $validator = Validator::make($request->all(), [
+            'jenis_event' => 'required|string',
+            'start_at' => 'required|date_format:Y-m-d',
+            'end_at' => 'required|date_format:Y-m-d',
+            'keterangan' => 'required|string',
+            'foto' => 'required|image',
+        ]);
+
+        if($validator->fails()) {
+            return back()->with("error", $validator->errors()->first());
+        }
+
+
+        if($request->has("foto")) {
+            $file_upload = $request->file("foto");
+            $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
+            $file_location = $file_upload->storeAs("public/event_parawisata", $file_name);
+        }
+
+        EventParawisata::create([
+            'jenis_event' => $request->jenis_event,
+            'start_at' => $request->start_at,
+            'end_at' => $request->end_at,
+            'keterangan' => $request->keterangan,
+            'foto' => substr($file_location, 7),
+            'slug_event_parawisata' => str_replace('+', '-', urlencode($request->jenis_event))
+        ]);
+
+        return back()->with("success", "Event Parawisata berhasil ditambahkan");
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\EventParawisata  $eventParawisata
+     * @param  \App\Models\EventParawisata  $event_parawisatum
      * @return \Illuminate\Http\Response
      */
-    public function show(EventParawisata $eventParawisata)
+    public function show(EventParawisata $event_parawisatum)
     {
         //
+        return $event_parawisatum;
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\EventParawisata  $eventParawisata
+     * @param  \App\Models\EventParawisata  $event_parawisatum
      * @return \Illuminate\Http\Response
      */
-    public function edit(EventParawisata $eventParawisata)
+    public function edit(EventParawisata $event_parawisatum)
     {
         //
+        return view('admin.event_parawisata.edit', compact('event_parawisatum'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\EventParawisata  $eventParawisata
+     * @param  \App\Models\EventParawisata  $event_parawisatum
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, EventParawisata $eventParawisata)
+    public function update(Request $request, EventParawisata $event_parawisatum)
     {
         //
+        $validator = Validator::make($request->all(), [
+            'jenis_event' => 'required|string',
+            'start_at' => 'required|date_format:Y-m-d',
+            'end_at' => 'required|date_format:Y-m-d',
+            'keterangan' => 'required|string',
+            'foto' => 'nullable|image',
+        ]);
+
+        if($validator->fails()) {
+            return back()->with("error", $validator->errors()->first());
+        }
+
+        $update = [
+            'jenis_event' => $request->jenis_event,
+            'start_at' => $request->start_at,
+            'end_at' => $request->end_at,
+            'keterangan' => $request->keterangan,
+            'slug_event_parawisata' => str_replace('+', '-', urlencode($request->jenis_event))
+        ];
+
+        if($request->hasFile("foto")) {
+            $file_upload = $request->file("foto");
+            $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
+            $file_location = $file_upload->storeAs("public/event_parawisata", $file_name);
+
+            Storage::delete(["public/".$event_parawisatum->foto]);
+
+            $update['foto'] = substr($file_location, 7);
+        }
+
+        $event_parawisatum->update($update);
+
+        return back()->with("success", "Event Parawisata berhasil diperbaharui");
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\EventParawisata  $eventParawisata
+     * @param  \App\Models\EventParawisata  $event_parawisatum
      * @return \Illuminate\Http\Response
      */
-    public function destroy(EventParawisata $eventParawisata)
+    public function destroy(EventParawisata $event_parawisatum)
     {
         //
+        $event_parawisatum->delete();
+        return ['pesan' => 'berhasil'];
     }
 }

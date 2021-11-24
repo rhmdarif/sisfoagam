@@ -179,7 +179,7 @@ class EkonomiKreatifController extends Controller
             'slug_ekonomi_kreatif' => str_replace('+', '-', urlencode($request->ekonomi_kreatif))
         ];
 
-        if($request->has("thumbnail")) {
+        if($request->hasFile("thumbnail")) {
             $file_upload = $request->file("thumbnail");
             $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
             $file_location = $file_upload->storeAs("public/ekonomi_kreatif", $file_name);

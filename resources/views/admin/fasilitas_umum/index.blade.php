@@ -6,12 +6,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Berita Parawisata</h1>
+                    <h1 class="m-0">Ekonomi Kreatif</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Berita Parawisata</li>
+                        <li class="breadcrumb-item active">Ekonomi Kreatif</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -26,34 +26,33 @@
                 <div class="col-lg-12">
                     <div class="card card-outline card-primary">
                         <div class="card-header">
-                            <a href="{{ route('admin.berita-parawisata.create') }}" class="btn btn-primary" >Tambah Data</a>
+                            <a href="{{ route('admin.fasilitas-umum.create') }}" class="btn btn-primary" >Tambah Data</a>
                         </div>
                         <div class="card-body">
                             <table id="table1" class="table table-striped">
                                 <thead>
                                     <tr>
                                         <th style="width:2%">No</th>
-                                        <th style="width:10%">Jenis Event</th>
-                                        <th style="width:10%">Jadwal Pelaksanaan</th>
+                                        <th style="width:10%">Nama Fasilitas</th>
                                         <th style="width:10%">Keterangan</th>
-                                        <th style="width:10%">Foto</th>
+                                        <th style="width:10%">Lokasi</th>
                                         <!-- <th style="width:18%">Keterangan</th> -->
                                         <th style="width:10%">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($berita as $i => $d)
+                                    @foreach($fasilitas_umum as $i => $d)
                                     <tr>
                                         <td>{{$i+1}}</td>
-                                        <td>{{$d->jenis_event}}</td>
-                                        <td>{{$d->jadwal_pelaksanaan}}</td>
+                                        <td>{{$d->nama_fasilitas_umum}}</td>
                                         <td>{{ substr(strip_tags($d->keterangan), 0, 100) }}{{ strlen($d->keterangan) > 100? "..." : "" }}</td>
                                         <td>
-                                            <img src="{{ storage_url($d->foto) }}" alt="{{ $d->jenis_event }}" class="img-fluid" width="100px">
+                                            <iframe width="300" height="170" id="map" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=<?= $d->lat; ?>,<?= $d->long; ?>&hl=in&z=14&amp;output=embed"></iframe>
                                         </td>
                                         <td>
                                             <button style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>
-                                            <a href="{{ route('admin.berita-parawisata.edit', $d->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
+                                            <button onclick="fasilitas('<?= $d->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-plus"></i></button>
+                                            <a href="{{ route('admin.fasilitas-umum.edit', $d->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
                                             <button onclick="hapus('<?= $d->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
                                         </td>
                                     </tr>
@@ -69,36 +68,10 @@
         </div><!-- /.container-fluid -->
     </div>
     <!-- /.content -->
-
-    <!-- Modal tambah fasilitas -->
-    <div class="modal fade" id="tambahfasilitas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">
-                        <div id="title">Tambah Fasilitas</div>
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection
 
 @push('js')
     <script>
-        var harga = new AutoNumeric('#harga', {
-            currencySymbol : 'Rp.',
-            decimalCharacter : ',',
-            digitGroupSeparator : '.',
-        });
-
         function tampil()
         {
             $('#tampilFoto').html(`<img src="../img/noimages.png" width="60%"/>`)
@@ -200,7 +173,7 @@
             var pesan = confirm("Yakin Ingin Menghapus Data!");
             if(pesan){
                 $.ajax({
-                    url: "{{route('admin.berita-parawisata.index')}}/"+id,
+                    url: "{{route('admin.fasilitas-umum.index')}}/"+id,
                     type:"DELETE",
                     dataType: "JSON",
                     data:{'id':id,"_token":"{{csrf_token()}}"},

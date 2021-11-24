@@ -14,12 +14,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">ekonomi_kreatif</h1>
+                    <h1 class="m-0">Fasilitas Umum</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">ekonomi_kreatif</li>
+                        <li class="breadcrumb-item active">Fasilitas Umum</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -34,10 +34,9 @@
                 <div class="col-lg-12">
                     <div class="card card-outline card-primary">
                         <div class="card-body">
-                            <form action="{{ route('admin.berita-parawisata.update', $berita_parawisatum->id) }}" method="POST"
+                            <form action="{{ route('admin.fasilitas-umum.store') }}" method="POST"
                                 enctype="multipart/form-data">
                                 @csrf
-                                @method("PUT")
                                 <input type="hidden" name="id" id="id">
                                 <div class="row">
                                     <div class="col-md-8">
@@ -45,39 +44,48 @@
 
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <label for="">Judul</label>
-                                                    <input type="text" name="judul" id="judul"
-                                                        class="form-control" placeholder="JUDUL BERITA" value="{{ $berita_parawisatum->judul }}">
+                                                    <label for="">Jenis Event</label>
+                                                    <input type="text" name="jenis_event" id="jenis_event"
+                                                        class="form-control" placeholder="JENIS EVENT">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="">Tg. Mulai</label>
+                                                    <input type="date" name="start_at" id="start_at"
+                                                        class="form-control" placeholder="JENIS EVENT">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="">Tg. Selesai</label>
+                                                    <input type="date" name="end_at" id="end_at"
+                                                        class="form-control" placeholder="JENIS EVENT">
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <label for="">Narasi</label>
-                                                    <textarea name="narasi" id="narasi" class="note">{{ $berita_parawisatum->narasi }}</textarea>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="">Posting By</label>
-                                                    <input type="text" name="posting_by" id="posting_by"
-                                                        class="form-control" placeholder="" value="{{ $berita_parawisatum->posting_by }}">
+                                                    <label for="">Keterangan</label>
+                                                    <textarea name="keterangan" id="keterangan" class="note"></textarea>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-4 text-center">
                                         <div class="form-group">
-                                            <label for="">Thumbnail</label>
+                                            <label for="">Foto</label>
 
-                                            <div style="margin-top:30px" id="tampilFoto">
-                                                <img src="{{ storage_url($berita_parawisatum->foto) }}" width="60%"/>
-                                            </div>
+                                            <div style="margin-top:30px" id="tampilFoto"></div>
 
-                                            <input type="file" name="thumbnail" id="thumbnail"
+                                            <input type="file" name="foto" id="foto"
                                                 onchange="return tampilfoto()" class="form-control">
                                         </div>
                                     </div>
+                                    <div class="col-md-12 mb-2">
+                                    </div>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary">Edit</button>
+                                <button type="submit" class="btn btn-primary">Tambahkan</button>
                             </form>
                         </div>
                     </div>
@@ -103,7 +111,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    @include('admin.master_data.ekonomi_kreatif.kategori.form')
+                    @include('admin.master_data.fasilitas_umum.kategori.form')
                 </div>
             </div>
         </div>
@@ -118,7 +126,7 @@
     @include('layouts.toastr-notif')
     <script>
         function tampilfoto() {
-            var fileInput = document.getElementById('thumbnail');
+            var fileInput = document.getElementById('foto');
             var filePath = fileInput.value;
             var extensions = /(\.jpg|\.png)$/i;
             var ukuran = fileInput.files[0].size;
