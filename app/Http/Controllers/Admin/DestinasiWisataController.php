@@ -291,4 +291,20 @@ class DestinasiWisataController extends Controller
         return DestinasiWisataFotoVidioWisata::where('destinasi_wisata_id', $id)->get();
     }
 
+
+    public function detail($id)
+    {
+
+        $data['kategori'] = DB::table('kategori_wisata')->get();
+        $data['destinasi_wisata'] = DB::table('destinasi_wisata')
+                            ->join('kategori_wisata','destinasi_wisata.kategori_wisata_id','kategori_wisata.id')
+                            ->select('destinasi_wisata.id as id_destinasi_wisata','destinasi_wisata.*','kategori_wisata.*')
+                            ->where('destinasi_wisata.id',$id)
+                            ->orderBy("destinasi_wisata.nama_wisata", "asc")
+                            ->get();
+
+        return view('admin.destinasi_wisata.detail', $data);
+        
+    }
+
 }

@@ -256,4 +256,19 @@ class AkomodasiController extends Controller
     {
         return FotoVideoAkomodasi::where('akomodasi_id', $id)->get();
     }
+
+    public function detail($id)
+    {
+        $data['kategori'] = DB::table('kategori_akomodasi')->get();
+        $data['akomodasi'] = DB::table('akomodasi')
+                            ->join('kategori_akomodasi','akomodasi.kategori_akomodasi_id','kategori_akomodasi.id')
+                            ->select('akomodasi.id as id_akomodasi','akomodasi.*','kategori_akomodasi.*')
+                            ->where('akomodasi.id',$id)
+                            ->orderBy("akomodasi.nama_akomodasi", "asc")
+                            ->get();
+
+        return view('admin.akomodasi.detail',$data);
+
+       
+    }
 }

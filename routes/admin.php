@@ -50,15 +50,17 @@ Route::prefix('admin')->as("admin.")->group(function () {
             Route::post('fasilitas', [Admin\AkomodasiController::class, 'fasilitas'])->name('fasilitas');
             Route::get('{id}/fasilitas', [Admin\AkomodasiController::class, 'fasilitas_select2'])->name('fasilitas_select2');
             Route::get('{id}/media', [Admin\AkomodasiController::class, 'media'])->name('media');
+            Route::get('{id}/detail', [Admin\AkomodasiController::class, 'detail'])->name('detail');
         });
 
-        // Route::prefix('destinasi-wisata')->as('destinasi-wisata.')->group(function (){
-        //     Route::get('home', [Admin\DestinasiWisataController::class, 'index'])->name('home');
-        //     Route::post('tambah', [Admin\DestinasiWisataController::class, 'create'])->name('tambah');
-        //     Route::post('edit', [Admin\DestinasiWisataController::class, 'edit'])->name('edit');
-        //     Route::post('delete', [Admin\DestinasiWisataController::class, 'delete'])->name('delete');
-        //     Route::post('fasilitas', [Admin\DestinasiWisataController::class, 'fasilitas'])->name('fasilitas');
-        // });
+        Route::prefix('destinasi-wisata')->as('destinasi-wisata.')->group(function (){
+            Route::get('home', [Admin\DestinasiWisataController::class, 'index'])->name('home');
+            Route::post('tambah', [Admin\DestinasiWisataController::class, 'create'])->name('tambah');
+            Route::post('edit', [Admin\DestinasiWisataController::class, 'edit'])->name('edit');
+            Route::post('delete', [Admin\DestinasiWisataController::class, 'delete'])->name('delete');
+            Route::post('fasilitas', [Admin\DestinasiWisataController::class, 'fasilitas'])->name('fasilitas');
+            Route::get('{id}/detail', [Admin\DestinasiWisataController::class, 'detail'])->name('detail');
+        });
 
 
         // EKONOMI KREATIF
@@ -70,6 +72,7 @@ Route::prefix('admin')->as("admin.")->group(function () {
         Route::get('destinasi-wisata/{id}/fasilitas', [Admin\DestinasiWisataController::class, 'fasilitas_select2'])->name('destinasi-wisata.fasilitas_select2');
         Route::get('destinasi-wisata/{id}/media', [Admin\DestinasiWisataController::class, 'media'])->name('destinasi-wisata.media');
         Route::resource('destinasi-wisata', Admin\DestinasiWisataController::class);
+        
 
         // BERITA PARAWISATA
         Route::resource('berita-parawisata', Admin\BeritaParawisataController::class);
