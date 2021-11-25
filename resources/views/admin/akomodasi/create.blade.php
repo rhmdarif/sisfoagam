@@ -77,7 +77,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="">Fasilitas</label>
-                                            <button type="button" class="btn btn-sm btn-primary float-right mb-2" onclick="tampil_fasilitas()">Tambah</button>
+                                            <button type="button" class="btn btn-sm btn-primary float-right mb-2" data-toggle="modal" data-target="#tambah-fasilitas">Tambah</button>
                                             <select name="fasilitas[]" id="fasilitas" class="form-control sl2multi" multiple style="width: 100% !important">
                                             </select>
                                         </div>
@@ -162,6 +162,45 @@
             // $('.select2bs4').select2({
             //     theme: 'bootstrap4'
             // })
+
+            $('#tambah-fasilitas form').submit((e) => {
+                e.preventDefault();
+
+                var form = $('#tambah-fasilitas form')[0];
+                var data = new FormData(form);
+
+                $('#tambah-fasilitas button[type=submit]').attr('disabled');
+
+                $.ajax({
+                    url: "{{ route('admin.master-data.akomodasi.fasilitas.store') }}",
+                    enctype: 'multipart/form-data',
+                    type: "POST",
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    timeout: 800000,
+                    success: function(hasil) {
+                        // hasil = JSON.parse(hasil);
+                        console.log("SUCCESS : ", hasil);
+                        $.toast({
+                            heading: 'Success',
+                            text: hasil.msg,
+                            showHideTransition: 'slide',
+                            icon: 'success',
+                            position: 'top-right'
+                        });
+                    },
+                    error: function(e) {
+                        console.log("ERROR : ", e);
+                    },
+                    complete: function() {
+                        $('#tambah-fasilitas button[type=submit]').removeAttr('disabled');
+                        $('#tambah-fasilitas').modal("hide");
+                    }
+                })
+            });
+
             $('#tambah-kategori form').submit((e) => {
                 e.preventDefault();
 
@@ -366,50 +405,6 @@
                     }
                 })
             }
-        }
-
-
-        function tampil_fasilitas()
-        {
-            $('#tambah-fasilitas').modal()
-            $('#tambah-fasilitas #title').html('Tambah Data')
-            $('#tambah-fasilitas #btnNama').html('Tambah')
-        }
-
-        function simpan_fasilitas()
-        {
-            var icon_fasilitas = $('#icon_fasilitas').prop('files')[0];
-            var nama_fasilitas = $('#nama_fasilitas').val();
-            var id = $('#id').val();
-            var form_data = new FormData();
-
-            form_data.append("_token", "{{ csrf_token() }}");
-            form_data.append("_method", "POST");
-            form_data.append('icon_fasilitas', icon_fasilitas);
-            form_data.append('nama_fasilitas', nama_fasilitas);
-            form_data.append('id', id);
-
-            $.ajax({
-                type: "POST",
-                url: "{{route('admin.master-data.akomodasi.fasilitas.store')}}",
-                contentType: 'multipart/form-data',
-                data: form_data,
-                processData: false,
-                contentType: false,
-                dataType: 'JSON',
-                success: function(data) {
-                    // location.reload();
-                    alert("Fasilitas berhasil ditambahkan")
-                    $('#tambah-fasilitas').modal('hide')
-                    console.log(data);
-                },
-                error: function(e) {
-                    console.log(e.responseText);
-                },
-                complete: function () {
-                    $('#tambah-fasilitas').modal('hide');
-                }
-            });
         }
 
         function fasilitas(id) {

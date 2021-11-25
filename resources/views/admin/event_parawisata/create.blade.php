@@ -34,7 +34,7 @@
                 <div class="col-lg-12">
                     <div class="card card-outline card-primary">
                         <div class="card-body">
-                            <form action="{{ route('admin.fasilitas-umum.store') }}" method="POST"
+                            <form action="{{ route('admin.event-parawisata.store') }}" method="POST"
                                 enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden" name="id" id="id">
@@ -96,26 +96,6 @@
     </div>
     <!-- /.content -->
 
-
-    <!-- Modal -->
-    <div class="modal fade" id="tambah-kategori" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">
-                        <div id="title"></div>
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    @include('admin.master_data.fasilitas_umum.kategori.form')
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection
 
 @push('js')
