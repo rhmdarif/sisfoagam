@@ -49,7 +49,7 @@
                                         <td>{{ date("d M Y", strtotime($d->start_at)) }} - {{ date("d M Y", strtotime($d->end_at)) }}</td>
                                         <td>{{ substr(strip_tags($d->keterangan), 0, 100) }}{{ strlen($d->keterangan) > 100? "..." : "" }}</td>
                                         <td>
-                                            <img src="{{ storage_url($d->foto) }}" alt="{{ $d->jenis_event }}" class="img-fluid" width="100px">
+                                            <img src="{{ $d->foto }}" alt="{{ $d->jenis_event }}" class="img-fluid" width="100px">
                                         </td>
                                         <td>
                                             <button style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>

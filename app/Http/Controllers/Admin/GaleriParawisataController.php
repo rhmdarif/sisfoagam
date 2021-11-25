@@ -65,7 +65,7 @@ class GaleriParawisataController extends Controller
                 if(isset($kategori)) {
                     $photos[] = [
                         'kategori' => $kategori,
-                        'file' => substr($location, 7)
+                        'file' => storage_url(substr($location, 7))
                     ];
                 }
             }

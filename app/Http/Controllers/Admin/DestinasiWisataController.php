@@ -95,7 +95,7 @@ class DestinasiWisataController extends Controller
             'long' => $request->lng,
             'slug_destinasi' => str_replace('+', '-', urlencode($request->destinasi_wisata)),
             'keterangan' => $request->keterangan ?? "",
-            'thumbnail_destinasi_wisata' => substr($file_location, 7)
+            'thumbnail_destinasi_wisata' => storage_url(substr($file_location, 7))
         ]);
 
         if(count($request->fasilitas)) {
@@ -125,7 +125,7 @@ class DestinasiWisataController extends Controller
                     $photos[] = [
                         'destinasi_wisata_id' => $destinasi_wisata->id,
                         'kategori' => $kategori,
-                        'file' => substr($location, 7)
+                        'file' => storage_url(substr($location, 7))
                     ];
                 }
             }
@@ -213,9 +213,10 @@ class DestinasiWisataController extends Controller
             $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
             $file_location = $file_upload->storeAs("public/destinasi_wisata", $file_name);
 
-            Storage::delete(["public/".$destinasi_wisatum->thumbnail_destinasi_wisata]);
+            list($baseUrl, $path, $dir, $file) = explode("/", $destinasi_wisatum->thumbnail_destinasi_wisata);
+            Storage::disk('public')->delete(implode('/', [$dir, $file]));
 
-            $update['thumbnail_destinasi_wisata'] =  substr($file_location, 7);
+            $update['thumbnail_destinasi_wisata'] =  storage_url(substr($file_location, 7));
         }
 
         $destinasi_wisatum->update($update);
@@ -233,7 +234,8 @@ class DestinasiWisataController extends Controller
         if($request->filled('old')) {
             $not_inc = DB::table('destinasi_wisata_foto_vidio_wisata')->where("destinasi_wisata_id", $destinasi_wisatum->id)->whereNotIn("id", $request->old)->get();
             foreach ($not_inc as $key => $value) {
-                Storage::delete(["public/".$value->file]);
+                list($baseUrl, $path, $dir, $file) = explode("/", $value->file);
+                Storage::disk('public')->delete(implode('/', [$dir, $file]));
             }
             DB::table('destinasi_wisata_foto_vidio_wisata')->where("destinasi_wisata_id", $destinasi_wisatum->id)->whereNotIn("id", $request->old)->delete();
         }
@@ -289,6 +291,22 @@ class DestinasiWisataController extends Controller
     public function media($id)
     {
         return DestinasiWisataFotoVidioWisata::where('destinasi_wisata_id', $id)->get();
+    }
+
+
+    public function detail($id)
+    {
+
+        $data['kategori'] = DB::table('kategori_wisata')->get();
+        $data['destinasi_wisata'] = DB::table('destinasi_wisata')
+                            ->join('kategori_wisata','destinasi_wisata.kategori_wisata_id','kategori_wisata.id')
+                            ->select('destinasi_wisata.id as id_destinasi_wisata','destinasi_wisata.*','kategori_wisata.*')
+                            ->where('destinasi_wisata.id',$id)
+                            ->orderBy("destinasi_wisata.nama_wisata", "asc")
+                            ->get();
+
+        return view('admin.destinasi_wisata.detail', $data);
+        
     }
 
 }

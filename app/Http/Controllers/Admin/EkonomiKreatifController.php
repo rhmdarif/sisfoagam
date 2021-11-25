@@ -84,7 +84,7 @@ class EkonomiKreatifController extends Controller
             'long' => $request->lng,
             'keterangan' => $request->keterangan,
             'slug_ekonomi_kreatif' => str_replace('+', '-', urlencode($request->ekonomi_kreatif)),
-            'thumbnail_ekonomi_kreatif' => substr($file_location, 7)
+            'thumbnail_ekonomi_kreatif' => storage_url(substr($file_location, 7))
         ]);
 
         if($request->hasfile('photos')) {
@@ -104,7 +104,7 @@ class EkonomiKreatifController extends Controller
                     $photos[] = [
                         'ekonomi_kreatif_id' => $ekonomi_kreatif->id,
                         'kategori' => $kategori,
-                        'file' => substr($location, 7)
+                        'file' => storage_url(substr($location, 7))
                     ];
                 }
             }
@@ -184,9 +184,10 @@ class EkonomiKreatifController extends Controller
             $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
             $file_location = $file_upload->storeAs("public/ekonomi_kreatif", $file_name);
 
-            Storage::delete(["public/".$ekonomi_kreatif->thumbnail_ekonomi_kreatif]);
+            list($baseUrl, $path, $dir, $file) = explode("/", $ekonomi_kreatif->thumbnail_ekonomi_kreatif);
+            Storage::disk('public')->delete(implode('/', [$dir, $file]));
 
-            $update['thumbnail_ekonomi_kreatif'] = substr($file_location, 7);
+            $update['thumbnail_ekonomi_kreatif'] = storage_url(substr($file_location, 7));
         }
 
         $ekonomi_kreatif->update($update);
@@ -194,7 +195,8 @@ class EkonomiKreatifController extends Controller
         if($request->filled('old')) {
             $not_inc = DB::table('destinasi_wisata_foto_vidio_wisata')->where("destinasi_wisata_id", $ekonomi_kreatif->id)->whereNotIn("id", $request->old)->get();
             foreach ($not_inc as $key => $value) {
-                Storage::delete(["public/".$value->file]);
+                list($baseUrl, $path, $dir, $file) = explode("/", $value->file);
+                Storage::disk('public')->delete(implode('/', [$dir, $file]));
             }
 
             DB::table('destinasi_wisata_foto_vidio_wisata')->where("destinasi_wisata_id", $ekonomi_kreatif->id)->whereNotIn("id", $request->old)->delete();
@@ -217,7 +219,7 @@ class EkonomiKreatifController extends Controller
                     $photos[] = [
                         'ekonomi_kreatif_id' => $ekonomi_kreatif->id,
                         'kategori' => $kategori,
-                        'file' => substr($location, 7)
+                        'file' => storage_url(substr($location, 7))
                     ];
                 }
             }
@@ -238,5 +240,19 @@ class EkonomiKreatifController extends Controller
         //
         $ekonomi_kreatif->delete();
         return ['pesan' => 'berhasil'];
+    }
+
+    public function detail($id)
+    {
+        $data['kategori'] = DB::table('kategori_ekonomi_kreatif')->get();
+        $data['ekonomi_kreatif'] = DB::table('ekonomi_kreatif')
+                            ->join('kategori_ekonomi_kreatif','ekonomi_kreatif.kategori_ekonomi_kreatif_id','kategori_ekonomi_kreatif.id')
+                            ->select('ekonomi_kreatif.id as id_ekonomi_kreatif','ekonomi_kreatif.*','kategori_ekonomi_kreatif.*')
+                            ->where('ekonomi_kreatif.id',$id)
+                            ->orderBy("ekonomi_kreatif.nama_ekonomi_kreatif", "asc")
+                            ->get();
+           
+
+        return view('admin.ekonomi_kreatif.detail',$data);
     }
 }

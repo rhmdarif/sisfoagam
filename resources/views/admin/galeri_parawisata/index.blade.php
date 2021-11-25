@@ -45,7 +45,7 @@
                                     @foreach($galeries as $i => $d)
                                     <tr>
                                         <td>{{$i+1}}</td>
-                                        <td><a href="{{ storage_url($d->file) }}" data-lightbox="galeri_parawisata" data-title="#{{ $d->id }} ({{ $d->kategori }})"><img src="{{ storage_url($d->file) }}" alt="{{ $d->kategori }}" class="img-fluid" width="100px"></a></td>
+                                        <td><a href="{{ $d->file }}" data-lightbox="galeri_parawisata" data-title="#{{ $d->id }} ({{ $d->kategori }})"><img src="{{ storage_url($d->file) }}" alt="{{ $d->kategori }}" class="img-fluid" width="100px"></a></td>
                                         <td>{{$d->kategori}}</td>
                                         <td>
                                             <button style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>

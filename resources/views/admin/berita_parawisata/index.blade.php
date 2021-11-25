@@ -46,13 +46,13 @@
                                     @foreach($berita as $i => $d)
                                     <tr>
                                         <td>{{$i+1}}</td>
-                                        <td><img src="{{ storage_url($d->foto) }}" alt="{{ $d->judul }}" class="img-fluid" width="100px"></td>
+                                        <td><img src="{{ $d->foto }}" alt="{{ $d->judul }}" class="img-fluid" width="100px"></td>
                                         <td>{{$d->judul}}</td>
                                         <td>{{ substr(strip_tags($d->narasi), 0, 100) }}{{ strlen($d->narasi) > 100? "..." : "" }}</td>
                                         <td>{{$d->posting_by}}</td>
                                         <td>{{$d->created_at}}</td>
                                         <td>
-                                            <button style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>
+                                        <a href="{{ route('admin.berita-pariwisata.detail', $d->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
                                             <a href="{{ route('admin.berita-parawisata.edit', $d->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
                                             <button onclick="hapus('<?= $d->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
                                         </td>

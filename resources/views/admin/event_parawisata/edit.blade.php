@@ -14,12 +14,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Event Parawisata</h1>
+                    <h1 class="m-0">Edit Event Parawisata</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Event Parawisata</li>
+                        <li class="breadcrumb-item active">Edit Event Parawisata</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -76,7 +76,7 @@
                                             <label for="">Foto</label>
 
                                             <div style="margin-top:30px" id="tampilFoto">
-                                                <img src="{{ storage_url($event_parawisatum->foto) }}" width="60%"/>
+                                                <img src="{{ $event_parawisatum->foto }}" width="60%"/>
                                             </div>
 
                                             <input type="file" name="foto" id="foto"

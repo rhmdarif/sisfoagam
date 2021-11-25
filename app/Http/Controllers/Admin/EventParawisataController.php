@@ -66,7 +66,7 @@ class EventParawisataController extends Controller
             'start_at' => $request->start_at,
             'end_at' => $request->end_at,
             'keterangan' => $request->keterangan,
-            'foto' => substr($file_location, 7),
+            'foto' => storage_url(substr($file_location, 7)),
             'slug_event_parawisata' => str_replace('+', '-', urlencode($request->jenis_event))
         ]);
 
@@ -132,9 +132,10 @@ class EventParawisataController extends Controller
             $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
             $file_location = $file_upload->storeAs("public/event_parawisata", $file_name);
 
-            Storage::delete(["public/".$event_parawisatum->foto]);
+            list($baseUrl, $path, $dir, $file) = explode("/", $event_parawisatum->foto);
+            Storage::disk('public')->delete(implode('/', [$dir, $file]));
 
-            $update['foto'] = substr($file_location, 7);
+            $update['foto'] = storage_url(substr($file_location, 7));
         }
 
         $event_parawisatum->update($update);

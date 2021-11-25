@@ -43,7 +43,7 @@
                                         <tr>
                                             <td>{{ $i+1 }}</td>
                                             <td>{{ $item->nama_kategori_akomodasi }}</td>
-                                            <td><img src="{{ storage_url($item->icon_kategori_akomodasi) }}" alt="{{ $item->nama_kategori_akomodasi }}" class="img-fluid" width="60px"> </td>
+                                            <td><img src="{{ $item->icon_kategori_akomodasi }}" alt="{{ $item->nama_kategori_akomodasi }}" class="img-fluid" width="60px"> </td>
                                             <td>
                                                 <button style="width:80px;color:white" type="button" class="btn btn-warning p-1"
                                                     onclick="edits({{ $item->id }})">Edit</button>
@@ -135,17 +135,19 @@
                         $('#tambah-kategori button[type=submit]').removeAttr('disabled');
                     }
                 })
-            })
+            });
+
             $('#edit-kategori form').submit((e) => {
                 e.preventDefault();
 
                 var form = $('#edit-kategori form')[0];
                 var data = new FormData(form);
+                    data.append("_method", "PUT");
 
                 $('#edit-kategori button[type=submit]').attr('disabled');
 
                 $.ajax({
-                    url: "{{ route('admin.master-data.akomodasi.kategori.index') }}/"+$('#id').val(),
+                    url: "{{ route('admin.master-data.akomodasi.kategori.index') }}/"+$('#edit-kategori #id').val(),
                     enctype: 'multipart/form-data',
                     type: "POST",
                     data: data,
@@ -176,11 +178,14 @@
                 success: function(data) {
                     console.log(data)
                     $('#edit-kategori #nama_kategori').val(data.nama_kategori_akomodasi)
-                    $('#edit-kategori #tampilFoto').html(`<img src="{{ url('storage') }}/${data.icon_kategori_akomodasi}" width="30%"/>`)
+                    $('#edit-kategori #tampilFoto').html(`<img src="${data.icon_kategori_akomodasi}" width="30%"/>`)
                     $('#edit-kategori #id').val(data.id)
                     $('#edit-kategori #title').html("Edit Data")
                     $('#edit-kategori #btnNama').html("Edit")
                     $('#edit-kategori').modal('show');
+                },
+                complete: function() {
+                    $('#edit-kategori').modal('hide');
                 }
             })
         }

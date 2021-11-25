@@ -25,7 +25,6 @@ class DestinasiWisata extends Model
                         ];
     protected $appends = ['jarak', 'rating'];
 
-
     public function getJarakAttribute()
     {
         $request = request();

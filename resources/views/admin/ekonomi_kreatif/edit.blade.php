@@ -14,12 +14,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">ekonomi_kreatif</h1>
+                    <h1 class="m-0">Edit Ekonomi Kreatif</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">ekonomi_kreatif</li>
+                        <li class="breadcrumb-item active">Edit Ekonomi Kreatif</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -46,14 +46,8 @@
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label for="">Kategori</label>
-                                                    <button type="button"
-                                                        class="btn btn-sm btn-primary float-right mb-2">Tambah</button>
-                                                    <select name="kategori" id="kategori" class="form-control">
-                                                        <option value="">-PILIH KATEGORI-</option>
-                                                        @foreach ($kategori as $a)
-                                                            <option value="{{ $a->id }}" {{ $ekonomi_kreatif->kategori_ekonomi_kreatif_id == $a->id ? "selected" : "" }}>
-                                                                {{ $a->nama_kategori_kreatif }}</option>
-                                                        @endforeach
+                                                    <button type="button" class="btn btn-primary float-right btn-sm mb-2" data-toggle="modal" data-target="#tambah-kategori">Tambah</button>
+                                                    <select name="kategori" id="kategori" class="form-control select2bs4">
                                                     </select>
                                                 </div>
                                             </div>
@@ -126,7 +120,7 @@
                     let preloaded = [];
 
                     json.forEach((e, i) => {
-                        preloaded.push({id: e.id, src: "{{ url('/') }}/storage/"+e.file});
+                        preloaded.push({id: e.id, src: e.file});
                     });
 
                     $('.input-images').imageUploader({
@@ -216,6 +210,75 @@
                         return query;
                     },
                     processResults: function(data, params) {
+                        params.page = params.page || 1;
+
+                        return {
+                            results: data.result,
+                            pagination: {
+                                more: (params.page * 10) < data.count_filtered
+                            }
+                        };
+                    }
+                    // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+                }
+            });
+
+
+
+            $('#tambah-kategori form').submit((e) => {
+                e.preventDefault();
+
+                var form = $('#tambah-kategori form')[0];
+                var data = new FormData(form);
+
+                $('#tambah-kategori button[type=submit]').attr('disabled');
+
+                $.ajax({
+                    url: "{{ route('admin.master-data.ekonomi-wisata.kategori.store') }}",
+                    enctype: 'multipart/form-data',
+                    type: "POST",
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    timeout: 800000,
+                    success: function (hasil) {
+                        // hasil = JSON.parse(hasil);
+                        console.log("SUCCESS : ", hasil);
+                        $.toast({
+                            heading: 'Success',
+                            text: hasil.msg,
+                            showHideTransition: 'slide',
+                            icon: 'success',
+                            position: 'top-right'
+                        });
+                    },
+                    error: function (e) {
+                        console.log("ERROR : ", e);
+                    },
+                    complete: function() {
+                        $('#tambah-kategori button[type=submit]').removeAttr('disabled');
+                        $('#tambah-kategori').modal('hide');
+                    }
+                })
+            });
+
+
+            $('select.select2bs4').select2({
+                theme: 'bootstrap4',
+                ajax: {
+                    url: "{{ route('admin.master-data.ekonomi-kreatif.kategori-ekonomi') }}",
+                    dataType: 'json',
+                    data: function (params) {
+                        var query = {
+                            search: params.term,
+                            type: 'public'
+                        }
+
+                        // Query parameters will be ?search=[term]&type=public
+                        return query;
+                    },
+                    processResults: function (data, params) {
                         params.page = params.page || 1;
 
                         return {

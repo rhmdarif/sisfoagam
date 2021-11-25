@@ -129,7 +129,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('admin.destinasi-wisata.index') }}" class="nav-link">
-                        <i class="nav-icon fas fa-hotel"></i>
+                        <i class="nav-icon fas fa-umbrella-beach"></i>
                         <p>
                             Destinasi Wisata
                         </p>
@@ -137,7 +137,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('admin.ekonomi-kreatif.index') }}" class="nav-link">
-                        <i class="nav-icon fas fa-hotel"></i>
+                        <i class="nav-icon fas fa-store"></i>
                         <p>
                             Ekonomi Kreatif
                         </p>
@@ -145,7 +145,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('admin.berita-parawisata.index') }}" class="nav-link">
-                        <i class="nav-icon fas fa-hotel"></i>
+                        <i class="nav-icon fas fa-newspaper"></i>
                         <p>
                             Berita Parawisata
                         </p>
@@ -153,7 +153,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('admin.galeri-parawisata.index') }}" class="nav-link">
-                        <i class="nav-icon fas fa-hotel"></i>
+                        <i class="nav-icon fas fa-photo-video"></i>
                         <p>
                             Galeri Parawisata
                         </p>
@@ -161,7 +161,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('admin.fasilitas-umum.index') }}" class="nav-link">
-                        <i class="nav-icon fas fa-hotel"></i>
+                        <i class="nav-icon fas fa-box-open"></i>
                         <p>
                             Fasilitas Umum
                         </p>
@@ -169,7 +169,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('admin.event-parawisata.index') }}" class="nav-link">
-                        <i class="nav-icon fas fa-hotel"></i>
+                        <i class="nav-icon fas fa-calendar-day"></i>
                         <p>
                             Event Parawisata
                         </p>
