@@ -44,7 +44,7 @@
                                         <tr>
                                             <td>{{ $i + 1 }}</td>
                                             <td>{{ $item->nama_fasilitas_akomodasi }}</td>
-                                            <td><img src="{{ storage_url($item->icon_fasilitas_akomodasi) }}"
+                                            <td><img src="{{ $item->icon_fasilitas_akomodasi }}"
                                                     alt="{{ $item->nama_fasilitas_akomodasi }}" class="img-fluid"
                                                     width="60px"> </td>
                                             <td>
@@ -172,8 +172,8 @@
                         console.log("ERROR : ", e);
                     },
                     complete: function() {
-                        $('#tambah-fasilitas button[type=submit]').removeAttr('disabled');
-                        $('#tambah-fasilitas').modal("hide");
+                        $('#edit-fasilitas button[type=submit]').removeAttr('disabled');
+                        $('#edit-fasilitas').modal("hide");
                     }
                 })
             })
@@ -189,7 +189,7 @@
                     console.log(data)
                     $('#edit-fasilitas #nama_fasilitas').val(data.nama_fasilitas_akomodasi)
                     $('#edit-fasilitas #tampilFoto').html(
-                        `<img src="{{ url('storage') }}/${data.icon_fasilitas_akomodasi}" width="30%"/>`)
+                        `<img src="${data.icon_fasilitas_akomodasi}" width="30%"/>`)
                     $('#edit-fasilitas #id').val(data.id)
                     $('#edit-fasilitas #title').html("Edit Data")
                     $('#edit-fasilitas #btnNama').html("Edit")

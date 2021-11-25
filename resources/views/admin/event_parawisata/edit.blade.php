@@ -76,7 +76,7 @@
                                             <label for="">Foto</label>
 
                                             <div style="margin-top:30px" id="tampilFoto">
-                                                <img src="{{ storage_url($event_parawisatum->foto) }}" width="60%"/>
+                                                <img src="{{ $event_parawisatum->foto }}" width="60%"/>
                                             </div>
 
                                             <input type="file" name="foto" id="foto"

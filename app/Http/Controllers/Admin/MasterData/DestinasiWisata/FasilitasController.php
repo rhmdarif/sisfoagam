@@ -61,7 +61,7 @@ class FasilitasController extends Controller
 
         FasilitasWisata::updateOrCreate(
                             ['nama_fasilitas_wisata' => $request->nama_fasilitas],
-                            ['icon_fasilitas_wisata' => substr($file_location, 7)]
+                            ['icon_fasilitas_wisata' => storage_url(substr($file_location, 7))]
                         );
         return ['status' => true, 'msg' => "Fasilitas berhasil ditambahkan"];
     }
@@ -115,9 +115,10 @@ class FasilitasController extends Controller
             $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
             $file_location = $file_upload->storeAs("public/fasilitas_wisata", $file_name);
 
-            Storage::disk('public')->delete($fasilita->icon_fasilitas_wisata);
+            list($baseUrl, $path, $dir, $file) = explode("/", $fasilita->icon_fasilitas_wisata);
+            Storage::disk('public')->delete(implode('/', [$dir, $file]));
 
-            $update['icon_fasilitas_wisata'] = substr($file_location, 7);
+            $update['icon_fasilitas_wisata'] = storage_url(substr($file_location, 7));
         }
 
         $fasilita->update($update);

@@ -61,7 +61,7 @@ class BeritaParawisataController extends Controller
             'judul' => $request->judul,
             'narasi' => $request->narasi,
             'posting_by' => $request->posting_by,
-            'foto' => substr($file_location, 7),
+            'foto' => storage_url(substr($file_location, 7)),
             'slug_berita_parawisata' => date("dmY")."-".str_replace("+", '-', urlencode($request->judul)),
         ]);
 
@@ -126,8 +126,10 @@ class BeritaParawisataController extends Controller
             $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
             $file_location = $file_upload->storeAs("public/berita_parawisata", $file_name);
 
-            Storage::delete(["public/".$berita_parawisatum->foto]);
-            $update['foto'] = substr($file_location, 7);
+            list($baseUrl, $path, $dir, $file) = explode("/", $berita_parawisatum->foto);
+            Storage::disk('public')->delete(implode('/', [$dir, $file]));
+
+            $update['foto'] = storage_url(substr($file_location, 7));
         }
 
         $berita_parawisatum->update($update);

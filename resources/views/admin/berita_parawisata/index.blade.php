@@ -46,7 +46,7 @@
                                     @foreach($berita as $i => $d)
                                     <tr>
                                         <td>{{$i+1}}</td>
-                                        <td><img src="{{ storage_url($d->foto) }}" alt="{{ $d->judul }}" class="img-fluid" width="100px"></td>
+                                        <td><img src="{{ $d->foto }}" alt="{{ $d->judul }}" class="img-fluid" width="100px"></td>
                                         <td>{{$d->judul}}</td>
                                         <td>{{ substr(strip_tags($d->narasi), 0, 100) }}{{ strlen($d->narasi) > 100? "..." : "" }}</td>
                                         <td>{{$d->posting_by}}</td>

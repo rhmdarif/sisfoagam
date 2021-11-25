@@ -43,7 +43,7 @@
                                         <tr>
                                             <td>{{ $i+1 }}</td>
                                             <td>{{ $item->nama_kategori_wisata }}</td>
-                                            <td><img src="{{ storage_url($item->icon_kategori_wisata) }}" alt="{{ $item->nama_kategori_wisata }}" class="img-fluid" width="60px"> </td>
+                                            <td><img src="{{ $item->icon_kategori_wisata }}" alt="{{ $item->nama_kategori_wisata }}" class="img-fluid" width="60px"> </td>
                                             <td>
                                                 <button style="width:80px;color:white" type="button" class="btn btn-warning p-1"
                                                     onclick="edits({{ $item->id }})">Edit</button>
@@ -133,6 +133,7 @@
                     },
                     complete: function() {
                         $('#tambah-kategori button[type=submit]').removeAttr('disabled');
+                        $('#tambah-kategori').modal('hide');
                     }
                 })
             })
@@ -161,7 +162,8 @@
                         console.log("ERROR : ", e);
                     },
                     complete: function() {
-                        $('#tambah-kategori button[type=submit]').removeAttr('disabled');
+                        $('#edit-kategori button[type=submit]').removeAttr('disabled');
+                        $('#edit-kategori').modal('hide');
                     }
                 })
             })
@@ -177,7 +179,7 @@
                 success: function(data) {
                     console.log(data)
                     $('#edit-kategori #nama_kategori').val(data.nama_kategori_wisata)
-                    $('#edit-kategori #tampilFoto').html(`<img src="{{ url('storage') }}/${data.icon_kategori_wisata}" width="30%"/>`)
+                    $('#edit-kategori #tampilFoto').html(`<img src="${data.icon_kategori_wisata}" width="30%"/>`)
                     $('#edit-kategori #id').val(data.id)
                     $('#edit-kategori #title').html("Edit Data")
                     $('#edit-kategori #btnNama').html("Edit")
@@ -199,6 +201,9 @@
                     dataType: 'JSON',
                     success: function(data) {
                         location.reload();
+                    },
+                    complete: function() {
+                        $('#edit-kategori').modal('hide');
                     }
                 });
             }

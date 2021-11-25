@@ -60,7 +60,7 @@ class KategoriController extends Controller
         KategoriEkonomiKreatif::updateOrCreate(
                             ['nama_kategori_kreatif' => $request->nama_kategori],
                             [
-                                'icon_kategori_kreatif' => substr($file_location, 7),
+                                'icon_kategori_kreatif' => storage_url(substr($file_location, 7)),
                                 'slug_kategori_kreatif' => $slug,
                             ]
                         );
@@ -121,9 +121,10 @@ class KategoriController extends Controller
             $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
             $file_location = $file_upload->storeAs("public/kategori_ekonomi_kreatif", $file_name);
 
-            Storage::disk('public')->delete($kategori->icon_kategori_kreatif);
+            list($baseUrl, $path, $dir, $file) = explode("/", $kategori->icon_kategori_kreatif);
+            Storage::disk('public')->delete(implode('/', [$dir, $file]));
 
-            $update['icon_kategori_kreatif'] = substr($file_location, 7);
+            $update['icon_kategori_kreatif'] = storage_url(substr($file_location, 7));
         }
 
         $kategori->update($update);

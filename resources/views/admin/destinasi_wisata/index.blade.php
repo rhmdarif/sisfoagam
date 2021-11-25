@@ -49,7 +49,7 @@
                                     @foreach($destinasi_wisata as $i => $d)
                                     <tr>
                                         <td>{{$i+1}}</td>
-                                        <td><img src="{{ storage_url($d->thumbnail_destinasi_wisata) }}" alt="{{ $d->thumbnail_destinasi_wisata }}" class="img-fluid" width="100px"></td>
+                                        <td><img src="{{ $d->thumbnail_destinasi_wisata }}" alt="{{ $d->thumbnail_destinasi_wisata }}" class="img-fluid" width="100px"></td>
                                         <td>{{$d->kategori->nama_kategori_wisata}}</td>
                                         <td>{{$d->nama_wisata}}</td>
                                         <td>{{number_format($d->harga_tiket_dewasa)}}</td>

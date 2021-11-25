@@ -97,7 +97,7 @@
                     let preloaded = [];
 
                     json.forEach((e, i) => {
-                        preloaded.push({id: e.id, src: "{{ url('/') }}/storage/"+e.file});
+                        preloaded.push({id: e.id, src: e.file});
                     });
 
                     $('.input-images').imageUploader({

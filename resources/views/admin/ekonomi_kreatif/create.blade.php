@@ -253,6 +253,9 @@
                 },
                 error: function(e) {
                     console.log(e.responseText);
+                },
+                complete: function () {
+                    $('#tambah-fasilitas').modal('hide');
                 }
             });
         }

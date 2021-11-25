@@ -195,6 +195,7 @@
                     },
                     complete: function() {
                         $('#tambah-kategori button[type=submit]').removeAttr('disabled');
+                        $('#tambah-kategori').modal('hide');
                     }
                 })
             });
@@ -404,6 +405,9 @@
                 },
                 error: function(e) {
                     console.log(e.responseText);
+                },
+                complete: function () {
+                    $('#tambah-fasilitas').modal('hide');
                 }
             });
         }

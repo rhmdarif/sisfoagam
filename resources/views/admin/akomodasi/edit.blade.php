@@ -73,7 +73,7 @@
                                     </div>
                                     <div class="col-md-4 text-center">
                                         <div style="margin-top:30px" id="tampilFoto">
-                                            <img src="{{ storage_url($data->thumbnail_akomodasi) }}" width="60%"/>
+                                            <img src="{{ $data->thumbnail_akomodasi }}" width="60%"/>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -164,7 +164,7 @@
                     let preloaded = [];
 
                     json.forEach((e, i) => {
-                        preloaded.push({id: e.id, src: "{{ url('/') }}/storage/foto_video_akomodasi/"+e.file});
+                        preloaded.push({id: e.id, src: e.file});
                     });
 
                     $('.input-images').imageUploader({
@@ -234,6 +234,7 @@
                     },
                     complete: function() {
                         $('#tambah-kategori button[type=submit]').removeAttr('disabled');
+                        $('#tambah-kategori').modal('hide');
                     }
                 })
             });
@@ -362,6 +363,9 @@
                 },
                 error: function(e) {
                     console.log(e.responseText);
+                },
+                complete: function () {
+                    $('#tambah-fasilitas').modal('hide');
                 }
             });
         }

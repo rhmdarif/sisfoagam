@@ -46,7 +46,7 @@
                                     @foreach($ekonomi_kreatif as $i => $d)
                                     <tr>
                                         <td>{{$i+1}}</td>
-                                        <td><img src="{{ storage_url($d->thumbnail_ekonomi_kreatif) }}" alt="{{ $d->thumbnail_ekonomi_kreatif }}" class="img-fluid" width="100px"></td>
+                                        <td><img src="{{ $d->thumbnail_ekonomi_kreatif }}" alt="{{ $d->thumbnail_ekonomi_kreatif }}" class="img-fluid" width="100px"></td>
                                         <td>{{$d->kategori->nama_kategori_kreatif}}</td>
                                         <td>{{$d->nama_ekonomi_kreatif}}</td>
                                         <td>{{number_format($d->harga)}}</td>
