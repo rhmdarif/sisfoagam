@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Models\BeritaParawisata;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use DB;
 
 class BeritaParawisataController extends Controller
 {
@@ -154,7 +154,7 @@ class BeritaParawisataController extends Controller
 
     public function detail($id)
     {
-     
+
         $data['berita_parawisata'] = DB::table('berita_parawisata')->get();
 
         return view('admin.berita_parawisata.detail',$data);
