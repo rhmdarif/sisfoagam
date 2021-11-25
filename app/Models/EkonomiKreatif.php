@@ -10,7 +10,7 @@ class EkonomiKreatif extends Model
 {
     use HasFactory;
     protected $table = "ekonomi_kreatif";
-    protected $appends = ['jarak', 'rating'];
+    protected $fillable = ['kategori_ekonomi_kreatif_id', 'nama_ekonomi_kreatif', 'slug_ekonomi_kreatif', 'harga', 'lat', 'long', 'thumbnail_ekonomi_kreatif', 'keterangan'];
 
     public function getJarakAttribute()
     {

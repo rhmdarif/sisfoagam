@@ -6,12 +6,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Akomodasi</h1>
+                    <h1 class="m-0">Tambah Akomodasi</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Akomodasi</li>
+                        <li class="breadcrumb-item active">Tambah Akomodasi</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -48,7 +48,7 @@
                                     @foreach($akomodasi as $i => $a)
                                     <tr>
                                         <td>{{$i+1}}</td>
-                                        <td><img src="{{ asset('storage/thumbnail/'.$a->thumbnail_akomodasi) }}" alt="{{ $a->thumbnail_akomodasi }}" class="img-fluid" width="100px"></td>
+                                        <td><img src="{{ $a->thumbnail_akomodasi }}" alt="{{ $a->thumbnail_akomodasi }}" class="img-fluid" width="100px"></td>
                                         <td>{{$a->nama_akomodasi}}</td>
                                         <td>{{$a->nama_kategori_akomodasi}}</td>
                                         <td>{{$a->kelas}}</td>
@@ -58,9 +58,9 @@
                                             <iframe width="300" height="170" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=<?= $a->lat; ?>,<?= $a->long; ?>&hl=in&z=14&amp;output=embed"></iframe>
                                         </td>
                                         <td>
-                                            <button style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>
+                                            <a href="{{ route('admin.akomodasi.detail', $a->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
                                             <button onclick="fasilitas('<?= $a->id_akomodasi ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-plus"></i></button>
-                                            <button onclick="location.href='<?= route('admin.akomodasi.edit-page', $a->id_akomodasi) ?>'" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></button>
+                                            <button onclick="location.href='<?= route('admin.akomodasi.edit-page', $a->id) ?>'" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></button>
                                             <button onclick="hapus('<?= $a->id_akomodasi ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
                                         </td>
                                     </tr>

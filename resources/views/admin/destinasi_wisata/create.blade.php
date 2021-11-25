@@ -1,9 +1,12 @@
 @extends('admin.layouts.app')
-@section('title', 'Akomodasi')
+@section('title', 'destinasi_wisata')
 @push('css')
     <!-- Select2 -->
     <link rel="stylesheet" href="{{ url('admin/assets') }}/plugins/select2/css/select2.min.css">
     <link rel="stylesheet" href="{{ url('admin/assets') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+
+    <link type="text/css" rel="stylesheet"
+        href="{{ url('/') }}/admin/assets/plugins/image-uploader/image-uploader.min.css">
 @endpush
 @section('content')
     <!-- Content Header (Page header) -->
@@ -11,12 +14,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Akomodasi</h1>
+                    <h1 class="m-0">Tambah Destinasi Wisata</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Akomodasi</li>
+                        <li class="breadcrumb-item active">Tambah Destinasi Wisata</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -31,68 +34,90 @@
                 <div class="col-lg-12">
                     <div class="card card-outline card-primary">
                         <div class="card-body">
-                            <form action="{{ route('admin.akomodasi.tambah') }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('admin.destinasi-wisata.store') }}" method="POST"
+                                enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden" name="id" id="id">
                                 <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="">Kategori</label>
-                                            <button type="button" class="btn btn-sm btn-primary float-right mb-2">Tambah</button>
-                                            <select name="kategori" id="kategori" class="form-control">
-                                                <option value="">-PILIH KATEGORI-</option>
-                                                @foreach ($kategori as $a)
-                                                    <option value="{{ $a->id }}">{{ $a->nama_kategori_wisata }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="">Akomodasi</label>
-                                            <input type="text" name="akomodasi" id="akomodasi" class="form-control"
-                                                placeholder="Akomodasi">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="">Kelas</label>
-                                            <input type="text" name="kelas" id="kelas" class="form-control" placeholder="Kelas">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="">Tipe</label>
-                                            <input type="text" name="tipe" id="tipe" class="form-control" placeholder="Tipe">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="">Harga</label>
-                                            <input type="text" name="harga" id="harga" class="form-control" placeholder="Harga">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="">Thumbnail</label>
-                                            <input type="file" name="thumbnail" id="thumbnail"
-                                                onchange="return tampilfoto()" class="form-control">
-                                            <input type="hidden" name="lat" id="lat" class="form-control">
-                                            <input type="hidden" name="lng" id="lng" class="form-control">
+                                    <div class="col-md-8">
+                                        <div class="row">
+
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="">Kategori</label>
+                                                    <button type="button" class="btn btn-primary float-right btn-sm mb-2" data-toggle="modal" data-target="#tambah-kategori">Tambah</button>
+                                                    <select name="kategori" id="kategori" class="form-control select2bs4">
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="">Destinasi Wisata</label>
+                                                    <input type="text" name="destinasi_wisata" id="destinasi_wisata"
+                                                        class="form-control" placeholder="Destinasi Wisata">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="">Harga Tiket Dewasa</label>
+                                                    <input type="text" name="harga_tiket_dewasa" id="harga_tiket_dewasa" class="form-control"
+                                                        placeholder="Kelas">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="">Harga Tiket Anak2</label>
+                                                    <input type="text" name="harga_tiket_anak" id="harga_tiket_anak" class="form-control"
+                                                        placeholder="Kelas">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="">Biaya Parkir R. 4</label>
+                                                    <input type="text" name="biaya_parkir_r4" id="biaya_parkir_r4" class="form-control"
+                                                        placeholder="Kelas">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="">Biaya Parkir R. 2</label>
+                                                    <input type="text" name="biaya_parkir_r2" id="biaya_parkir_r2" class="form-control"
+                                                        placeholder="Kelas">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="">Thumbnail</label>
+                                                    <input type="file" name="thumbnail" id="thumbnail"
+                                                        onchange="return tampilfoto()" class="form-control">
+                                                    <input type="hidden" name="lat" id="lat" class="form-control">
+                                                    <input type="hidden" name="lng" id="lng" class="form-control">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="">Fasilitas</label>
+                                                    <button type="button" class="btn btn-sm btn-primary float-right mb-2"
+                                                        onclick="tampil_fasilitas()">Tambah</button>
+                                                    <select name="fasilitas[]" id="fasilitas" class="form-control sl2multi" multiple
+                                                        style="width: 100% !important">
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="">Keterangan</label>
+                                                    <textarea name="keterangan" id="keterangan" class="note"></textarea>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-4 text-center">
                                         <div style="margin-top:30px" id="tampilFoto"></div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="">Fasilitas</label>
-                                            <button type="button" class="btn btn-sm btn-primary float-right mb-2" onclick="tampil_fasilitas()">Tambah</button>
-                                            <select name="fasilitas[]" id="fasilitas" class="form-control sl2multi" multiple style="width: 100% !important">
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="">Keterangan</label>
-                                            <textarea name="keterangan" id="keterangan" class="note"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
+
                                         <div class="form-group">
                                             <label for="">Lokasi</label>
                                             <div style="height: 337px;" id="map"></div>
                                         </div>
+                                    </div>
+                                    <div class="col-md-12 mb-2">
+                                        <div class="input-images"></div>
                                     </div>
                                 </div>
 
@@ -114,18 +139,32 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel"><div id="title"></div></h5>
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        <div id="title"></div>
+                    </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    @include('admin.akomodasi.fasilitas.form')
+                    @include('admin.master_data.destinasi_wisata.fasilitas.form')
                 </div>
-                {{-- <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div> --}}
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="edit-kategori" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @include('admin.master_data.destinasi_wisata.kategori.form')
+                </div>
             </div>
         </div>
     </div>
@@ -134,8 +173,54 @@
 @push('js')
     <!-- Select2 -->
     <script src="{{ url('admin/assets') }}/plugins/select2/js/select2.full.min.js"></script>
+    <script src="{{ url('/') }}/admin/assets/plugins/image-uploader/image-uploader.min.js"></script>
+
+    @include('layouts.toastr-notif')
     <script>
-        $(function() {
+        $(document).ready(() => {
+            $('.input-images').imageUploader({
+                imagesInputName: 'photos'
+            });
+
+            $('#tambah-fasilitas form').submit((e) => {
+                e.preventDefault();
+
+                var form = $('#tambah-fasilitas form')[0];
+                var data = new FormData(form);
+
+                $('#tambah-fasilitas button[type=submit]').attr('disabled');
+
+                $.ajax({
+                    url: "{{ route('admin.master-data.destinasi-wisata.fasilitas.store') }}",
+                    enctype: 'multipart/form-data',
+                    type: "POST",
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    timeout: 800000,
+                    success: function(hasil) {
+                        // hasil = JSON.parse(hasil);
+                        console.log("SUCCESS : ", hasil);
+                        $.toast({
+                            heading: 'Success',
+                            text: hasil.msg,
+                            showHideTransition: 'slide',
+                            icon: 'success',
+                            position: 'top-right'
+                        });
+                    },
+                    error: function(e) {
+                        console.log("ERROR : ", e);
+                    },
+                    complete: function() {
+                        $('#tambah-fasilitas button[type=submit]').removeAttr('disabled');
+                        $('#tambah-fasilitas').modal("hide");
+                    }
+                })
+            });
+
+
             //Initialize Select2 Elements
             // $('.select2bs4').select2({
             //     theme: 'bootstrap4'
@@ -143,7 +228,75 @@
 
             $('select.sl2multi').select2({
                 ajax: {
-                    url: "{{ route('admin.select2.fasilitas-destinasi-wisata') }}",
+                    url: "{{ route('admin.select2.fasilitas-wisata') }}",
+                    dataType: 'json',
+                    data: function(params) {
+                        var query = {
+                            search: params.term,
+                            type: 'public'
+                        }
+
+                        // Query parameters will be ?search=[term]&type=public
+                        return query;
+                    },
+                    processResults: function(data, params) {
+                        params.page = params.page || 1;
+
+                        return {
+                            results: data.result,
+                            pagination: {
+                                more: (params.page * 10) < data.count_filtered
+                            }
+                        };
+                    }
+                    // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+                }
+            });
+
+
+            $('#tambah-kategori form').submit((e) => {
+                e.preventDefault();
+
+                var form = $('#tambah-kategori form')[0];
+                var data = new FormData(form);
+
+                $('#tambah-kategori button[type=submit]').attr('disabled');
+
+                $.ajax({
+                    url: "{{ route('admin.master-data.destinasi-wisata.kategori.store') }}",
+                    enctype: 'multipart/form-data',
+                    type: "POST",
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    timeout: 800000,
+                    success: function (hasil) {
+                        // hasil = JSON.parse(hasil);
+                        console.log("SUCCESS : ", hasil);
+                        $.toast({
+                            heading: 'Success',
+                            text: hasil.msg,
+                            showHideTransition: 'slide',
+                            icon: 'success',
+                            position: 'top-right'
+                        });
+                    },
+                    error: function (e) {
+                        console.log("ERROR : ", e);
+                    },
+                    complete: function() {
+                        $('#tambah-kategori button[type=submit]').removeAttr('disabled');
+                        $('#tambah-kategori').modal('hide');
+                    }
+                })
+            });
+
+
+            $('select.select2bs4').select2({
+                theme: 'bootstrap4',
+                ajax: {
+                    url: "{{ route('admin.select2.kategori-wisata') }}",
                     dataType: 'json',
                     data: function (params) {
                         var query = {
@@ -170,7 +323,22 @@
         });
 
 
-        var harga = new AutoNumeric('#harga', {
+        var harga_tiket_dewasa = new AutoNumeric('#harga_tiket_dewasa', {
+            currencySymbol: 'Rp.',
+            decimalCharacter: ',',
+            digitGroupSeparator: '.',
+        });
+        var harga_tiket_anak = new AutoNumeric('#harga_tiket_anak', {
+            currencySymbol: 'Rp.',
+            decimalCharacter: ',',
+            digitGroupSeparator: '.',
+        });
+        var biaya_parkir_r4 = new AutoNumeric('#biaya_parkir_r4', {
+            currencySymbol: 'Rp.',
+            decimalCharacter: ',',
+            digitGroupSeparator: '.',
+        });
+        var biaya_parkir_r2 = new AutoNumeric('#biaya_parkir_r2', {
             currencySymbol: 'Rp.',
             decimalCharacter: ',',
             digitGroupSeparator: '.',
@@ -179,115 +347,15 @@
         function tampil() {
             $('#tampilFoto').html(`<img src="../img/noimages.png" width="60%"/>`)
             $('#addAkomoadasi').modal('show')
-            $('#title').html('Tambah Akomodasi')
+            $('#title').html('Tambah destinasi_wisata')
         }
-
-        function simpan() {
-            var id = $('#id').val();
-            var kategori = $('#kategori').val();
-            var akomodasi = $('#akomodasi').val();
-            var kelas = $('#kelas').val();
-            var tipe = $('#tipe').val();
-            var lat = $('#lat').val();
-            var lng = $('#lng').val();
-            var keterangan = $('#keterangan').val();
-            var thumbnail = $('#thumbnail').prop('files')[0];
-            let form_data = new FormData();
-
-            form_data.append("_token", "{{ csrf_token() }}");
-            form_data.append("_method", "POST");
-            form_data.append("kategori", kategori);
-            form_data.append("akomodasi", akomodasi);
-            form_data.append("kelas", kelas);
-            form_data.append("tipe", tipe);
-            form_data.append("harga", harga.getNumber());
-            form_data.append("lat", lat);
-            form_data.append("lng", lng);
-            form_data.append("keterangan", keterangan);
-            form_data.append("thumbnail", thumbnail);
-            form_data.append("id", id);
-
-            $.ajax({
-                type: "POST",
-                url: "{{ route('admin.akomodasi.tambah') }}",
-                contentType: 'multipart/form-data',
-                data: form_data,
-                processData: false,
-                contentType: false,
-                dataType: 'JSON',
-                success: function(data) {
-                    if (data.pesan == 'berhasil') {
-                        window.location.reload();
-                    }
-                }
-            })
-        }
-
-        function edit(id) {
-            const harga = AutoNumeric.getAutoNumericElement('#harga')
-
-            $.ajax({
-                url: "{{ route('admin.akomodasi.edit') }}",
-                dataType: "json",
-                type: 'POST',
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    "id": id
-                },
-                success: function(res) {
-                    console.log(res);
-                    $('#id').val(res.data.id_akomodasi);
-                    $('#kategori').val(res.data.kategori_akomodasi_id);
-                    $('#akomodasi').val(res.data.nama_akomodasi);
-                    $('#kelas').val(res.data.kelas);
-                    $('#tipe').val(res.data.tipe);
-                    $('#lat').val(res.data.lat);
-                    $('#lng').val(res.data.long);
-                    $('#tampilFoto').html(
-                        `<img src="{{ asset('storage/thumbnail/${res.data.thumbnail_akomodasi}') }}" width="60%"/>`
-                    )
-                    if (marker) {
-                        map.removeLayer(marker);
-                    }
-                    marker = new L.Marker([res.data.lat, res.data.long]).addTo(map);
-                    $(".note").summernote("code", res.data.keterangan);
-                    harga.set(res.data.harga);
-                    $('#addAkomoadasi').modal('show')
-                    $('#title').html('Edit Akomodasi')
-                }
-            })
-        }
-
-        function hapus(id) {
-            var pesan = confirm("Yakin Ingin Menghapus Data!");
-            if (pesan) {
-                $.ajax({
-                    url: "{{ route('admin.akomodasi.delete') }}",
-                    type: "POST",
-                    dataType: "JSON",
-                    data: {
-                        'id': id,
-                        "_token": "{{ csrf_token() }}"
-                    },
-                    success: function(data) {
-                        if (data.pesan == 'berhasil') {
-                            window.location.reload();
-                        }
-                    }
-                })
-            }
-        }
-
-
-        function tampil_fasilitas()
-        {
+        function tampil_fasilitas() {
             $('#tambah-fasilitas').modal()
             $('#tambah-fasilitas #title').html('Tambah Data')
             $('#tambah-fasilitas #btnNama').html('Tambah')
         }
 
-        function simpan_fasilitas()
-        {
+        function simpan_fasilitas() {
             var icon_fasilitas = $('#icon_fasilitas').prop('files')[0];
             var nama_fasilitas = $('#nama_fasilitas').val();
             var id = $('#id').val();
@@ -301,7 +369,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "{{route('admin.master-data.fasilitas-akomodasi.tambah')}}",
+                url: "{{ route('admin.master-data.destinasi-wisata.fasilitas.store') }}",
                 contentType: 'multipart/form-data',
                 data: form_data,
                 processData: false,
@@ -315,28 +383,11 @@
                 },
                 error: function(e) {
                     console.log(e.responseText);
+                },
+                complete: function () {
+                    $('#tambah-fasilitas').modal('hide');
                 }
             });
-        }
-
-        function fasilitas(id) {
-            $.ajax({
-                url: "{{ route('admin.akomodasi.fasilitas') }}",
-                type: "POST",
-                dataType: "HTML",
-                data: {
-                    'id': id,
-                    '_token': '{{ csrf_token() }}'
-                },
-                success: function(res) {
-                    $('#isiTabel').html(res)
-                    $('#addFasilitas').modal('show');
-                }
-            })
-        }
-
-        function tambahFasilitas() {
-            $('#tambahfasilitas').modal('show')
         }
 
         var map = L.map('map').setView([0, 0], 13);

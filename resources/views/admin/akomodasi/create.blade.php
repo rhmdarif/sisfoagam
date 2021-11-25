@@ -4,6 +4,8 @@
     <!-- Select2 -->
     <link rel="stylesheet" href="{{ url('admin/assets') }}/plugins/select2/css/select2.min.css">
     <link rel="stylesheet" href="{{ url('admin/assets') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+
+    <link type="text/css" rel="stylesheet" href="{{ url('/') }}/admin/assets/plugins/image-uploader/image-uploader.min.css">
 @endpush
 @section('content')
     <!-- Content Header (Page header) -->
@@ -11,12 +13,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Akomodasi</h1>
+                    <h1 class="m-0">Tambah Akomodasi</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Akomodasi</li>
+                        <li class="breadcrumb-item active">Tambah Akomodasi</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -38,13 +40,8 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="">Kategori</label>
-                                            <button type="button" class="btn btn-sm btn-primary float-right mb-2">Tambah</button>
-                                            <select name="kategori" id="kategori" class="form-control">
-                                                <option value="">-PILIH KATEGORI-</option>
-                                                @foreach ($kategori as $a)
-                                                    <option value="{{ $a->id }}">{{ $a->nama_kategori_akomodasi }}
-                                                    </option>
-                                                @endforeach
+                                            <button type="button" class="btn btn-primary float-right btn-sm mb-2" data-toggle="modal" data-target="#tambah-kategori">Tambah</button>
+                                            <select name="kategori" id="kategori" class="form-control select2bs4">
                                             </select>
                                         </div>
                                         <div class="form-group">
@@ -95,6 +92,10 @@
                                             <div style="height: 337px;" id="map"></div>
                                         </div>
                                     </div>
+
+                                    <div class="col-md-12">
+                                        <div class="input-images"></div>
+                                    </div>
                                 </div>
 
                                 <button type="submit" class="btn btn-primary">Tambahkan</button>
@@ -121,7 +122,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    @include('admin.akomodasi.fasilitas.form')
+                    @include('admin.master_data.akomodasi.fasilitas.form')
                 </div>
                 {{-- <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -130,19 +131,107 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="tambah-kategori" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"><div id="title"></div></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @include('admin.master_data.akomodasi.kategori.form')
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('js')
     <!-- Select2 -->
     <script src="{{ url('admin/assets') }}/plugins/select2/js/select2.full.min.js"></script>
+    <script src="{{ url('/') }}/admin/assets/plugins/image-uploader/image-uploader.min.js"></script>
+
+    @include('layouts.toastr-notif')
     <script>
         $(function() {
             //Initialize Select2 Elements
             // $('.select2bs4').select2({
             //     theme: 'bootstrap4'
             // })
+            $('#tambah-kategori form').submit((e) => {
+                e.preventDefault();
+
+                var form = $('#tambah-kategori form')[0];
+                var data = new FormData(form);
+
+                $('#tambah-kategori button[type=submit]').attr('disabled');
+
+                $.ajax({
+                    url: "{{ route('admin.master-data.akomodasi.kategori.store') }}",
+                    enctype: 'multipart/form-data',
+                    type: "POST",
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    timeout: 800000,
+                    success: function (hasil) {
+                        // hasil = JSON.parse(hasil);
+                        console.log("SUCCESS : ", hasil);
+                        $.toast({
+                            heading: 'Success',
+                            text: hasil.msg,
+                            showHideTransition: 'slide',
+                            icon: 'success',
+                            position: 'top-right'
+                        });
+                    },
+                    error: function (e) {
+                        console.log("ERROR : ", e);
+                    },
+                    complete: function() {
+                        $('#tambah-kategori button[type=submit]').removeAttr('disabled');
+                        $('#tambah-kategori').modal('hide');
+                    }
+                })
+            });
+
+            $('.input-images').imageUploader({ imagesInputName: 'photos' });
+
+            $('select.select2bs4').select2({
+                theme: 'bootstrap4',
+                ajax: {
+                    url: "{{ route('admin.select2.kategori-akomodasi') }}",
+                    dataType: 'json',
+                    data: function (params) {
+                        var query = {
+                            search: params.term,
+                            type: 'public'
+                        }
+
+                        // Query parameters will be ?search=[term]&type=public
+                        return query;
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+
+                        return {
+                            results: data.result,
+                            pagination: {
+                                more: (params.page * 10) < data.count_filtered
+                            }
+                        };
+                    }
+                    // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+                }
+            });
 
             $('select.sl2multi').select2({
+                theme: 'bootstrap4',
                 ajax: {
                     url: "{{ route('admin.select2.fasilitas-akomodasi') }}",
                     dataType: 'json',
@@ -302,7 +391,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "{{route('admin.master-data.fasilitas-akomodasi.tambah')}}",
+                url: "{{route('admin.master-data.akomodasi.fasilitas.store')}}",
                 contentType: 'multipart/form-data',
                 data: form_data,
                 processData: false,
@@ -316,6 +405,9 @@
                 },
                 error: function(e) {
                     console.log(e.responseText);
+                },
+                complete: function () {
+                    $('#tambah-fasilitas').modal('hide');
                 }
             });
         }

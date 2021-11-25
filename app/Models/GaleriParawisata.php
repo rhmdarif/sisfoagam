@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class GaleriParawisata extends Model
 {
     use HasFactory;
+    protected $table = "galeri_parawisata";
+    protected $fillable = ['kategori', 'file'];
 }

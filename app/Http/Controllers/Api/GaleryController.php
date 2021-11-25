@@ -49,7 +49,9 @@ class GaleryController extends Controller
 
     public function gallery_parawisata()
     {
-        $limit = request()->limit ?? 10;
-        return DB::table('galeri_parawisata')->orderBy("created_at", "desc")->paginate($limit);
+        // $limit = request()->limit ?? 10;
+        // return DB::table('galeri_parawisata')->orderBy("created_at", "desc")->paginate($limit);
+        
+        return DB::table('galeri_parawisata')->orderBy("created_at", "desc")->get();
     }
 }

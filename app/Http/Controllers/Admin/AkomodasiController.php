@@ -6,6 +6,7 @@ use App\Models\Akomodasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\FotoVideoAkomodasi;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -14,11 +15,12 @@ class AkomodasiController extends Controller
     public function index()
     {
         $data['kategori'] = DB::table('kategori_akomodasi')->get();
-        $data['akomodasi'] = DB::table('akomodasi')
-                            ->join('kategori_akomodasi','akomodasi.kategori_akomodasi_id','kategori_akomodasi.id')
-                            ->select('akomodasi.id as id_akomodasi','akomodasi.*','kategori_akomodasi.*')
-                            ->orderBy("akomodasi.nama_akomodasi", "asc")
-                            ->get();
+        // $data['akomodasi'] = DB::table('akomodasi')
+        //                     ->join('kategori_akomodasi','akomodasi.kategori_akomodasi_id','kategori_akomodasi.id')
+        //                     ->select('akomodasi.id as id_akomodasi','akomodasi.*','kategori_akomodasi.*')
+        //                     ->orderBy("akomodasi.nama_akomodasi", "asc")
+        //                     ->get();
+        $data['akomodasi'] = Akomodasi::orderBy("akomodasi.nama_akomodasi", "asc")->get();
         return view('admin.akomodasi.index',$data);
     }
 
@@ -41,14 +43,15 @@ class AkomodasiController extends Controller
             'keterangan' => 'nullable|string',
             'lat' => 'nullable',
             'lng' => 'nullable',
-            'thumbnail' => 'required_if:id,NULL|image'
+            'thumbnail' => 'required_if:id,NULL|image',
+            'photos.*' => 'image'
         ]);
 
         if($validator->fails()) {
             return response()->json(['pesan' => $validator->errors()->first()]);
         }
-
-        $harga = preg_replace("/[^0-9]/", '', $r->harga);
+        list($harga) = explode(",", $r->harga);
+        $harga = preg_replace("/[^0-9]/", '', $harga);
 
         // return $r;
         if($r->id == NULL)
@@ -56,7 +59,7 @@ class AkomodasiController extends Controller
             if($r->has("thumbnail")) {
                 $file_upload = $r->file("thumbnail");
                 $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
-                $file_location = $file_upload->storeAs("public/thumbnail", $file_name);
+                $file_location = $file_upload->storeAs("public/akomodasi", $file_name);
             }
 
             $simpan = DB::table('akomodasi')->insertGetId([
@@ -69,8 +72,33 @@ class AkomodasiController extends Controller
                 'lat' => $r->lat,
                 'long' => $r->lng,
                 'slug_akomodasi' => str_replace('+', '-', urlencode($r->akomodasi)),
-                'thumbnail_akomodasi' => $file_name ?? "",
+                'thumbnail_akomodasi' => storage_url(substr($file_location, 7)),
             ]);
+
+            if($r->hasfile('photos')) {
+                $photos= [];
+                foreach ($r->file('photos') as $key => $photo) {
+                    $name = $simpan."-".$key."-".time().'.'.$photo->extension();
+                    // $photo->move(storage_path('app/public').'/akomodasi/', $name);
+                    $photo->storeAs("public/foto_video_akomodasi", $name);
+                    $mime = $photo->getMimeType();
+                    if(preg_match("/image/i", $mime)) {
+                        $kategori = "foto";
+                    } else if(preg_match("/image/i", $mime)) {
+                        $kategori = "video";
+                    }
+
+                    if(isset($kategori)) {
+                        $photos[] = [
+                            'akomodasi_id' => $simpan,
+                            'kategori' => $kategori,
+                            'file' => $name
+                        ];
+                    }
+                }
+                DB::table('foto_video_akomodasi')->insert($photos);
+            }
+
         }else{
             $datacek = DB::table('akomodasi')->where('id', $r->id)->first();
 
@@ -79,7 +107,9 @@ class AkomodasiController extends Controller
                     $file_upload = $r->file("thumbnail");
                     $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
                     $file_location = $file_upload->storeAs("public/thumbnail", $file_name);
-                    Storage::delete(["public/thumbnail/".$datacek->thumbnail_akomodasi]);
+
+                    list($baseUrl, $path, $dir, $file) = explode("/", $datacek->thumbnail_akomodasi);
+                    Storage::disk('public')->delete(implode('/', [$dir, $file]));
 
                     $update = array(
                         'kategori_akomodasi_id' => $r->kategori,
@@ -91,7 +121,7 @@ class AkomodasiController extends Controller
                         'lat' => $r->lat,
                         'long' => $r->lng,
                         'slug_akomodasi' => str_replace('+', '-', urlencode($r->akomodasi)),
-                        'thumbnail_akomodasi' => $file_name,
+                        'thumbnail_akomodasi' => storage_url(substr($file_location, 7)),
                     );
                 }else{
                     $update = array(
@@ -107,20 +137,56 @@ class AkomodasiController extends Controller
                     );
                 }
                 $simpan = DB::table('akomodasi')->where('id', $r->id)->update($update);
-            }
-        }
-        if($simpan)
-        {
 
-            if(count($r->fasilitas)) {
-                DB::table('akomodasi_fasilitas_akomodasi')->where('akomodasi_id', $r->id ?? $simpan)->delete();
-
-                foreach ($r->fasilitas as $fasilitas) {
-                    $data_fasilitas[] = ['akomodasi_id' => $r->id ?? $simpan, 'fasilitas_akomodasi_id' => $fasilitas];
+                if($r->filled('old')) {
+                    $not_inc = DB::table('foto_video_akomodasi')->where("akomodasi_id", $r->id)->whereNotIn("id", $r->old)->get();
+                    foreach ($not_inc as $key => $value) {
+                        list($baseUrl, $path, $dir, $file) = explode("/", $value->file);
+                        Storage::disk('public')->delete(implode('/', [$dir, $file]));
+                    }
+                    DB::table('foto_video_akomodasi')->where("akomodasi_id", $r->id)->whereNotIn("id", $r->old)->delete();
                 }
 
-                DB::table('akomodasi_fasilitas_akomodasi')->insert($data_fasilitas);
+                if($r->hasfile('photos')) {
+                    $photos= [];
+                    foreach ($r->file('photos') as $key => $photo) {
+                        $name = $simpan."-".$key."-".time().'.'.$photo->extension();
+                        // $photo->move(storage_path('app/public').'/akomodasi/', $name);
+                        $photo->storeAs("public/foto_video_akomodasi", $name);
+                        $mime = $photo->getMimeType();
+                        if(preg_match("/image/i", $mime)) {
+                            $kategori = "foto";
+                        } else if(preg_match("/image/i", $mime)) {
+                            $kategori = "video";
+                        }
+
+                        if(isset($kategori)) {
+                            $photos[] = [
+                                'akomodasi_id' => $r->id,
+                                'kategori' => $kategori,
+                                'file' => $name
+                            ];
+                        }
+                    }
+                    DB::table('foto_video_akomodasi')->insert($photos);
+                }
+
             }
+        }
+
+
+        if($r->filled("fasilitas") AND count($r->fasilitas)) {
+            DB::table('akomodasi_fasilitas_akomodasi')->where('akomodasi_id', $r->id ?? $simpan)->delete();
+
+            foreach ($r->fasilitas as $fasilitas) {
+                $data_fasilitas[] = ['akomodasi_id' => $r->id ?? $simpan, 'fasilitas_akomodasi_id' => $fasilitas];
+            }
+
+            DB::table('akomodasi_fasilitas_akomodasi')->insert($data_fasilitas);
+        }
+
+        if($simpan)
+        {
 
             if($r->ajax()) {
                 return response()->json(['pesan' => 'berhasil']);
@@ -157,11 +223,7 @@ class AkomodasiController extends Controller
     }
     public function edit_page($id)
     {
-        $data['data'] = DB::table('akomodasi')
-        ->join('kategori_akomodasi','akomodasi.kategori_akomodasi_id','kategori_akomodasi.id')
-        ->select('akomodasi.id as id_akomodasi','akomodasi.*','kategori_akomodasi.*')
-        ->where('akomodasi.id', $id)
-        ->first();
+        $data['data'] = Akomodasi::find($id);
 
         // return $data;
         $data['kategori'] = DB::table('kategori_akomodasi')->get();
@@ -192,5 +254,25 @@ class AkomodasiController extends Controller
         ->where('akomodasi_fasilitas_akomodasi.akomodasi_id',$r->id)
         ->get();
         return view('admin.akomodasi.fasilitas',$data);
+    }
+
+    public function media($id)
+    {
+        return FotoVideoAkomodasi::where('akomodasi_id', $id)->get();
+    }
+
+    public function detail($id)
+    {
+        $data['kategori'] = DB::table('kategori_akomodasi')->get();
+        $data['akomodasi'] = DB::table('akomodasi')
+                            ->join('kategori_akomodasi','akomodasi.kategori_akomodasi_id','kategori_akomodasi.id')
+                            ->select('akomodasi.id as id_akomodasi','akomodasi.*','kategori_akomodasi.*')
+                            ->where('akomodasi.id',$id)
+                            ->orderBy("akomodasi.nama_akomodasi", "asc")
+                            ->get();
+
+        return view('admin.akomodasi.detail',$data);
+
+       
     }
 }

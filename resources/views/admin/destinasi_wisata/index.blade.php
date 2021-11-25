@@ -6,12 +6,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Akomodasi</h1>
+                    <h1 class="m-0">Destinasi Wisata</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Akomodasi</li>
+                        <li class="breadcrumb-item active">Destinasi Wisata</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -49,7 +49,7 @@
                                     @foreach($destinasi_wisata as $i => $d)
                                     <tr>
                                         <td>{{$i+1}}</td>
-                                        <td><img src="{{ storage_url("destinasi", $d->thumbnail_destinasi_wisata) }}" alt="{{ $d->thumbnail_destinasi_wisata }}" class="img-fluid" width="100px"></td>
+                                        <td><img src="{{ $d->thumbnail_destinasi_wisata }}" alt="{{ $d->thumbnail_destinasi_wisata }}" class="img-fluid" width="100px"></td>
                                         <td>{{$d->kategori->nama_kategori_wisata}}</td>
                                         <td>{{$d->nama_wisata}}</td>
                                         <td>{{number_format($d->harga_tiket_dewasa)}}</td>
@@ -60,7 +60,7 @@
                                             <iframe width="300" height="170" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=<?= $d->lat; ?>,<?= $d->long; ?>&hl=in&z=14&amp;output=embed"></iframe>
                                         </td>
                                         <td>
-                                            <button style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>
+                                            <a href="{{ route('admin.destinasi-wisata.detail', $d->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
                                             <button onclick="fasilitas('<?= $d->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-plus"></i></button>
                                             <a href="{{ route('admin.destinasi-wisata.edit', $d->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
                                             <button onclick="hapus('<?= $d->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
@@ -201,6 +201,26 @@
                         reader.readAsDataURL(fileInput.files[0]);
                     }
                 }
+            }
+        }
+
+        function hapus(id)
+        {
+            var pesan = confirm("Yakin Ingin Menghapus Data!");
+            if(pesan){
+                $.ajax({
+                    url: "{{route('admin.destinasi-wisata.index')}}/"+id,
+                    type:"DELETE",
+                    dataType: "JSON",
+                    data:{'id':id,"_token":"{{csrf_token()}}"},
+                    success: function(data)
+                    {
+                        if(data.pesan == 'berhasil')
+                        {
+                            window.location.reload();
+                        }
+                    }
+                })
             }
         }
     </script>

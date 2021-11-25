@@ -9,6 +9,7 @@ class FasilitasUmum extends Model
 {
     use HasFactory;
     protected $table = "fasilitas_umum";
+    protected $fillable = ['nama_fasilitas_umum', 'slug_fasilitas_umum', 'lat', 'long', 'keterangan'];
     protected $appends = ['jarak'];
 
     public function getJarakAttribute()
