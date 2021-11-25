@@ -241,4 +241,18 @@ class EkonomiKreatifController extends Controller
         $ekonomi_kreatif->delete();
         return ['pesan' => 'berhasil'];
     }
+
+    public function detail($id)
+    {
+        $data['kategori'] = DB::table('kategori_ekonomi_kreatif')->get();
+        $data['ekonomi_kreatif'] = DB::table('ekonomi_kreatif')
+                            ->join('kategori_ekonomi_kreatif','ekonomi_kreatif.kategori_ekonomi_kreatif_id','kategori_ekonomi_kreatif.id')
+                            ->select('ekonomi_kreatif.id as id_ekonomi_kreatif','ekonomi_kreatif.*','kategori_ekonomi_kreatif.*')
+                            ->where('ekonomi_kreatif.id',$id)
+                            ->orderBy("ekonomi_kreatif.nama_ekonomi_kreatif", "asc")
+                            ->get();
+           
+
+        return view('admin.ekonomi_kreatif.detail',$data);
+    }
 }
