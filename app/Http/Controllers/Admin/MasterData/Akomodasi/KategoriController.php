@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\MasterData\Akomodasi;
 
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\KategoriAkomodasi;
 use App\Http\Controllers\Controller;
@@ -56,7 +57,7 @@ class KategoriController extends Controller
         $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
         $file_location = $file_upload->storeAs("public/kategori_akomodasi", $file_name);
 
-        $slug = str_replace("+", "-", urlencode($request->nama_kategori));
+        $slug = Str::slug($request->nama_kategori);
         KategoriAkomodasi::updateOrCreate(
                             ['nama_kategori_akomodasi' => $request->nama_kategori],
                             [
@@ -109,7 +110,7 @@ class KategoriController extends Controller
             return ['status' => false, 'msg' => $validator->errors()->first()];
         }
 
-        $slug = str_replace("+", "-", urlencode($request->nama_kategori));
+        $slug = Str::slug($request->nama_kategori);
         $update =   [
                         'nama_kategori_wisata' => $request->nama_kategori,
                         'slug_kategori_wisata' => $slug

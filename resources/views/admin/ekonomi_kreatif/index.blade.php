@@ -61,9 +61,6 @@
                                                 <a href="{{ route('admin.ekonomi-kreatif.detail', $d->id) }}"
                                                     style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i
                                                         class="fas fa-eye"></i></a>
-                                                <button onclick="fasilitas('<?= $d->id ?>')"
-                                                    style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i
-                                                        class="fas fa-plus"></i></button>
                                                 <a href="{{ route('admin.ekonomi-kreatif.edit', $d->id) }}"
                                                     style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i
                                                         class="fas fa-edit"></i></a>

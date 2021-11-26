@@ -45,13 +45,19 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="">Akomodasi</label>
+                                            <label for="">Nama Akomodasi</label>
                                             <input type="text" name="akomodasi" id="akomodasi" class="form-control"
-                                                placeholder="Akomodasi">
+                                                placeholder="Nama Akomodasi">
                                         </div>
-                                        <div class="form-group">
+                                        <div class="form-group" id="form_kelas">
                                             <label for="">Kelas</label>
-                                            <input type="text" name="kelas" id="kelas" class="form-control" placeholder="Kelas">
+                                            <select name="kelas" id="kelas" class="form-control">
+                                                <option value="1">Rating 1</option>
+                                                <option value="2">Rating 2</option>
+                                                <option value="3">Rating 3</option>
+                                                <option value="4">Rating 4</option>
+                                                <option value="5">Rating 5</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
@@ -60,7 +66,7 @@
                                             <input type="text" name="tipe" id="tipe" class="form-control" placeholder="Tipe">
                                         </div>
                                         <div class="form-group">
-                                            <label for="">Harga</label>
+                                            <label for="" id="label_harga">Harga</label>
                                             <input type="text" name="harga" id="harga" class="form-control" placeholder="Harga">
                                         </div>
                                         <div class="form-group">
@@ -93,8 +99,37 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
+                                        <label for="">Galeri Foto Akomodasi</label>
                                         <div class="input-images"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="">Galeri Vidio Akomodasi</label>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" id="table_video">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Code</th>
+                                                        <th>Vidio</th>
+                                                        <th width="20%">Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <div class="form-group">
+                                                                <input type="text" id="vidio_url" class="form-control" placeholder="Youtube Video Url">
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-primary btn-block" id="tambah_video">Tambah</button>
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -296,8 +331,50 @@
                     // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
                 }
             });
+
+            $('#tambah_video').click(() => {
+                let vidio_url = $('#vidio_url').val();
+                console.log(getVideoIdYoutube(vidio_url));
+                appendRowTableVideo(getVideoIdYoutube(vidio_url))
+            });
+
+            $('#kategori').change(() => {
+                if($('#kategori').text().trim().toLowerCase() == "hotel") {
+                    $('#form_kelas').show();
+                    $('#label_harga').text("Harga Mulai");
+                } else {
+                    $('#form_kelas').hide();
+                    $('#label_harga').text("Harga");
+                }
+            })
         });
 
+        function getVideoIdYoutube(url) {
+            var url = new URL(url);
+            return url.searchParams.get("v") ?? null;
+        }
+
+        function delRowTableVideo(el) {
+            $(el).parents("tr").remove();
+        }
+
+        function appendRowTableVideo(code) {
+            if($('#'+code).length == 0) {
+                let markup =    `<tr id="${code}">
+                                    <td>
+                                        ${code}
+                                        <input type="hidden" name="gallery_video[]" value="${code}">
+                                    </td>
+                                    <td>
+                                        <iframe width="350" height="240" src="https://www.youtube.com/embed/${code}"></iframe>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger" onclick="delRowTableVideo(this)"><i class="fa fa-trash"></i></button>
+                                    </td>
+                                </tr>`;
+                $("#table_video tbody").append(markup);
+            }
+        }
 
         var harga = new AutoNumeric('#harga', {
             currencySymbol: 'Rp.',
@@ -440,8 +517,6 @@
             zoom: 18,
             marker: false
         });
-
-
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',

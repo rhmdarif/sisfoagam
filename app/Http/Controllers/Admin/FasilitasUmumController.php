@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\FasilitasUmum;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\FasilitasUmum;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
 class FasilitasUmumController extends Controller
@@ -58,7 +59,7 @@ class FasilitasUmumController extends Controller
             'long' => $request->lng,
         ], [
             'keterangan' => $request->keterangan,
-            'slug_fasilitas_umum' => str_replace('+', '-', urlencode($request->nama_fasilitas_umum))
+            'slug_fasilitas_umum' => rand(10000,99999).'-'.Str::slug($request->nama_fasilitas_umum)
         ]);
 
         return back()->with("success", "Fasilitas Umum berhasil ditambahkan");
@@ -114,7 +115,7 @@ class FasilitasUmumController extends Controller
             'lat' => $request->lat,
             'long' => $request->lng,
             'keterangan' => $request->keterangan,
-            'slug_fasilitas_umum' => str_replace('+', '-', urlencode($request->nama_fasilitas_umum))
+            'slug_fasilitas_umum' => rand(10000,99999).'-'.Str::slug($request->nama_fasilitas_umum)
         ]);
 
         return back()->with("success", "Fasilitas Umum berhasil diperbaharui");
