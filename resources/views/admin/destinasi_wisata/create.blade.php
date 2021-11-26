@@ -52,9 +52,9 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="">Destinasi Wisata</label>
+                                                    <label for="">Nama Wisata</label>
                                                     <input type="text" name="destinasi_wisata" id="destinasi_wisata"
-                                                        class="form-control" placeholder="Destinasi Wisata">
+                                                        class="form-control" placeholder="Nama Wisata">
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -116,8 +116,37 @@
                                             <div style="height: 337px;" id="map"></div>
                                         </div>
                                     </div>
-                                    <div class="col-md-12 mb-2">
+                                    <div class="col-md-6">
+                                        <label for="">Galeri Foto Akomodasi</label>
                                         <div class="input-images"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="">Galeri Vidio Akomodasi</label>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" id="table_video">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Code</th>
+                                                        <th>Vidio</th>
+                                                        <th width="20%">Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <div class="form-group">
+                                                                <input type="text" id="vidio_url" class="form-control" placeholder="Youtube Video Url">
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-primary btn-block" id="tambah_video">Tambah</button>
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -320,8 +349,41 @@
                     // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
                 }
             });
+
+            $('#tambah_video').click(() => {
+                let vidio_url = $('#vidio_url').val();
+                console.log(getVideoIdYoutube(vidio_url));
+                appendRowTableVideo(getVideoIdYoutube(vidio_url))
+            });
         });
 
+
+        function getVideoIdYoutube(url) {
+            var url = new URL(url);
+            return url.searchParams.get("v") ?? null;
+        }
+
+        function delRowTableVideo(el) {
+            $(el).parents("tr").remove();
+        }
+
+        function appendRowTableVideo(code) {
+            if($('#'+code).length == 0) {
+                let markup =    `<tr id="${code}">
+                                    <td>
+                                        ${code}
+                                        <input type="hidden" name="gallery_video[]" value="${code}">
+                                    </td>
+                                    <td>
+                                        <iframe width="350" height="240" src="https://www.youtube.com/embed/${code}"></iframe>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger" onclick="delRowTableVideo(this)"><i class="fa fa-trash"></i></button>
+                                    </td>
+                                </tr>`;
+                $("#table_video tbody").append(markup);
+            }
+        }
 
         var harga_tiket_dewasa = new AutoNumeric('#harga_tiket_dewasa', {
             currencySymbol: 'Rp.',

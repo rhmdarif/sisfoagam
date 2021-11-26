@@ -152,14 +152,6 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('admin.galeri-parawisata.index') }}" class="nav-link">
-                        <i class="nav-icon fas fa-photo-video"></i>
-                        <p>
-                            Galeri Parawisata
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a href="{{ route('admin.fasilitas-umum.index') }}" class="nav-link">
                         <i class="nav-icon fas fa-box-open"></i>
                         <p>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\EventParawisata;
 use App\Http\Controllers\Controller;
@@ -67,7 +68,7 @@ class EventParawisataController extends Controller
             'end_at' => $request->end_at,
             'keterangan' => $request->keterangan,
             'foto' => storage_url(substr($file_location, 7)),
-            'slug_event_parawisata' => str_replace('+', '-', urlencode($request->jenis_event))
+            'slug_event_parawisata' => rand(10000,99999).'-'.Str::slug($request->jenis_event)
         ]);
 
         return back()->with("success", "Event Parawisata berhasil ditambahkan");
@@ -124,7 +125,7 @@ class EventParawisataController extends Controller
             'start_at' => $request->start_at,
             'end_at' => $request->end_at,
             'keterangan' => $request->keterangan,
-            'slug_event_parawisata' => str_replace('+', '-', urlencode($request->jenis_event))
+            'slug_event_parawisata' => rand(10000,99999).'-'.Str::slug($request->jenis_event)
         ];
 
         if($request->hasFile("foto")) {
