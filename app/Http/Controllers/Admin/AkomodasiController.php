@@ -38,7 +38,7 @@ class AkomodasiController extends Controller
         $validator = Validator::make($r->all(), [
             'kategori' => 'required|exists:kategori_akomodasi,id',
             'akomodasi' => 'required|string',
-            'kelas' => 'required|string',
+            'kelas' => 'nullable|string',
             'harga' => 'required|string',
             'keterangan' => 'nullable|string',
             'lat' => 'nullable',
@@ -65,7 +65,7 @@ class AkomodasiController extends Controller
             $simpan = DB::table('akomodasi')->insertGetId([
                 'kategori_akomodasi_id' => $r->kategori,
                 'nama_akomodasi' => $r->akomodasi,
-                'kelas' => $r->kelas,
+                'kelas' => $r->kelas ?? null,
                 'harga' => $harga,
                 'keterangan' => $r->keterangan,
                 'lat' => $r->lat,
