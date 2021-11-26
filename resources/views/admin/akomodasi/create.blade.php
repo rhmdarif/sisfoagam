@@ -62,10 +62,6 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="">Tipe</label>
-                                            <input type="text" name="tipe" id="tipe" class="form-control" placeholder="Tipe">
-                                        </div>
-                                        <div class="form-group">
                                             <label for="" id="label_harga">Harga</label>
                                             <input type="text" name="harga" id="harga" class="form-control" placeholder="Harga">
                                         </div>

@@ -18,7 +18,6 @@ class CreateAkomodasiTable extends Migration
             $table->integer("kategori_akomodasi_id");
             $table->string("nama_akomodasi");
             $table->string("kelas")->nullable();
-            $table->string("tipe")->nullable();
             $table->integer("harga");
             $table->text("keterangan")->nullable();
             $table->string("lat")->nullable();
