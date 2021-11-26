@@ -335,7 +335,7 @@
             });
 
             $('#kategori').change(() => {
-                if($('#kategori').text().trim().toLowerCase() == "hotel") {
+                if($('#kategori').val() == 1) {
                     $('#form_kelas').show();
                     $('#label_harga').text("Harga Mulai");
                 } else {
