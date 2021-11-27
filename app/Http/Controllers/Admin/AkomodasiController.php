@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Akomodasi;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\GaleriParawisata;
 use App\Models\FotoVideoAkomodasi;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -90,6 +91,7 @@ class AkomodasiController extends Controller
 
                 }
                 DB::table('foto_video_akomodasi')->insert($photos);
+                GaleriParawisata::insert(collect($photos)->except('akomodasi_id')->toArray());
             }
 
 
@@ -145,11 +147,15 @@ class AkomodasiController extends Controller
 
                 if($r->filled('old')) {
                     $not_inc = DB::table('foto_video_akomodasi')->where("akomodasi_id", $r->id)->where('kategori', 'foto')->whereNotIn("id", $r->old)->get();
+                    $rmv_from_galery = [];
                     foreach ($not_inc as $key => $value) {
                         list($baseUrl, $path, $dir, $file) = explode("/", $value->file);
                         Storage::disk('public')->delete(implode('/', [$dir, $file]));
+                        $rmv_from_galery[] = $value->file;
                     }
                     DB::table('foto_video_akomodasi')->where("akomodasi_id", $r->id)->whereNotIn("id", $r->old)->delete();
+
+                    GaleriParawisata::whereIn("file", $rmv_from_galery)->delete();
                 }
 
                 if($r->hasfile('photos')) {
@@ -167,6 +173,7 @@ class AkomodasiController extends Controller
                         ];
                     }
                     DB::table('foto_video_akomodasi')->insert($photos);
+                    GaleriParawisata::insert(collect($photos)->except('akomodasi_id')->toArray());
                 }
 
                 if($r->filled("gallery_video")) {

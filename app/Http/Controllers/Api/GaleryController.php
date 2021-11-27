@@ -50,6 +50,7 @@ class GaleryController extends Controller
     public function gallery_parawisata()
     {
         $limit = request()->limit ?? 10;
-        return DB::table('galeri_parawisata')->orderBy("created_at", "desc")->paginate($limit);
+        return DB::table('galeri_parawisata')->orderBy("id", "desc")->paginate($limit);
+        // return DB::select(DB::raw("SELECT id, kategori, file FROM foto_video_akomodasi UNION ALL SELECT id, kategori, file FROM foto_video_wisata UNION ALL SELECT id, kategori, file FROM foto_video_ekonomi_kreatif ORDER BY id DESC"))->paginate(10);
     }
 }

@@ -60,7 +60,15 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 text-center">
-                                        <div style="margin-top:30px" id="tampilFoto"></div>
+
+                                        <div class="form-group">
+                                            <label for="">Foto</label>
+
+                                            <div style="margin-top:30px" id="tampilFoto"></div>
+
+                                            <input type="file" name="thumbnail" id="thumbnail"
+                                                onchange="return tampilfoto()" class="form-control">
+                                        </div>
 
                                         <div class="form-group">
                                             <label for="">Lokasi</label>
