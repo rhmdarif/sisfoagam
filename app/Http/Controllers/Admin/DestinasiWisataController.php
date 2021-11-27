@@ -116,11 +116,7 @@ class DestinasiWisataController extends Controller
                 // $photo->move(storage_path('app/public').'/akomodasi/', $name);
                 $location = $photo->storeAs("public/destinasi_wisata_foto_vidio_wisata", $name);
                 $mime = $photo->getMimeType();
-                if(preg_match("/image/i", $mime)) {
-                    $kategori = "foto";
-                } else if(preg_match("/image/i", $mime)) {
-                    $kategori = "video";
-                }
+                $kategori = "foto";
 
                 if(isset($kategori)) {
                     $photos[] = [

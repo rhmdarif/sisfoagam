@@ -219,11 +219,7 @@ class EkonomiKreatifController extends Controller
                 // $photo->move(storage_path('app/public').'/akomodasi/', $name);
                 $location = $photo->storeAs("public/foto_video_ekonomi_kreatif", $name);
                 $mime = $photo->getMimeType();
-                if(preg_match("/image/i", $mime)) {
-                    $kategori = "foto";
-                } else if(preg_match("/image/i", $mime)) {
-                    $kategori = "video";
-                }
+                $kategori = "foto";
 
                 if(isset($kategori)) {
                     $photos[] = [
