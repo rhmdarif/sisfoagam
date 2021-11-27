@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\DestinasiWisata;
+use App\Models\GaleriParawisata;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
@@ -127,6 +128,7 @@ class DestinasiWisataController extends Controller
                 }
             }
             DB::table('destinasi_wisata_foto_vidio_wisata')->insert($photos);
+            GaleriParawisata::insert(collect($photos)->except('destinasi_wisata_id')->toArray());
         }
 
         if($request->filled("gallery_video")) {
@@ -243,11 +245,14 @@ class DestinasiWisataController extends Controller
 
         if($request->filled('old')) {
             $not_inc = DB::table('destinasi_wisata_foto_vidio_wisata')->where('kategori', 'foto')->where("destinasi_wisata_id", $destinasi_wisatum->id)->whereNotIn("id", $request->old)->get();
+            $rmv_from_galery = [];
             foreach ($not_inc as $key => $value) {
                 list($baseUrl, $path, $dir, $file) = explode("/", $value->file);
                 Storage::disk('public')->delete(implode('/', [$dir, $file]));
+                $rmv_from_galery[] = $value->file;
             }
             DB::table('destinasi_wisata_foto_vidio_wisata')->where("destinasi_wisata_id", $destinasi_wisatum->id)->whereNotIn("id", $request->old)->delete();
+            GaleriParawisata::whereIn("file", $rmv_from_galery)->delete();
         }
 
         if($request->hasfile('photos')) {
@@ -268,6 +273,7 @@ class DestinasiWisataController extends Controller
                 }
             }
             DB::table('destinasi_wisata_foto_vidio_wisata')->insert($photos);
+            GaleriParawisata::insert(collect($photos)->except('destinasi_wisata_id')->toArray());
         }
 
         if($request->filled("gallery_video")) {

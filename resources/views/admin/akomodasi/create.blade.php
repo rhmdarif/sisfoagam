@@ -346,8 +346,13 @@
         });
 
         function getVideoIdYoutube(url) {
-            var url = new URL(url);
-            return url.searchParams.get("v") ?? null;
+            if(url.search("youtu.be") >= 0) {
+                let url_split = url.split("/");
+                return url_split[url_split.length -1];
+            } else {
+                var url = new URL(url);
+                return url.searchParams.get("v") ?? null;
+            }
         }
 
         function delRowTableVideo(el) {
