@@ -82,13 +82,12 @@ class AkomodasiController extends Controller
                     $file_location = $photo->storeAs("public/foto_video_akomodasi", $name);
                     $mime = $photo->getMimeType();
 
-                    if(isset($kategori)) {
-                        $photos[] = [
-                            'akomodasi_id' => $simpan,
-                            'kategori' => "foto",
-                            'file' => storage_url(substr($file_location, 7)),
-                        ];
-                    }
+                    $photos[] = [
+                        'akomodasi_id' => $simpan,
+                        'kategori' => "foto",
+                        'file' => storage_url(substr($file_location, 7)),
+                    ];
+
                 }
                 DB::table('foto_video_akomodasi')->insert($photos);
             }
@@ -161,13 +160,11 @@ class AkomodasiController extends Controller
                         $file_location = $photo->storeAs("public/foto_video_akomodasi", $name);
                         $mime = $photo->getMimeType();
 
-                        if(isset($kategori)) {
-                            $photos[] = [
-                                'akomodasi_id' => $r->id,
-                                'kategori' => "foto",
-                                'file' => storage_url(substr($file_location, 7)),
-                            ];
-                        }
+                        $photos[] = [
+                            'akomodasi_id' => $r->id,
+                            'kategori' => "foto",
+                            'file' => storage_url(substr($file_location, 7)),
+                        ];
                     }
                     DB::table('foto_video_akomodasi')->insert($photos);
                 }
