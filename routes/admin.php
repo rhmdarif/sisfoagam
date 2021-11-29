@@ -25,9 +25,11 @@ Route::prefix('admin')->as("admin.")->group(function () {
 
 
         Route::prefix('master-data')->as('master-data.')->group(function () {
+            
             Route::prefix("akomodasi")->as("akomodasi.")->group(function () {
                 Route::resource('kategori', Admin\MasterData\Akomodasi\KategoriController::class);
                 Route::resource('fasilitas', Admin\MasterData\Akomodasi\FasilitasController::class);
+
             });
 
             Route::prefix("destinasi-wisata")->as("destinasi-wisata.")->group(function () {
@@ -38,6 +40,13 @@ Route::prefix('admin')->as("admin.")->group(function () {
             Route::prefix("ekonomi-kreatif")->as("ekonomi-kreatif.")->group(function () {
                 Route::resource('kategori', Admin\MasterData\EkonomiKreatif\KategoriController::class);
             });
+
+           
+        });
+
+        // Foto Slider
+        Route::prefix("foto-slider")->as("foto-slider.")->group(function(){
+            Route::get('foto_slider',[Admin\MasterData\FotoSlider\FotoSliderController::class, 'index'])->name('foto-slider');
         });
 
         Route::prefix('akomodasi')->as('akomodasi.')->group(function (){

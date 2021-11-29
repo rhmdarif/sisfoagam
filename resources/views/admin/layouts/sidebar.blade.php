@@ -100,6 +100,7 @@
                                 </li>
                             </ul>
                         </li>
+                       
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
@@ -117,6 +118,15 @@
                                 </li>
                             </ul>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.master-data.foto-slider.index') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>
+                                    Foto Slider
+                                </p>
+                            </a>
+                        </li>
+                       
                     </ul>
                 </li>
                 <li class="nav-item">
