@@ -37,7 +37,6 @@
                                         <th style="width:10%">Kategori</th>
                                         <th style="width:10%">Akomodasi</th>
                                         <th style="width:10%">Kelas</th>
-                                        <th style="width:10%">Tipe</th>
                                         <th style="width:10%">Harga</th>
                                         <th style="width:10%">lokasi</th>
                                         <!-- <th style="width:18%">Keterangan</th> -->
@@ -52,7 +51,6 @@
                                         <td>{{$a->kategori->nama_kategori_akomodasi}}</td>
                                         <td>{{$a->nama_akomodasi}}</td>
                                         <td>{{$a->kelas}}</td>
-                                        <td>{{$a->tipe}}</td>
                                         <td>Rp.{{number_format($a->harga)}}</td>
                                         <td>
                                             <iframe width="300" height="170" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=<?= $a->lat; ?>,<?= $a->long; ?>&hl=in&z=14&amp;output=embed"></iframe>

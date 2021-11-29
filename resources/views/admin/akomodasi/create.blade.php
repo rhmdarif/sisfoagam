@@ -62,8 +62,8 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="" id="label_harga">Harga</label>
-                                            <input type="text" name="harga" id="harga" class="form-control" placeholder="Harga">
+                                            <label for="" id="label_harga">Harga Mulai</label>
+                                            <input type="text" name="harga" id="harga" class="form-control" placeholder="Harga Mulai">
                                         </div>
                                         <div class="form-group">
                                             <label for="">Thumbnail</label>
