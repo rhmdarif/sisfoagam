@@ -16,7 +16,7 @@ class CreateReviewAkomodasiTable extends Migration
         Schema::create('review_akomodasi', function (Blueprint $table) {
             $table->id();
             $table->integer("akomodasi_id");
-            $table->integer("users_id");
+            $table->integer("user_id");
             $table->string("tingkat_kepuasan");
             $table->text("komentar");
             $table->timestamps();

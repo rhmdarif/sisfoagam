@@ -324,12 +324,12 @@ class AkomodasiController extends Controller
 
         $data['review_a'] = DB::table('review_akomodasi')
                             ->join('akomodasi','review_akomodasi.akomodasi_id','akomodasi.id')
-                            ->join('users','review_akomodasi.users_id','users.id')
+                            ->join('users','review_akomodasi.user_id','users.id')
                             ->where('review_akomodasi.akomodasi_id',$id)
-                            ->orderBy('review_akomodasi.users_id',"asc")
+                            ->orderBy('review_akomodasi.user_id',"asc")
                             ->SimplePaginate(5);
-        
-                      
+
+
 
         return view('admin.akomodasi.detail',$data);
 
