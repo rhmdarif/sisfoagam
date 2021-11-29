@@ -45,10 +45,6 @@
                                     <th>{{ $item->kelas }}</th>
                                 </tr>
                                 <tr>
-                                    <th style="width:35%">Tipe</th>
-                                    <th>{{ $item->tipe }}</th>
-                                </tr>
-                                <tr>
                                     <th style="width:35%">Harga</th>
                                     <th>Rp. {{ number_format($item->harga) }} </th>
                                 </tr>
