@@ -45,10 +45,6 @@
                                     <th>{{ $item->kelas }}</th>
                                 </tr>
                                 <tr>
-                                    <th style="width:35%">Tipe</th>
-                                    <th>{{ $item->tipe }}</th>
-                                </tr>
-                                <tr>
                                     <th style="width:35%">Harga</th>
                                     <th>Rp. {{ number_format($item->harga) }} </th>
                                 </tr>
@@ -79,6 +75,49 @@
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content -->
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card card-outline card-warning">
+                    <div class="card-header">
+                        Review Akomodasi
+                    </div>
+                    <div class="card-body">
+                        <table id="" class="table table-border">
+                            <thead>
+                                <th style="width:35%">Nama Reviewer</th>
+                                <th style="width:35%">Tingkat Kepuasan</th>
+                                <th style="width:35%">Komentar</th>
+                                <th style="width:35%">Aksi</th>
+                            </thead>
+                            <tbody>
+                                @foreach($review_a as $item)
+                                <tr>
+                                    <td>{{ $item->name }}</td>
+                                    <td>{{ $item->tingkat_kepuasan }}</td>
+                                    <td>{{ $item->komentar }}</td>
+                                    <td>
+                                        <a href="javascript:void(0)" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        <div class="pull-right">
+                            {{ $review_a->links() }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+
+
+
 
 
 @endsection

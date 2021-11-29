@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin;
+use App\Http\Controllers\Admin\AkomodasiController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -12,3 +13,6 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 require __DIR__.'/admin.php';
+
+// Delete Detail
+

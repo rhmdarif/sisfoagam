@@ -322,8 +322,24 @@ class AkomodasiController extends Controller
                             ->orderBy("akomodasi.nama_akomodasi", "asc")
                             ->get();
 
+        $data['review_a'] = DB::table('review_akomodasi')
+                            ->join('akomodasi','review_akomodasi.akomodasi_id','akomodasi.id')
+                            ->join('users','review_akomodasi.users_id','users.id')
+                            ->where('review_akomodasi.akomodasi_id',$id)
+                            ->orderBy('review_akomodasi.users_id',"asc")
+                            ->SimplePaginate(5);
+        
+                      
+
         return view('admin.akomodasi.detail',$data);
 
 
     }
+
+    public function hapus_detail($id)
+    {
+        DB::table('review_akomodasi')->where('id',$id)->delete();
+        return response()->json(['success'=>'200']);
+    }
+
 }
