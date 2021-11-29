@@ -70,6 +70,46 @@
         <!-- /.row -->
     </div><!-- /.container-fluid -->
 </div>
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card card-outline card-warning">
+                    <div class="card-header">
+                        Review Ekonomi Kreatif
+                    </div>
+                    <div class="card-body">
+                        <table id="" class="table table-border">
+                            <thead>
+                                <th style="width:35%">Nama Reviewer</th>
+                                <th style="width:35%">Tingkat Kepuasan</th>
+                                <th style="width:35%">Komentar</th>
+                                <th style="width:35%">Aksi</th>
+                            </thead>
+                            <tbody>
+                                @foreach($ekonomi_k as $item)
+                                <tr>
+                                    <td>{{ $item->name }}</td>
+                                    <td>{{ $item->tingkat_kepuasan }}</td>
+                                    <td>{{ $item->komentar }}</td>
+                                    <td>
+                                    <button type="button" class="btn btn-danger btn-sm btn-circle" onclick="ModalHapus()"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        <div class="pull-right">
+                            {{ $ekonomi_k->links() }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
 <!-- /.content -->
 
 

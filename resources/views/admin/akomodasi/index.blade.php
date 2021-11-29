@@ -60,7 +60,7 @@
                                         <td>
                                             <a href="{{ route('admin.akomodasi.detail', $a->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
                                             <button onclick="location.href='<?= route('admin.akomodasi.edit-page', $a->id) ?>'" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></button>
-                                            <button onclick="hapus('<?= $a->id_akomodasi ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
+                                            <button onclick="hapus('<?= $a->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
                                         </td>
                                     </tr>
                                     @endforeach

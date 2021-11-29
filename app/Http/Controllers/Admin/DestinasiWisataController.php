@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\DestinasiWisata;
+use App\Models\GaleriParawisata;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
@@ -116,11 +117,7 @@ class DestinasiWisataController extends Controller
                 // $photo->move(storage_path('app/public').'/akomodasi/', $name);
                 $location = $photo->storeAs("public/destinasi_wisata_foto_vidio_wisata", $name);
                 $mime = $photo->getMimeType();
-                if(preg_match("/image/i", $mime)) {
-                    $kategori = "foto";
-                } else if(preg_match("/image/i", $mime)) {
-                    $kategori = "video";
-                }
+                $kategori = "foto";
 
                 if(isset($kategori)) {
                     $photos[] = [
@@ -128,9 +125,14 @@ class DestinasiWisataController extends Controller
                         'kategori' => $kategori,
                         'file' => storage_url(substr($location, 7))
                     ];
+                    $ins_to_galery = [
+                        'kategori' => $kategori,
+                        'file' => storage_url(substr($location, 7))
+                    ];
                 }
             }
             DB::table('destinasi_wisata_foto_vidio_wisata')->insert($photos);
+            GaleriParawisata::insert($ins_to_galery);
         }
 
         if($request->filled("gallery_video")) {
@@ -245,14 +247,18 @@ class DestinasiWisataController extends Controller
             DB::table('destinasi_wisata_fasilitas_wisata')->insert($data_fasilitas);
         }
 
+        $rmv_from_galery = [];
         if($request->filled('old')) {
             $not_inc = DB::table('destinasi_wisata_foto_vidio_wisata')->where('kategori', 'foto')->where("destinasi_wisata_id", $destinasi_wisatum->id)->whereNotIn("id", $request->old)->get();
             foreach ($not_inc as $key => $value) {
                 list($baseUrl, $path, $dir, $file) = explode("/", $value->file);
                 Storage::disk('public')->delete(implode('/', [$dir, $file]));
+                $rmv_from_galery[] = $value->file;
             }
             DB::table('destinasi_wisata_foto_vidio_wisata')->where("destinasi_wisata_id", $destinasi_wisatum->id)->whereNotIn("id", $request->old)->delete();
         }
+
+        $ins_to_galery= [];
 
         if($request->hasfile('photos')) {
             $photos= [];
@@ -269,13 +275,23 @@ class DestinasiWisataController extends Controller
                         'kategori' => $kategori,
                         'file' => storage_url(substr($file_location, 7)),
                     ];
+                    $ins_to_galery[] = [
+                        'kategori' => $kategori,
+                        'file' => storage_url(substr($file_location, 7))
+                    ];
                 }
             }
             DB::table('destinasi_wisata_foto_vidio_wisata')->insert($photos);
         }
 
         if($request->filled("gallery_video")) {
-            $not_inc = DB::table('foto_video_akomodasi')->where("destinasi_wisata_id", $destinasi_wisatum->id)->where('kategori', 'video')->delete();
+            $not_inc = DB::table('foto_video_akomodasi')->where("destinasi_wisata_id", $destinasi_wisatum->id)->where('kategori', 'video')->get();
+
+            foreach ($not_inc as $key => $value) {
+                $rmv_from_galery[] = $value->file;
+            }
+
+            DB::table('foto_video_akomodasi')->where("destinasi_wisata_id", $destinasi_wisatum->id)->where('kategori', 'video')->delete();
             $videos = [];
 
             foreach ($request->gallery_video as $key => $value) {
@@ -284,9 +300,16 @@ class DestinasiWisataController extends Controller
                     'kategori' => "video",
                     'file' => $value,
                 ];
+                $ins_to_galery[] = [
+                    'kategori' => "video",
+                    'file' => $value,
+                ];
             }
-            DB::table('destinasi_wisata_foto_vidio_wisata')->insert($videos);
         }
+
+        GaleriParawisata::insert($ins_to_galery);
+
+        GaleriParawisata::whereIn("file", $rmv_from_galery)->delete();
 
         return back()->with("success", "Destinasi berhasil ditambahkan");
     }
@@ -303,6 +326,12 @@ class DestinasiWisataController extends Controller
 
         list($baseUrl, $path, $dir, $file) = explode("/", $destinasi_wisatum->thumbnail_destinasi_wisata);
         Storage::disk('public')->delete(implode('/', [$dir, $file]));
+
+        $rmv_from_galery = [];
+        foreach($destinasi_wisatum->fotovideo as $k => $f) {
+            $rmv_from_galery[] = $f->file;
+        }
+        GaleriParawisata::whereIn("file", $rmv_from_galery)->delete();
 
         $destinasi_wisatum->delete();
         return ['pesan' => 'berhasil'];
@@ -332,9 +361,31 @@ class DestinasiWisataController extends Controller
                             ->where('destinasi_wisata.id',$id)
                             ->orderBy("destinasi_wisata.nama_wisata", "asc")
                             ->get();
+        
+        $data['destinasi_w'] = DB::table('destinasi_wisata_review_wisata')
+                            ->join('destinasi_wisata','destinasi_wisata_review_wisata.destinasi_wisata_id','destinasi_wisata.id')
+                            ->join('users','destinasi_wisata_review_wisata.user_id','users.id')
+                            ->where('destinasi_wisata_review_wisata.destinasi_wisata_id',$id)
+                            ->orderBy('destinasi_wisata_review_wisata.user_id',"asc")
+                            ->SimplePaginate(5);
 
         return view('admin.destinasi_wisata.detail', $data);
 
+    }
+
+    public function hapus_detail($id_rev)
+    {
+        DB::table('review_akomodasi')->where('id',$id_rev)->delete();
+        Alert::success('Congrats', 'Data Berhasil Dihapus');
+
+        $data['kategori'] = DB::table('kategori_akomodasi')->get();
+        // $data['akomodasi'] = DB::table('akomodasi')
+        //                     ->join('kategori_akomodasi','akomodasi.kategori_akomodasi_id','kategori_akomodasi.id')
+        //                     ->select('akomodasi.id as id_akomodasi','akomodasi.*','kategori_akomodasi.*')
+        //                     ->orderBy("akomodasi.nama_akomodasi", "asc")
+        //                     ->get();
+        $data['akomodasi'] = Akomodasi::orderBy("akomodasi.nama_akomodasi", "asc")->get();
+        return view('admin.akomodasi.index',$data);
     }
 
 }

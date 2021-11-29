@@ -34,7 +34,7 @@
                 <div class="col-lg-12">
                     <div class="card card-outline card-primary">
                         <div class="card-body">
-                            <form action="{{ route('admin.fasilitas-umum.update', $fasilitas_umum->id) }}" method="POST">
+                            <form action="{{ route('admin.fasilitas-umum.update', $fasilitas_umum->id) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 @method("PUT")
                                 <div class="row">
@@ -59,7 +59,17 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 text-center">
-                                        <div style="margin-top:30px" id="tampilFoto"></div>
+
+                                        <div class="form-group">
+                                            <label for="">Foto</label>
+
+                                            <div style="margin-top:30px" id="tampilFoto">
+                                                <img src="{{ $fasilitas_umum->thumbnail }}" width="60%"/>
+                                            </div>
+
+                                            <input type="file" name="thumbnail" id="thumbnail"
+                                                onchange="return tampilfoto()" class="form-control">
+                                        </div>
 
                                         <div class="form-group">
                                             <label for="">Lokasi</label>

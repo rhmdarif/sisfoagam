@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Akomodasi;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\GaleriParawisata;
 use App\Models\FotoVideoAkomodasi;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -73,7 +74,7 @@ class AkomodasiController extends Controller
                 'slug_akomodasi' => rand(10000,99999).'-'.Str::slug($r->akomodasi),
                 'thumbnail_akomodasi' => storage_url(substr($file_location, 7)),
             ]);
-
+            $ins_to_galery = [];
             if($r->hasfile('photos')) {
                 $photos= [];
                 foreach ($r->file('photos') as $key => $photo) {
@@ -82,13 +83,17 @@ class AkomodasiController extends Controller
                     $file_location = $photo->storeAs("public/foto_video_akomodasi", $name);
                     $mime = $photo->getMimeType();
 
-                    if(isset($kategori)) {
-                        $photos[] = [
-                            'akomodasi_id' => $simpan,
-                            'kategori' => "foto",
-                            'file' => storage_url(substr($file_location, 7)),
-                        ];
-                    }
+                    $photos[] = [
+                        'akomodasi_id' => $simpan,
+                        'kategori' => "foto",
+                        'file' => storage_url(substr($file_location, 7)),
+                    ];
+
+                    $ins_to_galery[] = [
+                        'kategori' => "foto",
+                        'file' => storage_url(substr($file_location, 7))
+                    ];
+
                 }
                 DB::table('foto_video_akomodasi')->insert($photos);
             }
@@ -106,6 +111,8 @@ class AkomodasiController extends Controller
                 }
                 DB::table('foto_video_akomodasi')->insert($videos);
             }
+
+            GaleriParawisata::insert($ins_to_galery);
 
         }else{
             $datacek = DB::table('akomodasi')->where('id', $r->id)->first();
@@ -144,15 +151,19 @@ class AkomodasiController extends Controller
                 }
                 $simpan = DB::table('akomodasi')->where('id', $r->id)->update($update);
 
+                $rmv_from_galery = [];
                 if($r->filled('old')) {
                     $not_inc = DB::table('foto_video_akomodasi')->where("akomodasi_id", $r->id)->where('kategori', 'foto')->whereNotIn("id", $r->old)->get();
                     foreach ($not_inc as $key => $value) {
                         list($baseUrl, $path, $dir, $file) = explode("/", $value->file);
                         Storage::disk('public')->delete(implode('/', [$dir, $file]));
+                        $rmv_from_galery[] = $value->file;
                     }
                     DB::table('foto_video_akomodasi')->where("akomodasi_id", $r->id)->whereNotIn("id", $r->old)->delete();
+
                 }
 
+                $ins_to_galery= [];
                 if($r->hasfile('photos')) {
                     $photos= [];
                     foreach ($r->file('photos') as $key => $photo) {
@@ -161,19 +172,26 @@ class AkomodasiController extends Controller
                         $file_location = $photo->storeAs("public/foto_video_akomodasi", $name);
                         $mime = $photo->getMimeType();
 
-                        if(isset($kategori)) {
-                            $photos[] = [
-                                'akomodasi_id' => $r->id,
-                                'kategori' => "foto",
-                                'file' => storage_url(substr($file_location, 7)),
-                            ];
-                        }
+                        $photos[] = [
+                            'akomodasi_id' => $r->id,
+                            'kategori' => "foto",
+                            'file' => storage_url(substr($file_location, 7)),
+                        ];
+                        $ins_to_galery[] = [
+                            'kategori' => "foto",
+                            'file' => storage_url(substr($file_location, 7))
+                        ];
                     }
                     DB::table('foto_video_akomodasi')->insert($photos);
                 }
 
                 if($r->filled("gallery_video")) {
-                    $not_inc = DB::table('foto_video_akomodasi')->where("akomodasi_id", $r->id)->where('kategori', 'video')->delete();
+                    $not_inc = DB::table('foto_video_akomodasi')->where("akomodasi_id", $r->id)->where('kategori', 'video')->get();
+                    foreach ($not_inc as $key => $value) {
+                        $rmv_from_galery[] = $value->file;
+                    }
+
+                    DB::table('foto_video_akomodasi')->where("akomodasi_id", $r->id)->where('kategori', 'video')->delete();
                     $videos = [];
 
                     foreach ($r->gallery_video as $key => $value) {
@@ -182,9 +200,17 @@ class AkomodasiController extends Controller
                             'kategori' => "video",
                             'file' => $value,
                         ];
+                        $ins_to_galery[] = [
+                            'kategori' => "video",
+                            'file' => $value,
+                        ];
                     }
                     DB::table('foto_video_akomodasi')->insert($videos);
                 }
+
+                GaleriParawisata::whereIn("file", $rmv_from_galery)->delete();
+
+                GaleriParawisata::insert($ins_to_galery);
 
             }
         }
@@ -249,10 +275,17 @@ class AkomodasiController extends Controller
 
     public function delete(Request $r)
     {
-        $data = DB::table('akomodasi')->where('id', $r->id)->first();
+        $data = Akomodasi::find($r->id);
 
         list($baseUrl, $path, $dir, $file) = explode("/", $data->thumbnail_akomodasi);
         Storage::disk('public')->delete(implode('/', [$dir, $file]));
+
+        $rmv_from_galery = [];
+        foreach($data->fotovideo as $k => $f) {
+            $rmv_from_galery[] = $f->file;
+        }
+        GaleriParawisata::whereIn("file", $rmv_from_galery)->delete();
+
 
         $hapus = Akomodasi::findOrFail($r->id)->delete();
         if($hapus == TRUE)
@@ -289,8 +322,24 @@ class AkomodasiController extends Controller
                             ->orderBy("akomodasi.nama_akomodasi", "asc")
                             ->get();
 
+        $data['review_a'] = DB::table('review_akomodasi')
+                            ->join('akomodasi','review_akomodasi.akomodasi_id','akomodasi.id')
+                            ->join('users','review_akomodasi.users_id','users.id')
+                            ->where('review_akomodasi.akomodasi_id',$id)
+                            ->orderBy('review_akomodasi.users_id',"asc")
+                            ->SimplePaginate(5);
+        
+                      
+
         return view('admin.akomodasi.detail',$data);
 
 
     }
+
+    public function hapus_detail($id)
+    {
+        DB::table('review_akomodasi')->where('id',$id)->delete();
+        return response()->json(['success'=>'200']);
+    }
+
 }

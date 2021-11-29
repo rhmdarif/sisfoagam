@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\EkonomiKreatif;
+use App\Models\GaleriParawisata;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\KategoriEkonomiKreatif;
@@ -88,6 +89,7 @@ class EkonomiKreatifController extends Controller
             'thumbnail_ekonomi_kreatif' => storage_url(substr($file_location, 7))
         ]);
 
+        $ins_to_galery = [];
         if($request->hasfile('photos')) {
             $photos= [];
             foreach ($request->file('photos') as $key => $photo) {
@@ -100,6 +102,11 @@ class EkonomiKreatifController extends Controller
                 if(isset($kategori)) {
                     $photos[] = [
                         'ekonomi_kreatif_id' => $ekonomi_kreatif->id,
+                        'kategori' => $kategori,
+                        'file' => storage_url(substr($location, 7))
+                    ];
+
+                    $ins_to_galery[] = [
                         'kategori' => $kategori,
                         'file' => storage_url(substr($location, 7))
                     ];
@@ -117,9 +124,14 @@ class EkonomiKreatifController extends Controller
                     'kategori' => "video",
                     'file' => $value,
                 ];
+                $ins_to_galery[] = [
+                    'kategori' => "video",
+                    'file' => $value,
+                ];
             }
             DB::table('foto_video_ekonomi_kreatif')->insert($videos);
         }
+        GaleriParawisata::insert($ins_to_galery);
 
         return back()->with("success", "Ekonomi Kreatif berhasil ditambahkan");
     }
@@ -202,11 +214,13 @@ class EkonomiKreatifController extends Controller
 
         $ekonomi_kreatif->update($update);
 
+        $rmv_from_galery = [];
         if($request->filled('old')) {
             $not_inc = DB::table('destinasi_wisata_foto_vidio_wisata')->where("kategori", "foto")->where("destinasi_wisata_id", $ekonomi_kreatif->id)->whereNotIn("id", $request->old)->get();
             foreach ($not_inc as $key => $value) {
                 list($baseUrl, $path, $dir, $file) = explode("/", $value->file);
                 Storage::disk('public')->delete(implode('/', [$dir, $file]));
+                $rmv_from_galery[] = $value->file;
             }
 
             DB::table('destinasi_wisata_foto_vidio_wisata')->where("destinasi_wisata_id", $ekonomi_kreatif->id)->whereNotIn("id", $request->old)->delete();
@@ -219,11 +233,7 @@ class EkonomiKreatifController extends Controller
                 // $photo->move(storage_path('app/public').'/akomodasi/', $name);
                 $location = $photo->storeAs("public/foto_video_ekonomi_kreatif", $name);
                 $mime = $photo->getMimeType();
-                if(preg_match("/image/i", $mime)) {
-                    $kategori = "foto";
-                } else if(preg_match("/image/i", $mime)) {
-                    $kategori = "video";
-                }
+                $kategori = "foto";
 
                 if(isset($kategori)) {
                     $photos[] = [
@@ -231,13 +241,24 @@ class EkonomiKreatifController extends Controller
                         'kategori' => $kategori,
                         'file' => storage_url(substr($location, 7))
                     ];
+
+                    $ins_to_galery = [
+                        'kategori' => $kategori,
+                        'file' => storage_url(substr($location, 7))
+                    ];
                 }
             }
             DB::table('foto_video_ekonomi_kreatif')->insert($photos);
+            GaleriParawisata::insert($$ins_to_galery);
         }
 
         if($request->filled("gallery_video")) {
-            $not_inc = DB::table('foto_video_ekonomi_kreatif')->where("ekonomi_kreatif_id", $ekonomi_kreatif->id)->where('kategori', 'video')->delete();
+            $not_inc = DB::table('foto_video_ekonomi_kreatif')->where("ekonomi_kreatif_id", $ekonomi_kreatif->id)->where('kategori', 'video')->get();
+            foreach ($not_inc as $key => $value) {
+                $rmv_from_galery[] = $value->file;
+            }
+            DB::table('foto_video_ekonomi_kreatif')->where("ekonomi_kreatif_id", $ekonomi_kreatif->id)->where('kategori', 'video')->delete();
+
             $videos = [];
 
             foreach ($request->gallery_video as $key => $value) {
@@ -249,6 +270,7 @@ class EkonomiKreatifController extends Controller
             }
             DB::table('foto_video_ekonomi_kreatif')->insert($videos);
         }
+        GaleriParawisata::whereIn("file", $rmv_from_galery)->delete();
 
         return back()->with("success", "Ekonomi Kreatif berhasil ditambahkan");
     }
@@ -262,6 +284,15 @@ class EkonomiKreatifController extends Controller
     public function destroy(EkonomiKreatif $ekonomi_kreatif)
     {
         //
+        list($baseUrl, $path, $dir, $file) = explode("/", $ekonomi_kreatif->thumbnail_ekonomi_kreatif);
+        Storage::disk('public')->delete(implode('/', [$dir, $file]));
+
+        $rmv_from_galery = [];
+        foreach($ekonomi_kreatif->fotovideo as $k => $f) {
+            $rmv_from_galery[] = $f->file;
+        }
+        GaleriParawisata::whereIn("file", $rmv_from_galery)->delete();
+
         $ekonomi_kreatif->delete();
         return ['pesan' => 'berhasil'];
     }
@@ -276,6 +307,12 @@ class EkonomiKreatifController extends Controller
                             ->orderBy("ekonomi_kreatif.nama_ekonomi_kreatif", "asc")
                             ->get();
 
+        $data['ekonomi_k'] = DB::table('review_ekonomi_kreatif')
+                            ->join('ekonomi_kreatif','review_ekonomi_kreatif.ekonomi_kreatif_id','ekonomi_kreatif.id')
+                            ->join('users','review_ekonomi_kreatif.user_id','users.id')
+                            ->where('review_ekonomi_kreatif.ekonomi_kreatif_id',$id)
+                            ->orderBy('review_ekonomi_kreatif.user_id',"asc")
+                            ->SimplePaginate(5);
 
         return view('admin.ekonomi_kreatif.detail',$data);
     }
