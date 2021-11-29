@@ -304,9 +304,31 @@ class DestinasiWisataController extends Controller
                             ->where('destinasi_wisata.id',$id)
                             ->orderBy("destinasi_wisata.nama_wisata", "asc")
                             ->get();
+        
+        $data['destinasi_w'] = DB::table('destinasi_wisata_review_wisata')
+                            ->join('destinasi_wisata','destinasi_wisata_review_wisata.destinasi_wisata_id','destinasi_wisata.id')
+                            ->join('users','destinasi_wisata_review_wisata.user_id','users.id')
+                            ->where('destinasi_wisata_review_wisata.destinasi_wisata_id',$id)
+                            ->orderBy('destinasi_wisata_review_wisata.user_id',"asc")
+                            ->SimplePaginate(5);
 
         return view('admin.destinasi_wisata.detail', $data);
         
+    }
+
+    public function hapus_detail($id_rev)
+    {
+        DB::table('review_akomodasi')->where('id',$id_rev)->delete();
+        Alert::success('Congrats', 'Data Berhasil Dihapus');
+
+        $data['kategori'] = DB::table('kategori_akomodasi')->get();
+        // $data['akomodasi'] = DB::table('akomodasi')
+        //                     ->join('kategori_akomodasi','akomodasi.kategori_akomodasi_id','kategori_akomodasi.id')
+        //                     ->select('akomodasi.id as id_akomodasi','akomodasi.*','kategori_akomodasi.*')
+        //                     ->orderBy("akomodasi.nama_akomodasi", "asc")
+        //                     ->get();
+        $data['akomodasi'] = Akomodasi::orderBy("akomodasi.nama_akomodasi", "asc")->get();
+        return view('admin.akomodasi.index',$data);
     }
 
 }

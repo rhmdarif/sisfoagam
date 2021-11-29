@@ -251,6 +251,13 @@ class EkonomiKreatifController extends Controller
                             ->where('ekonomi_kreatif.id',$id)
                             ->orderBy("ekonomi_kreatif.nama_ekonomi_kreatif", "asc")
                             ->get();
+
+        $data['ekonomi_k'] = DB::table('review_ekonomi_kreatif')
+                            ->join('ekonomi_kreatif','review_ekonomi_kreatif.ekonomi_kreatif_id','ekonomi_kreatif.id')
+                            ->join('users','review_ekonomi_kreatif.user_id','users.id')
+                            ->where('review_ekonomi_kreatif.ekonomi_kreatif_id',$id)
+                            ->orderBy('review_ekonomi_kreatif.user_id',"asc")
+                            ->SimplePaginate(5);
            
 
         return view('admin.ekonomi_kreatif.detail',$data);
