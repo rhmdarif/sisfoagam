@@ -49,8 +49,8 @@
                                     <tr>
                                         <td>{{$i+1}}</td>
                                         <td><img src="{{ $a->thumbnail_akomodasi }}" alt="{{ $a->thumbnail_akomodasi }}" class="img-fluid" width="100px"></td>
+                                        <td>{{$a->kategori->nama_kategori_akomodasi}}</td>
                                         <td>{{$a->nama_akomodasi}}</td>
-                                        <td>{{$a->nama_kategori_akomodasi}}</td>
                                         <td>{{$a->kelas}}</td>
                                         <td>{{$a->tipe}}</td>
                                         <td>Rp.{{number_format($a->harga)}}</td>
@@ -59,9 +59,8 @@
                                         </td>
                                         <td>
                                             <a href="{{ route('admin.akomodasi.detail', $a->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
-                                            <button onclick="fasilitas('<?= $a->id_akomodasi ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-plus"></i></button>
                                             <button onclick="location.href='<?= route('admin.akomodasi.edit-page', $a->id) ?>'" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></button>
-                                            <button onclick="hapus('<?= $a->id_akomodasi ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
+                                            <button onclick="hapus('<?= $a->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
                                         </td>
                                     </tr>
                                     @endforeach

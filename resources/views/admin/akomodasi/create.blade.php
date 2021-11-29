@@ -45,22 +45,24 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="">Akomodasi</label>
+                                            <label for="">Nama Akomodasi</label>
                                             <input type="text" name="akomodasi" id="akomodasi" class="form-control"
-                                                placeholder="Akomodasi">
+                                                placeholder="Nama Akomodasi">
                                         </div>
-                                        <div class="form-group">
+                                        <div class="form-group" id="form_kelas">
                                             <label for="">Kelas</label>
-                                            <input type="text" name="kelas" id="kelas" class="form-control" placeholder="Kelas">
+                                            <select name="kelas" id="kelas" class="form-control">
+                                                <option value="1">Rating 1</option>
+                                                <option value="2">Rating 2</option>
+                                                <option value="3">Rating 3</option>
+                                                <option value="4">Rating 4</option>
+                                                <option value="5">Rating 5</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="">Tipe</label>
-                                            <input type="text" name="tipe" id="tipe" class="form-control" placeholder="Tipe">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="">Harga</label>
+                                            <label for="" id="label_harga">Harga</label>
                                             <input type="text" name="harga" id="harga" class="form-control" placeholder="Harga">
                                         </div>
                                         <div class="form-group">
@@ -77,7 +79,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="">Fasilitas</label>
-                                            <button type="button" class="btn btn-sm btn-primary float-right mb-2" onclick="tampil_fasilitas()">Tambah</button>
+                                            <button type="button" class="btn btn-sm btn-primary float-right mb-2" data-toggle="modal" data-target="#tambah-fasilitas">Tambah</button>
                                             <select name="fasilitas[]" id="fasilitas" class="form-control sl2multi" multiple style="width: 100% !important">
                                             </select>
                                         </div>
@@ -93,8 +95,37 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
+                                        <label for="">Galeri Foto Akomodasi</label>
                                         <div class="input-images"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="">Galeri Vidio Akomodasi</label>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" id="table_video">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Code</th>
+                                                        <th>Vidio</th>
+                                                        <th width="20%">Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <div class="form-group">
+                                                                <input type="text" id="vidio_url" class="form-control" placeholder="Youtube Video Url">
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-primary btn-block" id="tambah_video">Tambah</button>
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -162,6 +193,45 @@
             // $('.select2bs4').select2({
             //     theme: 'bootstrap4'
             // })
+
+            $('#tambah-fasilitas form').submit((e) => {
+                e.preventDefault();
+
+                var form = $('#tambah-fasilitas form')[0];
+                var data = new FormData(form);
+
+                $('#tambah-fasilitas button[type=submit]').attr('disabled');
+
+                $.ajax({
+                    url: "{{ route('admin.master-data.akomodasi.fasilitas.store') }}",
+                    enctype: 'multipart/form-data',
+                    type: "POST",
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    timeout: 800000,
+                    success: function(hasil) {
+                        // hasil = JSON.parse(hasil);
+                        console.log("SUCCESS : ", hasil);
+                        $.toast({
+                            heading: 'Success',
+                            text: hasil.msg,
+                            showHideTransition: 'slide',
+                            icon: 'success',
+                            position: 'top-right'
+                        });
+                    },
+                    error: function(e) {
+                        console.log("ERROR : ", e);
+                    },
+                    complete: function() {
+                        $('#tambah-fasilitas button[type=submit]').removeAttr('disabled');
+                        $('#tambah-fasilitas').modal("hide");
+                    }
+                })
+            });
+
             $('#tambah-kategori form').submit((e) => {
                 e.preventDefault();
 
@@ -257,8 +327,55 @@
                     // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
                 }
             });
+
+            $('#tambah_video').click(() => {
+                let vidio_url = $('#vidio_url').val();
+                console.log(getVideoIdYoutube(vidio_url));
+                appendRowTableVideo(getVideoIdYoutube(vidio_url))
+            });
+
+            $('#kategori').change(() => {
+                if($('#kategori').val() == 1) {
+                    $('#form_kelas').show();
+                    $('#label_harga').text("Harga Mulai");
+                } else {
+                    $('#form_kelas').hide();
+                    $('#label_harga').text("Harga");
+                }
+            })
         });
 
+        function getVideoIdYoutube(url) {
+            if(url.search("youtu.be") >= 0) {
+                let url_split = url.split("/");
+                return url_split[url_split.length -1];
+            } else {
+                var url = new URL(url);
+                return url.searchParams.get("v") ?? null;
+            }
+        }
+
+        function delRowTableVideo(el) {
+            $(el).parents("tr").remove();
+        }
+
+        function appendRowTableVideo(code) {
+            if($('#'+code).length == 0) {
+                let markup =    `<tr id="${code}">
+                                    <td>
+                                        ${code}
+                                        <input type="hidden" name="gallery_video[]" value="${code}">
+                                    </td>
+                                    <td>
+                                        <iframe width="350" height="240" src="https://www.youtube.com/embed/${code}"></iframe>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger" onclick="delRowTableVideo(this)"><i class="fa fa-trash"></i></button>
+                                    </td>
+                                </tr>`;
+                $("#table_video tbody").append(markup);
+            }
+        }
 
         var harga = new AutoNumeric('#harga', {
             currencySymbol: 'Rp.',
@@ -368,50 +485,6 @@
             }
         }
 
-
-        function tampil_fasilitas()
-        {
-            $('#tambah-fasilitas').modal()
-            $('#tambah-fasilitas #title').html('Tambah Data')
-            $('#tambah-fasilitas #btnNama').html('Tambah')
-        }
-
-        function simpan_fasilitas()
-        {
-            var icon_fasilitas = $('#icon_fasilitas').prop('files')[0];
-            var nama_fasilitas = $('#nama_fasilitas').val();
-            var id = $('#id').val();
-            var form_data = new FormData();
-
-            form_data.append("_token", "{{ csrf_token() }}");
-            form_data.append("_method", "POST");
-            form_data.append('icon_fasilitas', icon_fasilitas);
-            form_data.append('nama_fasilitas', nama_fasilitas);
-            form_data.append('id', id);
-
-            $.ajax({
-                type: "POST",
-                url: "{{route('admin.master-data.akomodasi.fasilitas.store')}}",
-                contentType: 'multipart/form-data',
-                data: form_data,
-                processData: false,
-                contentType: false,
-                dataType: 'JSON',
-                success: function(data) {
-                    // location.reload();
-                    alert("Fasilitas berhasil ditambahkan")
-                    $('#tambah-fasilitas').modal('hide')
-                    console.log(data);
-                },
-                error: function(e) {
-                    console.log(e.responseText);
-                },
-                complete: function () {
-                    $('#tambah-fasilitas').modal('hide');
-                }
-            });
-        }
-
         function fasilitas(id) {
             $.ajax({
                 url: "{{ route('admin.akomodasi.fasilitas') }}",
@@ -445,8 +518,6 @@
             zoom: 18,
             marker: false
         });
-
-
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',

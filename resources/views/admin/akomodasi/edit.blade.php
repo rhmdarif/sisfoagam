@@ -37,38 +37,41 @@
                                 @csrf
                                 <input type="hidden" name="id" id="id" value="{{ $data->id }}">
                                 <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="">Kategori</label>
-                                            <button type="button" class="btn btn-primary float-right btn-sm mb-2" data-toggle="modal" data-target="#tambah-kategori">Tambah</button>
-                                            <select name="kategori" id="kategori" class="form-control select2bs4">
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="">Akomodasi</label>
-                                            <input type="text" name="akomodasi" id="akomodasi" class="form-control" value="{{ $data->nama_akomodasi }}"
-                                                placeholder="Akomodasi">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="">Kelas</label>
-                                            <input type="text" name="kelas" id="kelas" class="form-control" placeholder="Kelas" value="{{ $data->kelas }}">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="">Tipe</label>
-                                            <input type="text" name="tipe" id="tipe" class="form-control" placeholder="Tipe" value="{{ $data->tipe }}">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="">Harga</label>
-                                            <input type="text" name="harga" id="harga" class="form-control" placeholder="Harga" value="{{ $data->harga ?? 0 }}">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="">Thumbnail</label>
-                                            <input type="file" name="thumbnail" id="thumbnail"
-                                                onchange="return tampilfoto()" class="form-control">
-                                            <input type="hidden" id="lat" class="form-control" value="{{ $data->lat }}">
-                                            <input type="hidden" id="lng" class="form-control" value="{{ $data->long }}">
+                                    <div class="col-md-8">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="">Kategori</label>
+                                                    <button type="button" class="btn btn-primary float-right btn-sm mb-2" data-toggle="modal" data-target="#tambah-kategori">Tambah</button>
+                                                    <select name="kategori" id="kategori" class="form-control select2bs4">
+                                                        {{-- <option value="{{ $data->kategori_akomodasi_id }}" selected>{{ $data->nama_kategori_akomodasi }}</option> --}}
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="">Nama Akomodasi</label>
+                                                    <input type="text" name="akomodasi" id="akomodasi" class="form-control" value="{{ $data->nama_akomodasi }}"
+                                                        placeholder="Nama Akomodasi">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="">Harga</label>
+                                                    <input type="text" name="harga" id="harga" class="form-control" placeholder="Harga" value="{{ $data->harga ?? 0 }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="">Thumbnail</label>
+                                                    <input type="file" name="thumbnail" id="thumbnail"
+                                                        onchange="return tampilfoto()" class="form-control">
+                                                    <input type="hidden" id="lat" class="form-control" value="{{ $data->lat }}">
+                                                    <input type="hidden" id="lng" class="form-control" value="{{ $data->long }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12" id="form_kelas">
+                                                <div class="form-group">
+                                                    <label for="">Kelas</label>
+                                                    <input type="text" name="kelas" id="kelas" class="form-control" placeholder="Kelas" value="{{ $data->kelas }}">
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-4 text-center">
@@ -94,8 +97,38 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-12">
+
+                                    <div class="col-md-6">
+                                        <label for="">Galeri Foto Akomodasi</label>
                                         <div class="input-images"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="">Galeri Vidio Akomodasi</label>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" id="table_video">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Code</th>
+                                                        <th>Vidio</th>
+                                                        <th width="20%">Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <div class="form-group">
+                                                                <input type="text" id="vidio_url" class="form-control" placeholder="Youtube Video Url">
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-primary btn-block" id="tambah_video">Tambah</button>
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -158,48 +191,33 @@
 
 
         function loadMedia() {
-                // $.get("{{ route('admin.akomodasi.media', $data->id) }}", (result) => {
-                //     console.log(result);
-                    let json = {!! json_encode($data->fotovideo) !!}
-                    let preloaded = [];
+            // $.get("{{ route('admin.akomodasi.media', $data->id) }}", (result) => {
+            //     console.log(result);
+                let json = {!! json_encode($data->fotovideo) !!}
+                let preloaded = [];
+                let video_list = [];
 
-                    json.forEach((e, i) => {
+                json.forEach((e, i) => {
+                    if(e.kategori == "foto") {
                         preloaded.push({id: e.id, src: e.file});
-                    });
+                    } else {
+                        appendRowTableVideo(e.file)
+                    }
+                });
 
-                    $('.input-images').imageUploader({
-                        preloaded: preloaded,
-                        imagesInputName: 'photos',
-                        preloadedInputName: 'old'
-                    });
+                $('.input-images').imageUploader({
+                    preloaded: preloaded,
+                    imagesInputName: 'photos',
+                    preloadedInputName: 'old'
+                });
 
-                //     console.log(preloaded);
-                // })
-            }
+            //     console.log(preloaded);
+            // })
+        }
 
-        $(document).ready(() => {
-            // $('.input-images').imageUploader({ imagesInputName: 'photos' });
+        $(document).ready(async () => {
 
             loadMedia();
-            // let preloaded = [
-            //     {id: 1, src: 'https://picsum.photos/500/500?random=1'},
-            //     {id: 2, src: 'https://picsum.photos/500/500?random=2'},
-            //     {id: 3, src: 'https://picsum.photos/500/500?random=3'},
-            //     {id: 4, src: 'https://picsum.photos/500/500?random=4'},
-            //     {id: 5, src: 'https://picsum.photos/500/500?random=5'},
-            //     {id: 6, src: 'https://picsum.photos/500/500?random=6'},
-            // ];
-
-            // $('.input-images-2').imageUploader({
-            //     preloaded: preloaded,
-            //     imagesInputName: 'photos',
-            //     preloadedInputName: 'old'
-            // });
-
-            //Initialize Select2 Elements
-            // $('.select2bs4').select2({
-            //     theme: 'bootstrap4'
-            // })
 
             $('#tambah-kategori form').submit((e) => {
                 e.preventDefault();
@@ -239,9 +257,11 @@
                 })
             });
 
+            // <option value="{{ $data->kategori_akomodasi_id }}" selected>{{ $data->nama_kategori_akomodasi }}</option>
 
-            $('select.select2bs4').select2({
+            await $('select.select2bs4').select2({
                 theme: 'bootstrap4',
+                // data: [{id: '{{ $data->kategori_akomodasi_id }}', text: '{{ $data->nama_kategori_akomodasi }}'}],
                 ajax: {
                     url: "{{ route('admin.select2.kategori-akomodasi') }}",
                     dataType: 'json',
@@ -268,6 +288,14 @@
                 }
             });
 
+            $('select.select2bs4').select2("trigger", "select", {
+                data: { id: "{{ $data->kategori_akomodasi_id }}", text:'{{ $data->kategori->nama_kategori_akomodasi }}' }
+            });
+            // $('select.select2bs4').select2('data', {id:'{{ $data->kategori_akomodasi_id }}', text:'asdasd'}).trigger('change');
+
+                // $('select.select2bs4').val({{ $data->kategori_akomodasi_id }}).trigger("change");
+            // .select2('data', [{"id":"{{ $data->kategori_akomodasi_id }}","text":"{{ $data->nama_kategori_akomodasi }}"}]).trigger("change")
+            // .append('<option value="{{ $data->kategori_akomodasi_id }}">{{ $data->nama_kategori_akomodasi }}</option>').val('{{ $data->kategori_akomodasi_id }}').trigger('change');
             $('select.sl2multi').select2({
                 ajax: {
                     url: "{{ route('admin.select2.fasilitas-akomodasi') }}",
@@ -296,7 +324,46 @@
             });
 
             fasilitas_selected();
+
+
+            $('#tambah_video').click(() => {
+                let vidio_url = $('#vidio_url').val();
+                console.log(getVideoIdYoutube(vidio_url));
+                appendRowTableVideo(getVideoIdYoutube(vidio_url))
+            });
         });
+
+        function getVideoIdYoutube(url) {
+            if(url.search("youtu.be") >= 0) {
+                let url_split = url.split("/");
+                return url_split[url_split.length -1];
+            } else {
+                var url = new URL(url);
+                return url.searchParams.get("v") ?? null;
+            }
+        }
+
+        function delRowTableVideo(el) {
+            $(el).parents("tr").remove();
+        }
+
+        function appendRowTableVideo(code) {
+            if($('#'+code).length == 0) {
+                let markup =    `<tr id="${code}">
+                                    <td>
+                                        ${code}
+                                        <input type="hidden" name="gallery_video[]" value="${code}">
+                                    </td>
+                                    <td>
+                                        <iframe width="350" height="240" src="https://www.youtube.com/embed/${code}"></iframe>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger" onclick="delRowTableVideo(this)"><i class="fa fa-trash"></i></button>
+                                    </td>
+                                </tr>`;
+                $("#table_video tbody").append(markup);
+            }
+        }
 
         function fasilitas_selected() {
 

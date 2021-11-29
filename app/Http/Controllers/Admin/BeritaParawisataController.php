@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\BeritaParawisata;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use DB;
 
 class BeritaParawisataController extends Controller
 {
@@ -63,7 +64,7 @@ class BeritaParawisataController extends Controller
             'narasi' => $request->narasi,
             'posting_by' => $request->posting_by,
             'foto' => storage_url(substr($file_location, 7)),
-            'slug_berita_parawisata' => date("dmY")."-".str_replace("+", '-', urlencode($request->judul)),
+            'slug_berita_parawisata' => rand(10000,99999).'-'.Str::slug($request->judul),
         ]);
 
 
@@ -119,7 +120,7 @@ class BeritaParawisataController extends Controller
             'judul' => $request->judul,
             'narasi' => $request->narasi,
             'posting_by' => $request->posting_by,
-            'slug_berita_parawisata' => date("dmY")."-".str_replace("+", '-', urlencode($request->judul)),
+            'slug_berita_parawisata' => rand(10000,99999).'-'.Str::slug($request->judul),
         ];
 
         if($request->has('thumbnail')) {
@@ -154,7 +155,7 @@ class BeritaParawisataController extends Controller
 
     public function detail($id)
     {
-     
+
         $data['berita_parawisata'] = DB::table('berita_parawisata')->get();
 
         return view('admin.berita_parawisata.detail',$data);

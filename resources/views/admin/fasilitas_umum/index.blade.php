@@ -33,6 +33,7 @@
                                 <thead>
                                     <tr>
                                         <th style="width:2%">No</th>
+                                        <th style="width:10%">Thumbnail</th>
                                         <th style="width:10%">Nama Fasilitas</th>
                                         <th style="width:10%">Keterangan</th>
                                         <th style="width:10%">Lokasi</th>
@@ -44,6 +45,7 @@
                                     @foreach($fasilitas_umum as $i => $d)
                                     <tr>
                                         <td>{{$i+1}}</td>
+                                        <td><img src="{{$d->thumbnail}}" width="80px"></td>
                                         <td>{{$d->nama_fasilitas_umum}}</td>
                                         <td>{{ substr(strip_tags($d->keterangan), 0, 100) }}{{ strlen($d->keterangan) > 100? "..." : "" }}</td>
                                         <td>

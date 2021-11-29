@@ -72,12 +72,44 @@
                                                     <input type="hidden" name="lat" id="lat" class="form-control">
                                                     <input type="hidden" name="lng" id="lng" class="form-control">
                                                 </div>
-                                                <div class="input-images"></div>
                                                 <div class="form-group">
                                                     <label for="">Keterangan</label>
                                                     <textarea name="keterangan" id="keterangan" class="note"></textarea>
                                                 </div>
                                             </div>
+
+                                    <div class="col-md-6">
+                                        <label for="">Galeri Foto Akomodasi</label>
+                                        <div class="input-images"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="">Galeri Vidio Akomodasi</label>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" id="table_video">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Code</th>
+                                                        <th>Vidio</th>
+                                                        <th width="20%">Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <div class="form-group">
+                                                                <input type="text" id="vidio_url" class="form-control" placeholder="Youtube Video Url">
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-primary btn-block" id="tambah_video">Tambah</button>
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
                                         </div>
                                     </div>
                                     <div class="col-md-4 text-center">
@@ -87,8 +119,6 @@
                                             <label for="">Lokasi</label>
                                             <div style="height: 337px;" id="map"></div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-12 mb-2">
                                     </div>
                                 </div>
 
@@ -207,7 +237,46 @@
                     // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
                 }
             });
+
+            $('#tambah_video').click(() => {
+                let vidio_url = $('#vidio_url').val();
+                console.log(getVideoIdYoutube(vidio_url));
+                appendRowTableVideo(getVideoIdYoutube(vidio_url))
+            });
         });
+
+
+        function getVideoIdYoutube(url) {
+            if(url.search("youtu.be") >= 0) {
+                let url_split = url.split("/");
+                return url_split[url_split.length -1];
+            } else {
+                var url = new URL(url);
+                return url.searchParams.get("v") ?? null;
+            }
+        }
+
+        function delRowTableVideo(el) {
+            $(el).parents("tr").remove();
+        }
+
+        function appendRowTableVideo(code) {
+            if($('#'+code).length == 0) {
+                let markup =    `<tr id="${code}">
+                                    <td>
+                                        ${code}
+                                        <input type="hidden" name="gallery_video[]" value="${code}">
+                                    </td>
+                                    <td>
+                                        <iframe width="350" height="240" src="https://www.youtube.com/embed/${code}"></iframe>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger" onclick="delRowTableVideo(this)"><i class="fa fa-trash"></i></button>
+                                    </td>
+                                </tr>`;
+                $("#table_video tbody").append(markup);
+            }
+        }
 
         var harga = new AutoNumeric('#harga', {
             currencySymbol: 'Rp.',

@@ -73,17 +73,49 @@
                                                     <input type="hidden" name="lat" id="lat" class="form-control" value="{{ $ekonomi_kreatif->lat }}">
                                                     <input type="hidden" name="lng" id="lng" class="form-control" value="{{ $ekonomi_kreatif->long }}">
                                                 </div>
-                                                <div class="input-images"></div>
                                                 <div class="form-group">
                                                     <label for="">Keterangan</label>
                                                     <textarea name="keterangan" id="keterangan" class="note">{{ $ekonomi_kreatif->keterangan }}</textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label for="">Galeri Foto Akomodasi</label>
+                                                <div class="input-images"></div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="">Galeri Vidio Akomodasi</label>
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered" id="table_video">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Code</th>
+                                                                <th>Vidio</th>
+                                                                <th width="20%">Aksi</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                        <tfoot>
+                                                            <tr>
+                                                                <td colspan="2">
+                                                                    <div class="form-group">
+                                                                        <input type="text" id="vidio_url" class="form-control" placeholder="Youtube Video Url">
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <button type="button" class="btn btn-primary btn-block" id="tambah_video">Tambah</button>
+                                                                </td>
+                                                            </tr>
+                                                        </tfoot>
+                                                    </table>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-4 text-center">
                                         <div style="margin-top:30px" id="tampilFoto">
-                                            <img src="{{ storage_url($ekonomi_kreatif->thumbnail_ekonomi_kreatif) }}" width="60%"/>
+                                            <img src="{{ $ekonomi_kreatif->thumbnail_ekonomi_kreatif }}" width="60%"/>
                                         </div>
 
                                         <div class="form-group">
@@ -115,23 +147,29 @@
     <script>
 
         function loadMedia() {
-                //     console.log(result);
-                    let json = {!! json_encode($ekonomi_kreatif->fotovideo) !!}
-                    let preloaded = [];
+            // $.get("{{ route('admin.akomodasi.media', $ekonomi_kreatif->id) }}", (result) => {
+            //     console.log(result);
+                let json = {!! json_encode($ekonomi_kreatif->fotovideo) !!}
+                let preloaded = [];
+                let video_list = [];
 
-                    json.forEach((e, i) => {
+                json.forEach((e, i) => {
+                    if(e.kategori == "foto") {
                         preloaded.push({id: e.id, src: e.file});
-                    });
+                    } else {
+                        appendRowTableVideo(e.file)
+                    }
+                });
 
-                    $('.input-images').imageUploader({
-                        preloaded: preloaded,
-                        imagesInputName: 'photos',
-                        preloadedInputName: 'old'
-                    });
+                $('.input-images').imageUploader({
+                    preloaded: preloaded,
+                    imagesInputName: 'photos',
+                    preloadedInputName: 'old'
+                });
 
-                //     console.log(preloaded);
-                // })
-            }
+            //     console.log(preloaded);
+            // })
+        }
 
         function fasilitas_selected() {
 
@@ -234,7 +272,7 @@
                 $('#tambah-kategori button[type=submit]').attr('disabled');
 
                 $.ajax({
-                    url: "{{ route('admin.master-data.ekonomi-wisata.kategori.store') }}",
+                    url: "{{ route('admin.master-data.ekonomi-kreatif.kategori.store') }}",
                     enctype: 'multipart/form-data',
                     type: "POST",
                     data: data,
@@ -267,7 +305,7 @@
             $('select.select2bs4').select2({
                 theme: 'bootstrap4',
                 ajax: {
-                    url: "{{ route('admin.master-data.ekonomi-kreatif.kategori-ekonomi') }}",
+                    url: "{{ route('admin.select2.kategori-ekonomi') }}",
                     dataType: 'json',
                     data: function (params) {
                         var query = {
@@ -292,9 +330,51 @@
                 }
             });
 
-            fasilitas_selected()
+            $('select.select2bs4').select2("trigger", "select", {
+                data: { id: "{{ $ekonomi_kreatif->kategori->id }}", text:'{{ $ekonomi_kreatif->kategori->nama_kategori_kreatif }}' }
+            });
+
+            fasilitas_selected();
+
+
+            $('#tambah_video').click(() => {
+                let vidio_url = $('#vidio_url').val();
+                console.log(getVideoIdYoutube(vidio_url));
+                appendRowTableVideo(getVideoIdYoutube(vidio_url))
+            });
         });
 
+        function getVideoIdYoutube(url) {
+            if(url.search("youtu.be") >= 0) {
+                let url_split = url.split("/");
+                return url_split[url_split.length -1];
+            } else {
+                var url = new URL(url);
+                return url.searchParams.get("v") ?? null;
+            }
+        }
+
+        function delRowTableVideo(el) {
+            $(el).parents("tr").remove();
+        }
+
+        function appendRowTableVideo(code) {
+            if($('#'+code).length == 0) {
+                let markup =    `<tr id="${code}">
+                                    <td>
+                                        ${code}
+                                        <input type="hidden" name="gallery_video[]" value="${code}">
+                                    </td>
+                                    <td>
+                                        <iframe width="350" height="240" src="https://www.youtube.com/embed/${code}"></iframe>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger" onclick="delRowTableVideo(this)"><i class="fa fa-trash"></i></button>
+                                    </td>
+                                </tr>`;
+                $("#table_video tbody").append(markup);
+            }
+        }
 
         var harga = new AutoNumeric('#harga', {
             currencySymbol: 'Rp.',

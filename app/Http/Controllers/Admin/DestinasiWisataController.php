@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\DestinasiWisata;
+use App\Models\GaleriParawisata;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
@@ -93,7 +95,7 @@ class DestinasiWisataController extends Controller
             'biaya_parkir_roda_4' => $biaya_parkir_r4,
             'lat' => $request->lat,
             'long' => $request->lng,
-            'slug_destinasi' => str_replace('+', '-', urlencode($request->destinasi_wisata)),
+            'slug_destinasi' => rand(10000,99999).'-'.Str::slug($request->destinasi_wisata),
             'keterangan' => $request->keterangan ?? "",
             'thumbnail_destinasi_wisata' => storage_url(substr($file_location, 7))
         ]);
@@ -115,11 +117,7 @@ class DestinasiWisataController extends Controller
                 // $photo->move(storage_path('app/public').'/akomodasi/', $name);
                 $location = $photo->storeAs("public/destinasi_wisata_foto_vidio_wisata", $name);
                 $mime = $photo->getMimeType();
-                if(preg_match("/image/i", $mime)) {
-                    $kategori = "foto";
-                } else if(preg_match("/image/i", $mime)) {
-                    $kategori = "video";
-                }
+                $kategori = "foto";
 
                 if(isset($kategori)) {
                     $photos[] = [
@@ -127,9 +125,27 @@ class DestinasiWisataController extends Controller
                         'kategori' => $kategori,
                         'file' => storage_url(substr($location, 7))
                     ];
+                    $ins_to_galery = [
+                        'kategori' => $kategori,
+                        'file' => storage_url(substr($location, 7))
+                    ];
                 }
             }
             DB::table('destinasi_wisata_foto_vidio_wisata')->insert($photos);
+            GaleriParawisata::insert($ins_to_galery);
+        }
+
+        if($request->filled("gallery_video")) {
+            $videos = [];
+
+            foreach ($request->gallery_video as $key => $value) {
+                $videos[] = [
+                    'destinasi_wisata_id' => $destinasi_wisata->id,
+                    'kategori' => "video",
+                    'file' => $value,
+                ];
+            }
+            DB::table('destinasi_wisata_foto_vidio_wisata')->insert($videos);
         }
 
         return back()->with("success", "Destinasi berhasil ditambahkan");
@@ -204,7 +220,7 @@ class DestinasiWisataController extends Controller
             'biaya_parkir_roda_4' => $biaya_parkir_r4,
             'lat' => $request->lat,
             'long' => $request->lng,
-            'slug_destinasi' => str_replace('+', '-', urlencode($request->destinasi_wisata)),
+            'slug_destinasi' => rand(10000,99999).'-'.Str::slug($request->destinasi_wisata),
             'keterangan' => $request->keterangan ?? "",
         ];
 
@@ -231,38 +247,69 @@ class DestinasiWisataController extends Controller
             DB::table('destinasi_wisata_fasilitas_wisata')->insert($data_fasilitas);
         }
 
+        $rmv_from_galery = [];
         if($request->filled('old')) {
-            $not_inc = DB::table('destinasi_wisata_foto_vidio_wisata')->where("destinasi_wisata_id", $destinasi_wisatum->id)->whereNotIn("id", $request->old)->get();
+            $not_inc = DB::table('destinasi_wisata_foto_vidio_wisata')->where('kategori', 'foto')->where("destinasi_wisata_id", $destinasi_wisatum->id)->whereNotIn("id", $request->old)->get();
             foreach ($not_inc as $key => $value) {
                 list($baseUrl, $path, $dir, $file) = explode("/", $value->file);
                 Storage::disk('public')->delete(implode('/', [$dir, $file]));
+                $rmv_from_galery[] = $value->file;
             }
             DB::table('destinasi_wisata_foto_vidio_wisata')->where("destinasi_wisata_id", $destinasi_wisatum->id)->whereNotIn("id", $request->old)->delete();
         }
+
+        $ins_to_galery= [];
 
         if($request->hasfile('photos')) {
             $photos= [];
             foreach ($request->file('photos') as $key => $photo) {
                 $name = $destinasi_wisatum->id."-".$key."-".time().'.'.$photo->extension();
                 // $photo->move(storage_path('app/public').'/akomodasi/', $name);
-                $photo->storeAs("public/destinasi_wisata_foto_vidio_wisata", $name);
+                $file_location = $photo->storeAs("public/destinasi_wisata_foto_vidio_wisata", $name);
                 $mime = $photo->getMimeType();
-                if(preg_match("/image/i", $mime)) {
-                    $kategori = "foto";
-                } else if(preg_match("/image/i", $mime)) {
-                    $kategori = "video";
-                }
+                $kategori = "foto";
 
                 if(isset($kategori)) {
                     $photos[] = [
                         'destinasi_wisata_id' => $destinasi_wisatum->id,
                         'kategori' => $kategori,
-                        'file' => $name
+                        'file' => storage_url(substr($file_location, 7)),
+                    ];
+                    $ins_to_galery[] = [
+                        'kategori' => $kategori,
+                        'file' => storage_url(substr($file_location, 7))
                     ];
                 }
             }
             DB::table('destinasi_wisata_foto_vidio_wisata')->insert($photos);
         }
+
+        if($request->filled("gallery_video")) {
+            $not_inc = DB::table('foto_video_akomodasi')->where("destinasi_wisata_id", $destinasi_wisatum->id)->where('kategori', 'video')->get();
+
+            foreach ($not_inc as $key => $value) {
+                $rmv_from_galery[] = $value->file;
+            }
+
+            DB::table('foto_video_akomodasi')->where("destinasi_wisata_id", $destinasi_wisatum->id)->where('kategori', 'video')->delete();
+            $videos = [];
+
+            foreach ($request->gallery_video as $key => $value) {
+                $videos[] = [
+                    'destinasi_wisata_id' => $destinasi_wisatum->id,
+                    'kategori' => "video",
+                    'file' => $value,
+                ];
+                $ins_to_galery[] = [
+                    'kategori' => "video",
+                    'file' => $value,
+                ];
+            }
+        }
+
+        GaleriParawisata::insert($ins_to_galery);
+
+        GaleriParawisata::whereIn("file", $rmv_from_galery)->delete();
 
         return back()->with("success", "Destinasi berhasil ditambahkan");
     }
@@ -276,6 +323,16 @@ class DestinasiWisataController extends Controller
     public function destroy(DestinasiWisata $destinasi_wisatum)
     {
         //
+
+        list($baseUrl, $path, $dir, $file) = explode("/", $destinasi_wisatum->thumbnail_destinasi_wisata);
+        Storage::disk('public')->delete(implode('/', [$dir, $file]));
+
+        $rmv_from_galery = [];
+        foreach($destinasi_wisatum->fotovideo as $k => $f) {
+            $rmv_from_galery[] = $f->file;
+        }
+        GaleriParawisata::whereIn("file", $rmv_from_galery)->delete();
+
         $destinasi_wisatum->delete();
         return ['pesan' => 'berhasil'];
     }
@@ -313,7 +370,7 @@ class DestinasiWisataController extends Controller
                             ->SimplePaginate(5);
 
         return view('admin.destinasi_wisata.detail', $data);
-        
+
     }
 
     public function hapus_detail($id_rev)

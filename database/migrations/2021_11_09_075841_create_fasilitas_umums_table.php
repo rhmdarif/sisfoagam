@@ -18,7 +18,8 @@ class CreateFasilitasUmumsTable extends Migration
             $table->string("nama_fasilitas_umum");
             $table->string("slug_fasilitas_umum");
             $table->string('lat')->nullable();
-            $table->string('long')->nullable();
+            $table->string('long')->nullabe();
+            $table->string('thumbnail');
             $table->text("keterangan");
             $table->timestamps();
         });

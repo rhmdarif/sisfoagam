@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\MasterData\EkonomiKreatif;
 
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\KategoriEkonomiKreatif;
@@ -56,7 +57,7 @@ class KategoriController extends Controller
         $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
         $file_location = $file_upload->storeAs("public/kategori_ekonomi_kreatif", $file_name);
 
-        $slug = str_replace("+", "-", urlencode($request->nama_kategori));
+        $slug = Str::slug($request->nama_kategori);
         KategoriEkonomiKreatif::updateOrCreate(
                             ['nama_kategori_kreatif' => $request->nama_kategori],
                             [
@@ -110,7 +111,7 @@ class KategoriController extends Controller
         }
 
 
-        $slug = str_replace("+", "-", urlencode($request->nama_kategori));
+        $slug = Str::slug($request->nama_kategori);
         $update = [
                         'nama_kategori_kreatif' => $request->nama_kategori,
                         'slug_kategori_kreatif' => $slug
