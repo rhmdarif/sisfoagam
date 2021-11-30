@@ -1,7 +1,8 @@
 <form action="" method="POST" enctype="multipart/form-data">
+    @csrf
     <div class="form-group">
         <label for="nama_fasilitas">Foto Slider</label>
-        <input type="file" name="foto_slider" id="foto_slider" class="form-control" value="">
+        <input type="file" name="foto_slider" id="foto_slider" class="form-control" onchange="tampilfoto()" value="">
     </div>
     <div class="form-group text-center">
         <div id="tampilFoto"></div>

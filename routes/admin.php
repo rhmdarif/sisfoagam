@@ -46,8 +46,8 @@ Route::prefix('admin')->as("admin.")->group(function () {
         Route::prefix("foto-slider")->as("foto-slider.")->group(function(){
             Route::get('foto_slider',[Admin\MasterData\FotoSlider\FotoSliderController::class, 'index'])->name('index');
             Route::delete('foto_slider/delete/{id}',[Admin\MasterData\FotoSlider\FotoSliderController::class, 'destroy'])->name('destroy');
-            Route::get('foto_slider/edit/{id}', [Admin\MasterData\FotoSlider\FotoSliderController::class, 'edit'])->name('edit');
-            
+            Route::post('foto_slider/edit/{id}', [Admin\MasterData\FotoSlider\FotoSliderController::class, 'edit'])->name('edit');
+
         });
 
         Route::prefix('akomodasi')->as('akomodasi.')->group(function (){

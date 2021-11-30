@@ -44,9 +44,7 @@
                                     <td><img src="{{ $item->file }}" alt="{{ $item->file }}" class="img-fluid" width="60px"> </td>
                                     <td>{{ $item->description }}</td>
                                     <td>
-                                        <button style="width:80px;color:white" type="button" class="btn btn-warning p-1" onclick="edits({{ $item->id }})">Edit</button>
-
-                                        <button style="width:80px" type="button" class="btn btn-danger p-1" onclick="ModalHapus('{{ route('admin.foto-slider.destroy', $item->id) }}')">Hapus</button>
+                                        <button style="width:80px;color:white" type="button" class="btn btn-warning p-1" onclick="edits({{ $item->id }}, '{{ $item->file }}', '{{ route('admin.foto-slider.edit', $item->id) }}', '{{  $item->description }}')">Edit</button>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -107,6 +105,7 @@
 @endsection
 
 @push('js')
+@include('layouts.toastr-notif')
 <script>
     $(document).ready(() => {
         $('#tambah-fasilitas form').submit((e) => {
@@ -182,27 +181,21 @@
 
     });
 
-    function edits(id) {
-        $.ajax({
-            url: "{{ route('admin.foto-slider.index') }}/" + id,
-            type: 'get',
-            dataType: 'json',
-            success: function(data) {
-                console.log(data)
-                $('#edit-slider #nama_fasilitas').val(data.nama_fasilitas_akomodasi)
-                $('#edit-slider #tampilFoto').html(
-                    `<img src="${data.icon_fasilitas_akomodasi}" width="30%"/>`)
-                $('#edit-slider #id').val(data.id)
-                $('#edit-slider #title').html("Edit Data")
-                $('#edit-slider #btnNama').html("Edit")
-                $('#edit-slider').modal('show');
-            }
-        })
+    function edits(id, file, url, deskripsi) {
+        console.log(id, file, url);
+
+        $('#edit-slider form').attr('action', url);
+        $('#edit-slider #tampilFoto').html(`<img src="${file}" width="30%"/>`)
+        $('#edit-slider #id').val(id)
+        $('#edit-slider #deskripsi').val(deskripsi)
+        $('#edit-slider #title').html("Edit Data")
+        $('#edit-slider #btnNama').html("Edit")
+        $('#edit-slider').modal('show');
     }
 
 
     function tampilfoto() {
-        var fileInput = document.getElementById('icon_kategori');
+        var fileInput = document.getElementById('foto_slider');
         var filePath = fileInput.value;
         var extensions = /(\.jpg|\.png)$/i;
         var ukuran = fileInput.files[0].size;
