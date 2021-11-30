@@ -134,7 +134,7 @@ class UserAdminController extends Controller
             $update['password'] = Hash::make($request->password);
         }
 
-        $admin->update();
+        $admin->update($update);
 
         return back()->with("success", "Admin ".$request->name." telah diperbaharui");
     }
