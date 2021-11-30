@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class DestinasiWisata extends Model
@@ -53,5 +54,15 @@ class DestinasiWisata extends Model
     public function fotovideo()
     {
         return $this->hasMany(DestinasiWisataFotoVidioWisata::class, "destinasi_wisata_id", "id");
+    }
+
+    /**
+     * Get the jumlah_pengunjung associated with the DestinasiWisata
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function jumlah_pengunjung(): HasOne
+    {
+        return $this->hasOne(DestinasiWisataJumlahKunjungan::class, 'destinasi_wisata_id', 'id');
     }
 }

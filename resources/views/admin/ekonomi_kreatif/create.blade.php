@@ -61,7 +61,7 @@
                                                 <div class="form-group">
                                                     <label for="">Harga</label>
                                                     <input type="text" name="harga" id="harga" class="form-control"
-                                                        placeholder="Kelas">
+                                                        placeholder="Harga">
                                                 </div>
                                             </div>
                                             <div class="col-md-12">

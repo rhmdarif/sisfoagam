@@ -40,6 +40,7 @@
                                         <th style="width:10%">HTM Anak</th>
                                         <th style="width:10%">Biaya Parkir Roda 2</th>
                                         <th style="width:10%">Biaya Parkir Roda 4</th>
+                                        <th style="width:10%">Jumlah Kunjungan</th>
                                         <th style="width:10%">Lokasi</th>
                                         <!-- <th style="width:18%">Keterangan</th> -->
                                         <th style="width:10%">Aksi</th>
@@ -56,10 +57,12 @@
                                         <td>{{number_format($d->harga_tiket_anak)}}</td>
                                         <td>{{number_format($d->biaya_parkir_roda_2)}}</td>
                                         <td>{{number_format($d->biaya_parkir_roda_4)}}</td>
+                                        <td>{{number_format($d->jumlah_pengunjung->jumlah_kunjungan ?? 0)}}</td>
                                         <td>
                                             <iframe width="300" height="170" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=<?= $d->lat; ?>,<?= $d->long; ?>&hl=in&z=14&amp;output=embed"></iframe>
                                         </td>
                                         <td>
+                                            <button type="button" onclick="ubahJumlahKunjungan('{{ route('admin.destinasi-wisata.ubahJumlahKunjungan', $d->id) }}', '{{ $d->nama_wisata }}', {{ $d->jumlah_pengunjung->jumlah_kunjungan ?? 0 }})" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>
                                             <a href="{{ route('admin.destinasi-wisata.detail', $d->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
                                             <a href="{{ route('admin.destinasi-wisata.edit', $d->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
                                             <button onclick="hapus('<?= $d->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
@@ -127,8 +130,6 @@
             zoom: 18,
             marker: false
         });
-
-
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -218,6 +219,17 @@
                         {
                             window.location.reload();
                         }
+                    }
+                })
+            }
+        }
+
+        function ubahJumlahKunjungan(url, name, value) {
+            let prm = prompt("Ubah jumlah kunjungan wisata : "+name, value);
+            if(prm != null) {
+                $.post(url, {jumlah:prm}, (result) => {
+                    if(result.pesan == "berhasil") {
+                        window.location.reload();
                     }
                 })
             }

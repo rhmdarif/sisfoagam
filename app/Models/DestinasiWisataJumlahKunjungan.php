@@ -9,4 +9,5 @@ class DestinasiWisataJumlahKunjungan extends Model
 {
     use HasFactory;
     protected $table = "destinasi_wisata_jumlah_kunjungan";
+    protected $fillable = ['destinasi_wisata_id', 'jumlah_kunjungan'];
 }

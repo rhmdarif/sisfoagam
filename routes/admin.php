@@ -10,14 +10,12 @@ Route::prefix('admin')->as("admin.")->group(function () {
 
     Route::get("daftar", [Admin\Auth\LoginController::class, 'daftar'])->name("daftar");
     Route::post("daftarkan", [Admin\Auth\LoginController::class, 'register'])->name("daftarkan");
-    Route::get("logout", [Admin\Auth\LoginController::class, 'logout'])->name("logout");
-    Route::middleware(['auth'])->group(function () {
-        Route::get('home', [Admin\HomeController::class, 'index'])->name('home');
-    });
 
 
 
     Route::middleware(['auth'])->group(function () {
+        Route::get("logout", [Admin\Auth\LoginController::class, 'logout'])->name("logout");
+
         Route::get('/', function() {
             return redirect()->route("admin.home");
         });
@@ -25,9 +23,11 @@ Route::prefix('admin')->as("admin.")->group(function () {
 
 
         Route::prefix('master-data')->as('master-data.')->group(function () {
+
             Route::prefix("akomodasi")->as("akomodasi.")->group(function () {
                 Route::resource('kategori', Admin\MasterData\Akomodasi\KategoriController::class);
                 Route::resource('fasilitas', Admin\MasterData\Akomodasi\FasilitasController::class);
+
             });
 
             Route::prefix("destinasi-wisata")->as("destinasi-wisata.")->group(function () {
@@ -38,6 +38,16 @@ Route::prefix('admin')->as("admin.")->group(function () {
             Route::prefix("ekonomi-kreatif")->as("ekonomi-kreatif.")->group(function () {
                 Route::resource('kategori', Admin\MasterData\EkonomiKreatif\KategoriController::class);
             });
+
+
+        });
+
+        // Foto Slider
+        Route::prefix("foto-slider")->as("foto-slider.")->group(function(){
+            Route::get('foto_slider',[Admin\MasterData\FotoSlider\FotoSliderController::class, 'index'])->name('index');
+            Route::delete('foto_slider/delete/{id}',[Admin\MasterData\FotoSlider\FotoSliderController::class, 'destroy'])->name('destroy');
+            Route::post('foto_slider/edit/{id}', [Admin\MasterData\FotoSlider\FotoSliderController::class, 'edit'])->name('edit');
+
         });
 
         Route::prefix('akomodasi')->as('akomodasi.')->group(function (){
@@ -51,18 +61,17 @@ Route::prefix('admin')->as("admin.")->group(function () {
             Route::get('{id}/fasilitas', [Admin\AkomodasiController::class, 'fasilitas_select2'])->name('fasilitas_select2');
             Route::get('{id}/media', [Admin\AkomodasiController::class, 'media'])->name('media');
             Route::get('{id}/detail', [Admin\AkomodasiController::class, 'detail'])->name('detail');
-            Route::delete('delete_review/{id}',[AkomodasiController::class, 'destroy'])->name('delete_review');
-            
+            Route::delete('delete_review/{id}',[Admin\AkomodasiController::class, 'destroy'])->name('delete_review');
+
         });
 
-        Route::prefix('destinasi-wisata')->as('destinasi-wisata.')->group(function (){
-            Route::get('home', [Admin\DestinasiWisataController::class, 'index'])->name('home');
-            Route::post('tambah', [Admin\DestinasiWisataController::class, 'create'])->name('tambah');
-            Route::post('edit', [Admin\DestinasiWisataController::class, 'edit'])->name('edit');
-            Route::post('delete', [Admin\DestinasiWisataController::class, 'delete'])->name('delete');
-            Route::post('fasilitas', [Admin\DestinasiWisataController::class, 'fasilitas'])->name('fasilitas');
-            Route::get('{id}/detail', [Admin\DestinasiWisataController::class, 'detail'])->name('detail');
-        });
+        // Route::prefix('destinasi-wisata')->as('destinasi-wisata.')->group(function (){
+        //     Route::get('home', [Admin\DestinasiWisataController::class, 'index'])->name('home');
+        //     Route::post('tambah', [Admin\DestinasiWisataController::class, 'create'])->name('tambah');
+        //     Route::post('edit', [Admin\DestinasiWisataController::class, 'edit'])->name('edit');
+        //     Route::post('delete', [Admin\DestinasiWisataController::class, 'delete'])->name('delete');
+        //     Route::post('fasilitas', [Admin\DestinasiWisataController::class, 'fasilitas'])->name('fasilitas');
+        // });
 
 
         // EKONOMI KREATIF
@@ -71,15 +80,17 @@ Route::prefix('admin')->as("admin.")->group(function () {
         Route::resource('ekonomi-kreatif', Admin\EkonomiKreatifController::class);
 
         Route::prefix('ekonomi-kreatif')->as('ekonomi-kreatif.')->group(function(){
-           
+
             Route::get('{id}/detail', [Admin\EkonomiKreatifController::class, 'detail'])->name('detail');
         });
 
         // DESTINASI WISATA
+        Route::get('destinasi-wisata/{id}/detail', [Admin\DestinasiWisataController::class, 'detail'])->name('destinasi-wisata.detail');
         Route::get('destinasi-wisata/{id}/fasilitas', [Admin\DestinasiWisataController::class, 'fasilitas_select2'])->name('destinasi-wisata.fasilitas_select2');
         Route::get('destinasi-wisata/{id}/media', [Admin\DestinasiWisataController::class, 'media'])->name('destinasi-wisata.media');
+        Route::post('destinasi-wisata/{destinasi_wisatum}/jumlah-kunjungan', [Admin\DestinasiWisataController::class, 'ubahJumlahKunjungan'])->name('destinasi-wisata.ubahJumlahKunjungan');
         Route::resource('destinasi-wisata', Admin\DestinasiWisataController::class);
-        
+
 
         // BERITA PARAWISATA
         Route::resource('berita-parawisata', Admin\BeritaParawisataController::class);
@@ -96,6 +107,9 @@ Route::prefix('admin')->as("admin.")->group(function () {
 
         // FASILITAS UMUM
         Route::resource('fasilitas-umum', Admin\FasilitasUmumController::class);
+
+        // USER ADMIN
+        Route::resource('user/admin', Admin\UserAdminController::class);
     });
 
     Route::prefix('select2')->as('select2.')->group(function () {
