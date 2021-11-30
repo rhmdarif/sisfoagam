@@ -88,7 +88,7 @@
                                 </li>
                             </ul>
                         </li>
-                       
+
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
@@ -106,7 +106,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a href="{{ route('admin.master-data.foto-slider.index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>
@@ -114,7 +114,7 @@
                                 </p>
                             </a>
                         </li>
-                       
+                        --}}
                     </ul>
                 </li>
                 <li class="nav-item">
@@ -162,6 +162,14 @@
                         <i class="nav-icon fas fa-calendar-day"></i>
                         <p>
                             Event Parawisata
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.admin.index') }}" class="nav-link">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>
+                            User Admin
                         </p>
                     </a>
                 </li>

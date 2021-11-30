@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Akomodasi;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\DestinasiWisata;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Models\DestinasiWisataFotoVidioWisata;
+use App\Models\DestinasiWisataJumlahKunjungan;
 
 class DestinasiWisataController extends Controller
 {
@@ -361,7 +363,7 @@ class DestinasiWisataController extends Controller
                             ->where('destinasi_wisata.id',$id)
                             ->orderBy("destinasi_wisata.nama_wisata", "asc")
                             ->get();
-        
+
         $data['destinasi_w'] = DB::table('destinasi_wisata_review_wisata')
                             ->join('destinasi_wisata','destinasi_wisata_review_wisata.destinasi_wisata_id','destinasi_wisata.id')
                             ->join('users','destinasi_wisata_review_wisata.user_id','users.id')
@@ -376,7 +378,7 @@ class DestinasiWisataController extends Controller
     public function hapus_detail($id_rev)
     {
         DB::table('review_akomodasi')->where('id',$id_rev)->delete();
-        Alert::success('Congrats', 'Data Berhasil Dihapus');
+        // Alert::success('Congrats', 'Data Berhasil Dihapus');
 
         $data['kategori'] = DB::table('kategori_akomodasi')->get();
         // $data['akomodasi'] = DB::table('akomodasi')
@@ -385,7 +387,18 @@ class DestinasiWisataController extends Controller
         //                     ->orderBy("akomodasi.nama_akomodasi", "asc")
         //                     ->get();
         $data['akomodasi'] = Akomodasi::orderBy("akomodasi.nama_akomodasi", "asc")->get();
-        return view('admin.akomodasi.index',$data);
+        return back()->with("success", "Data Berhasil dihapus");
+    }
+
+    public function ubahJumlahKunjungan(Request $request, DestinasiWisata $destinasi_wisatum)
+    {
+        DestinasiWisataJumlahKunjungan::updateOrCreate([
+            'destinasi_wisata_id' => $destinasi_wisatum->id
+        ], [
+            'jumlah_kunjungan' => $request->jumlah
+        ]);
+
+        return ['pesan' => 'berhasil'];
     }
 
 }
