@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\GaleryController;
 use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
+use App\Http\Controllers\Api\VisitorController;
 
 /*
 |--------------------------------------------------------------------------
