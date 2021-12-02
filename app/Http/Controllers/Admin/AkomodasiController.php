@@ -323,23 +323,27 @@ class AkomodasiController extends Controller
                             ->get();
 
         $data['review_a'] = DB::table('review_akomodasi')
-                            ->join('akomodasi','review_akomodasi.akomodasi_id','akomodasi.id')
+                            ->select("review_akomodasi.*", "users.name")
                             ->join('users','review_akomodasi.user_id','users.id')
                             ->where('review_akomodasi.akomodasi_id',$id)
                             ->orderBy('review_akomodasi.user_id',"asc")
                             ->SimplePaginate(5);
 
-
+        // return $data;
 
         return view('admin.akomodasi.detail',$data);
 
 
     }
 
-    public function hapus_detail($id)
+ 
+    public function destroy($id)
     {
         DB::table('review_akomodasi')->where('id',$id)->delete();
-        return response()->json(['success'=>'200']);
+                return Redirect()->back();
+                
+            
+
     }
 
 }
