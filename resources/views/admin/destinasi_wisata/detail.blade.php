@@ -26,7 +26,7 @@
             <div class="col-lg-12">
                 <div class="card card-outline card-primary">
                     <div class="card-header">
-                        <a href="{{ route('admin.destinasi-wisata.home') }}" class="btn btn-secondary"> <i class="fas fa-backward"></i> Kembali</a>
+                        <a href="{{ route('admin.destinasi-wisata.index') }}" class="btn btn-secondary"> <i class="fas fa-backward"></i> Kembali</a>
                     </div>
                     <div class="card-body">
                         <table id="" class="table table-borderless">
