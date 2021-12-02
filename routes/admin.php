@@ -61,7 +61,7 @@ Route::prefix('admin')->as("admin.")->group(function () {
             Route::get('{id}/fasilitas', [Admin\AkomodasiController::class, 'fasilitas_select2'])->name('fasilitas_select2');
             Route::get('{id}/media', [Admin\AkomodasiController::class, 'media'])->name('media');
             Route::get('{id}/detail', [Admin\AkomodasiController::class, 'detail'])->name('detail');
-            Route::delete('delete_review/{id}',[Admin\AkomodasiController::class, 'destroy'])->name('delete_review');
+            Route::delete('{id}/hapus',[Admin\AkomodasiController::class, 'destroy'])->name('hapus.data_review_akomodasi');
 
         });
 
@@ -81,7 +81,8 @@ Route::prefix('admin')->as("admin.")->group(function () {
 
         Route::prefix('ekonomi-kreatif')->as('ekonomi-kreatif.')->group(function(){
 
-            Route::get('{id}/detail', [Admin\EkonomiKreatifController::class, 'detail'])->name('detail');
+        Route::get('{id}/detail', [Admin\EkonomiKreatifController::class, 'detail'])->name('detail');
+        Route::delete('{id}/hapus',[Admin\EkonomiKreatifController::class, 'destroy1'])->name('hapus.data_review_ekonomi');
         });
 
         // DESTINASI WISATA
