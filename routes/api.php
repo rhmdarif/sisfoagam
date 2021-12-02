@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\GaleryController;
 use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
+use App\Http\Controllers\Api\VisitorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -88,7 +89,6 @@ Route::any('/search', [SearchController::class, 'home']);
 Route::any('/galery/{kategori}/{slug}', [GaleryController::class, 'index']);
 Route::any('/galery/parawisata', [GaleryController::class, 'gallery_parawisata']);
 
-
 // AUTH
 Route::prefix('auth')->group(function () {
     // Login
@@ -102,3 +102,9 @@ Route::middleware(['verify.api'])->group(function () {
     Route::post('users/update', [UserController::class, 'update']);
     Route::post('users/update-password', [UserController::class, 'updatePassword']);
 });
+
+// VISITOR COUNT
+Route::post("visitor-count", [VisitorController::class, 'count']);
+
+// SLIDER
+Route::get("slider", [GaleryController::class, 'slider']);

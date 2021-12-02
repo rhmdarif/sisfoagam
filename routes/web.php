@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\Admin;
 use App\Http\Controllers\Admin\AkomodasiController;
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -14,5 +14,6 @@ Route::get('/dashboard', function () {
 
 require __DIR__.'/admin.php';
 
-// Delete Detail
+// Delete Detail Akomodasi
+// Route::delete('{id}/detail/',[Admin\AkomodasiController::class, 'destroy'])->name('hapus.data_review_akomodasi');
 

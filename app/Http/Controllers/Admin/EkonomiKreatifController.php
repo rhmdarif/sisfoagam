@@ -24,8 +24,8 @@ class EkonomiKreatifController extends Controller
     {
         //
         $data = [
-            'ekonomi_kreatif' => EkonomiKreatif::with(['kategori' => function($kategori) {
-                return $kategori->select("id","nama_kategori_kreatif");
+            'ekonomi_kreatif' => EkonomiKreatif::with(['kategori' => function ($kategori) {
+                return $kategori->select("id", "nama_kategori_kreatif");
             }])->get()
         ];
 
@@ -65,16 +65,16 @@ class EkonomiKreatifController extends Controller
             'thumbnail' => 'required|image',
         ]);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             return back()->with("error", $validator->errors()->first())->withInput();
         }
 
         $harga  = preg_replace("/[^0-9]/", '', explode(",", $request->harga)[0]);
 
 
-        if($request->has("thumbnail")) {
+        if ($request->has("thumbnail")) {
             $file_upload = $request->file("thumbnail");
-            $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
+            $file_name = rand(100, 333) . "-" . time() . "." . $file_upload->getClientOriginalExtension();
             $file_location = $file_upload->storeAs("public/ekonomi_kreatif", $file_name);
         }
 
@@ -85,21 +85,21 @@ class EkonomiKreatifController extends Controller
             'lat' => $request->lat,
             'long' => $request->lng,
             'keterangan' => $request->keterangan,
-            'slug_ekonomi_kreatif' => rand(10000,99999).'-'.Str::slug($request->ekonomi_kreatif),
+            'slug_ekonomi_kreatif' => rand(10000, 99999) . '-' . Str::slug($request->ekonomi_kreatif),
             'thumbnail_ekonomi_kreatif' => storage_url(substr($file_location, 7))
         ]);
 
         $ins_to_galery = [];
-        if($request->hasfile('photos')) {
-            $photos= [];
+        if ($request->hasfile('photos')) {
+            $photos = [];
             foreach ($request->file('photos') as $key => $photo) {
-                $name = $ekonomi_kreatif->id."-".$key."-".time().'.'.$photo->extension();
+                $name = $ekonomi_kreatif->id . "-" . $key . "-" . time() . '.' . $photo->extension();
                 // $photo->move(storage_path('app/public').'/akomodasi/', $name);
                 $location = $photo->storeAs("public/foto_video_ekonomi_kreatif", $name);
                 $mime = $photo->getMimeType();
                 $kategori = "foto";
 
-                if(isset($kategori)) {
+                if (isset($kategori)) {
                     $photos[] = [
                         'ekonomi_kreatif_id' => $ekonomi_kreatif->id,
                         'kategori' => $kategori,
@@ -115,7 +115,7 @@ class EkonomiKreatifController extends Controller
             DB::table('foto_video_ekonomi_kreatif')->insert($photos);
         }
 
-        if($request->filled("gallery_video")) {
+        if ($request->filled("gallery_video")) {
             $videos = [];
 
             foreach ($request->gallery_video as $key => $value) {
@@ -177,7 +177,7 @@ class EkonomiKreatifController extends Controller
         //
         $validator = Validator::make($request->all(), [
             'kategori' => 'required|exists:kategori_ekonomi_kreatif,id',
-            'ekonomi_kreatif' => 'required|string|unique:ekonomi_kreatif,nama_ekonomi_kreatif,'.$ekonomi_kreatif->id,
+            'ekonomi_kreatif' => 'required|string|unique:ekonomi_kreatif,nama_ekonomi_kreatif,' . $ekonomi_kreatif->id,
             'harga' => 'required|string',
             'lat' => 'required|string',
             'lng' => 'required|string',
@@ -185,7 +185,7 @@ class EkonomiKreatifController extends Controller
             'thumbnail' => 'nullable|image',
         ]);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             return back()->with("error", $validator->errors()->first())->withInput();
         }
 
@@ -198,12 +198,12 @@ class EkonomiKreatifController extends Controller
             'lat' => $request->lat,
             'long' => $request->lng,
             'keterangan' => $request->keterangan,
-            'slug_ekonomi_kreatif' => rand(10000,99999).'-'.Str::slug($request->ekonomi_kreatif)
+            'slug_ekonomi_kreatif' => rand(10000, 99999) . '-' . Str::slug($request->ekonomi_kreatif)
         ];
 
-        if($request->hasFile("thumbnail")) {
+        if ($request->hasFile("thumbnail")) {
             $file_upload = $request->file("thumbnail");
-            $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
+            $file_name = rand(100, 333) . "-" . time() . "." . $file_upload->getClientOriginalExtension();
             $file_location = $file_upload->storeAs("public/ekonomi_kreatif", $file_name);
 
             list($baseUrl, $path, $dir, $file) = explode("/", $ekonomi_kreatif->thumbnail_ekonomi_kreatif);
@@ -215,7 +215,7 @@ class EkonomiKreatifController extends Controller
         $ekonomi_kreatif->update($update);
 
         $rmv_from_galery = [];
-        if($request->filled('old')) {
+        if ($request->filled('old')) {
             $not_inc = DB::table('destinasi_wisata_foto_vidio_wisata')->where("kategori", "foto")->where("destinasi_wisata_id", $ekonomi_kreatif->id)->whereNotIn("id", $request->old)->get();
             foreach ($not_inc as $key => $value) {
                 list($baseUrl, $path, $dir, $file) = explode("/", $value->file);
@@ -226,16 +226,16 @@ class EkonomiKreatifController extends Controller
             DB::table('destinasi_wisata_foto_vidio_wisata')->where("destinasi_wisata_id", $ekonomi_kreatif->id)->whereNotIn("id", $request->old)->delete();
         }
 
-        if($request->hasfile('photos')) {
-            $photos= [];
+        if ($request->hasfile('photos')) {
+            $photos = [];
             foreach ($request->file('photos') as $key => $photo) {
-                $name = $ekonomi_kreatif->id."-".$key."-".time().'.'.$photo->extension();
+                $name = $ekonomi_kreatif->id . "-" . $key . "-" . time() . '.' . $photo->extension();
                 // $photo->move(storage_path('app/public').'/akomodasi/', $name);
                 $location = $photo->storeAs("public/foto_video_ekonomi_kreatif", $name);
                 $mime = $photo->getMimeType();
                 $kategori = "foto";
 
-                if(isset($kategori)) {
+                if (isset($kategori)) {
                     $photos[] = [
                         'ekonomi_kreatif_id' => $ekonomi_kreatif->id,
                         'kategori' => $kategori,
@@ -252,7 +252,7 @@ class EkonomiKreatifController extends Controller
             GaleriParawisata::insert($$ins_to_galery);
         }
 
-        if($request->filled("gallery_video")) {
+        if ($request->filled("gallery_video")) {
             $not_inc = DB::table('foto_video_ekonomi_kreatif')->where("ekonomi_kreatif_id", $ekonomi_kreatif->id)->where('kategori', 'video')->get();
             foreach ($not_inc as $key => $value) {
                 $rmv_from_galery[] = $value->file;
@@ -288,7 +288,7 @@ class EkonomiKreatifController extends Controller
         Storage::disk('public')->delete(implode('/', [$dir, $file]));
 
         $rmv_from_galery = [];
-        foreach($ekonomi_kreatif->fotovideo as $k => $f) {
+        foreach ($ekonomi_kreatif->fotovideo as $k => $f) {
             $rmv_from_galery[] = $f->file;
         }
         GaleriParawisata::whereIn("file", $rmv_from_galery)->delete();
@@ -297,23 +297,29 @@ class EkonomiKreatifController extends Controller
         return ['pesan' => 'berhasil'];
     }
 
+    public function destroy1($id)
+    {
+        DB::table('review_ekonomi_kreatif')->where('id', $id)->delete();
+        return Redirect()->back();
+    }
+
     public function detail($id)
     {
         $data['kategori'] = DB::table('kategori_ekonomi_kreatif')->get();
         $data['ekonomi_kreatif'] = DB::table('ekonomi_kreatif')
-                            ->join('kategori_ekonomi_kreatif','ekonomi_kreatif.kategori_ekonomi_kreatif_id','kategori_ekonomi_kreatif.id')
-                            ->select('ekonomi_kreatif.id as id_ekonomi_kreatif','ekonomi_kreatif.*','kategori_ekonomi_kreatif.*')
-                            ->where('ekonomi_kreatif.id',$id)
-                            ->orderBy("ekonomi_kreatif.nama_ekonomi_kreatif", "asc")
-                            ->get();
+            ->join('kategori_ekonomi_kreatif', 'ekonomi_kreatif.kategori_ekonomi_kreatif_id', 'kategori_ekonomi_kreatif.id')
+            ->select('ekonomi_kreatif.id as id_ekonomi_kreatif', 'ekonomi_kreatif.*', 'kategori_ekonomi_kreatif.*')
+            ->where('ekonomi_kreatif.id', $id)
+            ->orderBy("ekonomi_kreatif.nama_ekonomi_kreatif", "asc")
+            ->get();
 
         $data['ekonomi_k'] = DB::table('review_ekonomi_kreatif')
-                            ->join('ekonomi_kreatif','review_ekonomi_kreatif.ekonomi_kreatif_id','ekonomi_kreatif.id')
-                            ->join('users','review_ekonomi_kreatif.user_id','users.id')
-                            ->where('review_ekonomi_kreatif.ekonomi_kreatif_id',$id)
-                            ->orderBy('review_ekonomi_kreatif.user_id',"asc")
-                            ->SimplePaginate(5);
+            ->select("review_ekonomi_kreatif.*", "users.name")
+            ->join('users', 'review_ekonomi_kreatif.user_id', 'users.id')
+            ->where('review_ekonomi_kreatif.ekonomi_kreatif_id', $id)
+            ->orderBy('review_ekonomi_kreatif.user_id', "asc")
+            ->SimplePaginate(5);
 
-        return view('admin.ekonomi_kreatif.detail',$data);
+        return view('admin.ekonomi_kreatif.detail', $data);
     }
 }
