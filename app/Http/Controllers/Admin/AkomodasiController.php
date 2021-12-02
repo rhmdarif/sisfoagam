@@ -341,9 +341,6 @@ class AkomodasiController extends Controller
     {
         DB::table('review_akomodasi')->where('id',$id)->delete();
                 return Redirect()->back();
-                
-            
-
     }
 
 }

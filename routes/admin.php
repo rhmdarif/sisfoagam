@@ -81,7 +81,8 @@ Route::prefix('admin')->as("admin.")->group(function () {
 
         Route::prefix('ekonomi-kreatif')->as('ekonomi-kreatif.')->group(function(){
 
-            Route::get('{id}/detail', [Admin\EkonomiKreatifController::class, 'detail'])->name('detail');
+        Route::get('{id}/detail', [Admin\EkonomiKreatifController::class, 'detail'])->name('detail');
+        Route::delete('{id}/hapus',[Admin\EkonomiKreatifController::class, 'destroy1'])->name('hapus.data_review_ekonomi');
         });
 
         // DESTINASI WISATA
