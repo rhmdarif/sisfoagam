@@ -53,4 +53,9 @@ class GaleryController extends Controller
         return DB::table('galeri_parawisata')->orderBy("id", "desc")->paginate($limit);
         // return DB::select(DB::raw("SELECT id, kategori, file FROM foto_video_akomodasi UNION ALL SELECT id, kategori, file FROM foto_video_wisata UNION ALL SELECT id, kategori, file FROM foto_video_ekonomi_kreatif ORDER BY id DESC"))->paginate(10);
     }
+
+    public function slider()
+    {
+        return DB::table('sliders')->get();
+    }
 }

@@ -105,3 +105,6 @@ Route::middleware(['verify.api'])->group(function () {
 
 // VISITOR COUNT
 Route::post("visitor-count", [VisitorController::class, 'count']);
+
+// SLIDER
+Route::get("slider", [GaleryController::class, 'slider']);
