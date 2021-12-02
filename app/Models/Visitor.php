@@ -26,4 +26,9 @@ class Visitor extends Model
         'mac',
         'android',
     ];
+
+    public function getPeriodeFormatAttribute()
+    {
+        return date("d M Y", strtotime($this->periode));
+    }
 }
