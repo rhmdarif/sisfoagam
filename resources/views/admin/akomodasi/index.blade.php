@@ -6,12 +6,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Akomodasi</h1>
+                    <h1 class="m-0">Tambah Akomodasi</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Akomodasi</li>
+                        <li class="breadcrumb-item active">Tambah Akomodasi</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -26,7 +26,7 @@
                 <div class="col-lg-12">
                     <div class="card card-outline card-primary">
                         <div class="card-header">
-                            <button type="button" class="btn btn-primary" onclick="tampil()">Tambah Data</button>
+                            <a href="{{ route('admin.akomodasi.add') }}" class="btn btn-primary" >Tambah Data</a>
                         </div>
                         <div class="card-body">
                             <table id="table1" class="table table-striped">
@@ -37,7 +37,6 @@
                                         <th style="width:10%">Kategori</th>
                                         <th style="width:10%">Akomodasi</th>
                                         <th style="width:10%">Kelas</th>
-                                        <th style="width:10%">Tipe</th>
                                         <th style="width:10%">Harga</th>
                                         <th style="width:10%">lokasi</th>
                                         <!-- <th style="width:18%">Keterangan</th> -->
@@ -48,20 +47,18 @@
                                     @foreach($akomodasi as $i => $a)
                                     <tr>
                                         <td>{{$i+1}}</td>
-                                        <td><img src="{{ asset('storage/thumbnail/'.$a->thumbnail_akomodasi) }}" alt="{{ $a->thumbnail_akomodasi }}" class="img-fluid" width="100px"></td>
+                                        <td><img src="{{ $a->thumbnail_akomodasi }}" alt="{{ $a->thumbnail_akomodasi }}" class="img-fluid" width="100px"></td>
+                                        <td>{{$a->kategori->nama_kategori_akomodasi}}</td>
                                         <td>{{$a->nama_akomodasi}}</td>
-                                        <td>{{$a->nama_kategori_akomodasi}}</td>
                                         <td>{{$a->kelas}}</td>
-                                        <td>{{$a->tipe}}</td>
                                         <td>Rp.{{number_format($a->harga)}}</td>
                                         <td>
                                             <iframe width="300" height="170" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=<?= $a->lat; ?>,<?= $a->long; ?>&hl=in&z=14&amp;output=embed"></iframe>
                                         </td>
                                         <td>
-                                            <button style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>
-                                            <button onclick="fasilitas('<?= $a->id_akomodasi ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-plus"></i></button>
-                                            <button onclick="edit('<?= $a->id_akomodasi ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></button>
-                                            <button onclick="hapus('<?= $a->id_akomodasi ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
+                                            <a href="{{ route('admin.akomodasi.detail', $a->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
+                                            <button onclick="location.href='<?= route('admin.akomodasi.edit-page', $a->id) ?>'" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></button>
+                                            <button onclick="hapus('<?= $a->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -170,7 +167,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    
+
                 </div>
             </div>
         </div>
@@ -213,7 +210,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Modal tambah fasilitas -->
     <div class="modal fade" id="tambahfasilitas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -228,7 +225,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    
+
                 </div>
             </div>
         </div>
@@ -278,7 +275,7 @@
 
             $.ajax({
                 type: "POST",
-                url: '{{route("akomodasi.tambah")}}',
+                url: '{{route("admin.akomodasi.tambah")}}',
                 contentType: 'multipart/form-data',
                 data: form_data,
                 processData: false,
@@ -298,7 +295,7 @@
             const harga = AutoNumeric.getAutoNumericElement('#harga')
 
             $.ajax({
-                url: '{{route("akomodasi.edit")}}',
+                url: '{{route("admin.akomodasi.edit")}}',
                 dataType: "json",
                 type: 'POST',
                 data:{
@@ -315,7 +312,7 @@
                     $('#lat').val(res.data.lat);
                     $('#lng').val(res.data.long);
                     $('#tampilFoto').html(`<img src="{{ asset('storage/thumbnail/${res.data.thumbnail_akomodasi}') }}" width="60%"/>`)
-                    if (marker) 
+                    if (marker)
                     {
                         map.removeLayer(marker);
                     }
@@ -333,7 +330,7 @@
             var pesan = confirm("Yakin Ingin Menghapus Data!");
             if(pesan){
                 $.ajax({
-                    url: "{{route('akomodasi.delete')}}",
+                    url: "{{route('admin.akomodasi.delete')}}",
                     type:"POST",
                     dataType: "JSON",
                     data:{'id':id,"_token":"{{csrf_token()}}"},
@@ -351,7 +348,7 @@
         function fasilitas(id)
         {
             $.ajax({
-                url: "{{route('akomodasi.fasilitas')}}",
+                url: "{{route('admin.akomodasi.fasilitas')}}",
                 type: "POST",
                 dataType: "HTML",
                 data: {'id': id, '_token': '{{csrf_token()}}'},
@@ -368,7 +365,7 @@
             $('#tambahfasilitas').modal('show')
         }
 
-        var map = L.map('map').setView([0,0], 13); 
+        var map = L.map('map').setView([0,0], 13);
         var marker = L.marker([0,0]).addTo(map);
         var popup = L.popup();
         var markersLayer = new L.LayerGroup();
@@ -382,7 +379,7 @@
             marker: false
         });
 
-        
+
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -413,13 +410,13 @@
                 // pas lokasi basobok, jalankan kode yg ado didalam function ko
             var geolocation = navigator.geolocation.getCurrentPosition(function(pos){
                 // kode dibawah ko dijalankan pas posisi gps basobok
-                    var lat = pos.coords.latitude; // ambiak lat gps 
+                    var lat = pos.coords.latitude; // ambiak lat gps
                     var lng = pos.coords.longitude; // ambiak lng gps
                     map.addControl( controlSearch );
                     map.setView([lat,lng]); // ubah tampilan posisi peta ke posisi gps
                     marker.setLatLng([lat,lng]); // pindahkan posisi marker ke posisi gps
             });
-        
+
         }
 
         map.on('click', klik);
