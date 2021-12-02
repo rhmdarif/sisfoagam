@@ -199,8 +199,8 @@
         var filePath = fileInput.value;
         var extensions = /(\.jpg|\.png)$/i;
         var ukuran = fileInput.files[0].size;
-        if (ukuran > 100000) {
-            alert('ukuran terlalu besar. Maksimal 100KB')
+        if (ukuran > 1000000) {
+            alert('ukuran terlalu besar. Maksimal 1MB')
             fileInput.value = '';
             document.getElementById('tampilFoto').innerHTML = '';
             return false;
