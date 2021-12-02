@@ -91,7 +91,7 @@ Route::prefix('admin')->as("admin.")->group(function () {
         Route::get('destinasi-wisata/{id}/media', [Admin\DestinasiWisataController::class, 'media'])->name('destinasi-wisata.media');
         Route::post('destinasi-wisata/{destinasi_wisatum}/jumlah-kunjungan', [Admin\DestinasiWisataController::class, 'ubahJumlahKunjungan'])->name('destinasi-wisata.ubahJumlahKunjungan');
         Route::resource('destinasi-wisata', Admin\DestinasiWisataController::class);
-
+        Route::delete('{id}/hapus',[Admin\DestinasiWisataController::class, 'destroy1'])->name('hapus.data_review_destinasi');
 
         // BERITA PARAWISATA
         Route::resource('berita-parawisata', Admin\BeritaParawisataController::class);
