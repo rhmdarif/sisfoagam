@@ -17,10 +17,14 @@
     <link rel="stylesheet" href="{{ url('admin/assets') }}/dist/css/adminlte.min.css">
 </head>
 
-<body class="hold-transition login-page">
+<body class="hold-transition login-page" style="
+background-image: url({{ url('/') }}/admin/assets/bg/TIKU.jpg);
+background-repeat: no-repeat;
+background-size: auto;
+background-position: bottom;">
     <div class="login-box">
         <div class="login-logo">
-            <a href="#"><b>Admin</b>LTE</a>
+            <a href="#">Login <b>Administrator</b></a>
         </div>
         <!-- /.login-logo -->
         <div class="card">

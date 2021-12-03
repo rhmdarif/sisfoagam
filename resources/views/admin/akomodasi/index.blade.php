@@ -56,6 +56,7 @@
                                             <iframe width="300" height="170" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=<?= $a->lat; ?>,<?= $a->long; ?>&hl=in&z=14&amp;output=embed"></iframe>
                                         </td>
                                         <td>
+                                            <button onclick="visitorModal({{ $a->id }})" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>
                                             <a href="{{ route('admin.akomodasi.detail', $a->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
                                             <button onclick="location.href='<?= route('admin.akomodasi.edit-page', $a->id) ?>'" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></button>
                                             <button onclick="hapus('<?= $a->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
@@ -154,7 +155,7 @@
     </div>
 
     <!-- Modal Dertail -->
-    <div class="modal fade" id="detalAkomodasi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="visitorsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
@@ -166,6 +167,30 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+                <div class="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Dertail -->
+    <div class="modal fade" id="visitorsEditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        <div id="title"></div>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <script>
+                    function reload_table_kunjungan(id) {
+                        $('#visitorsModal .modal-body').load("{{ url('/') }}/admin/akomodasi/"+id+"/visitor");
+                    }
+                </script>
                 <div class="modal-body">
 
                 </div>
@@ -239,6 +264,15 @@
             decimalCharacter : ',',
             digitGroupSeparator : '.',
         });
+
+        function visitorModal(id) {
+            $('#visitorsModal #title').text("Daftar Pengunjung");
+            reload_table_kunjungan(id);
+            // $.get("{{ url('/') }}/admin/akomodasi/"+id+"/visitor", (result) => {
+
+            // })
+            $('#visitorsModal').modal('show');
+        }
 
         function tampil()
         {

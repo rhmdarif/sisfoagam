@@ -63,6 +63,13 @@ Route::prefix('admin')->as("admin.")->group(function () {
             Route::get('{id}/detail', [Admin\AkomodasiController::class, 'detail'])->name('detail');
             Route::delete('{id}/hapus',[Admin\AkomodasiController::class, 'destroy'])->name('hapus.data_review_akomodasi');
 
+            Route::prefix('{akomodasi_id}/visitor')->group(function () {
+                Route::get('/', [Admin\AkomodasiVisitorController::class, 'index']);
+                Route::post('/', [Admin\AkomodasiVisitorController::class, 'store']);
+                Route::get('form', [Admin\AkomodasiVisitorController::class, 'create']);
+                Route::get('{visitor}/form', [Admin\AkomodasiVisitorController::class, 'edit']);
+                Route::post('{visitor}/update', [Admin\AkomodasiVisitorController::class, 'update']);
+            });
         });
 
         // Route::prefix('destinasi-wisata')->as('destinasi-wisata.')->group(function (){
