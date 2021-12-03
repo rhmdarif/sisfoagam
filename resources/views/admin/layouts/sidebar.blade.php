@@ -2,8 +2,8 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="{{ route('admin.home') }}" class="brand-link">
-        <img src="{{ url('admin/assets') }}/dist/img/AdminLTELogo.png" alt="{{ auth()->user()->name ?? '' }}"
-            class="brand-image img-circle elevation-3" style="opacity: .8">
+        <img src="{{ url('/') }}/admin/assets/bg/kab-agam.png" alt="{{ auth()->user()->name ?? '' }}"
+            class="brand-image img-circle elevation-3">
         <span class="brand-text font-weight-light">{{ auth()->user()->name ?? '' }}</span>
     </a>
 
@@ -114,7 +114,7 @@
                                 </p>
                             </a>
                         </li>
-                        
+
                     </ul>
                 </li>
                 <li class="nav-item">
