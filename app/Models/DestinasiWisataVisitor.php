@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class DestinasiWisataVisitor extends Model
 {
     use HasFactory;
+    protected $fillable = ['destinasi_wisata_id', 'periode', 'visitor'];
 }

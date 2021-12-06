@@ -69,4 +69,10 @@ class AkomodasiVisitorController extends Controller
 
         return ['status' => true, 'msg' => "Data pengunjung telah ditambahkan"];
     }
+
+    public function destroy($destinasi_wisata_id, AkomodasiVisitor $visitor)
+    {
+        $visitor->delete();
+        return ['pesan' => 'berhasil'];
+    }
 }
