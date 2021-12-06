@@ -114,6 +114,14 @@
                                 </p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.master-data.panduan.index') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>
+                                    Panduan Aplikasi
+                                </p>
+                            </a>
+                        </li>
 
                     </ul>
                 </li>
@@ -170,6 +178,14 @@
                         <i class="nav-icon fas fa-users"></i>
                         <p>
                             User Admin
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.panduan.show') }}" class="nav-link">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>
+                            Panduan Aplikasi
                         </p>
                     </a>
                 </li>
