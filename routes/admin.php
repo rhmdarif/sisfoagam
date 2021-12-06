@@ -39,8 +39,10 @@ Route::prefix('admin')->as("admin.")->group(function () {
                 Route::resource('kategori', Admin\MasterData\EkonomiKreatif\KategoriController::class);
             });
 
-
+            Route::resource('panduan', Admin\PanduanController::class);
         });
+
+        Route::get('panduan-aplikasi/{slug?}', [Admin\PanduanController::class, "show"])->name('panduan.show');
 
         // Foto Slider
         Route::prefix("foto-slider")->as("foto-slider.")->group(function(){
