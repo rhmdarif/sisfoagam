@@ -175,18 +175,35 @@ class DestinasiWisataController extends Controller
 
         if($objek != null) {
             $tahun = $request->tahun ?? date("Y");
-            $visitor = DB::table('destinasi_wisata_visitors')->where('destinasi_wisata_id', $objek->id)->where('periode', 'like', $tahun."%")->get();
+            // $visitor = DB::table('destinasi_wisata_visitors')->where('destinasi_wisata_id', $objek->id)->where('periode', 'like', $tahun."%")->get();
 
             // $legend = [];
             $data = [];
-            foreach ($visitor as $key => $value) {
-                // $legend[$key] = $value->periode;
-                // $data[$key] = $value->visitor;
-                $data[$key] = [
-                    'legend' => $value->periode,
-                    'data' => $value->visitor,
-                ];
+
+            for ($i=0; $i < 12; $i++) {
+                $w = $i+1;
+                $value = DB::table('destinasi_wisata_visitors')->where('destinasi_wisata_id', $objek->id)->where('periode', 'like', (($w<10)? '%-0'.$w.'-%' : '%-'.$w.'-%'))->first();
+
+                if($value != null) {
+                    $data[$i] = [
+                        'legend' => $value->periode,
+                        'data' => $value->visitor,
+                    ];
+                } else {
+                    $data[$i] = [
+                        'legend' => $tahun.(($w<10)? '-0'.$w.'-01' : '-'.$w.'-01'),
+                        'data' => 0,
+                    ];
+                }
             }
+            // foreach ($visitor as $key => $value) {
+            //     // $legend[$key] = $value->periode;
+            //     // $data[$key] = $value->visitor;
+            //     $data[$key] = [
+            //         'legend' => $value->periode,
+            //         'data' => $value->visitor,
+            //     ];
+            // }
 
             // return ['status' => true, 'legend' => $legend, 'data' => $data];
             return ['status' => true, 'data' => $data];
