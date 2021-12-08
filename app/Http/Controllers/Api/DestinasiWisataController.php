@@ -182,7 +182,7 @@ class DestinasiWisataController extends Controller
 
             for ($i=0; $i < 12; $i++) {
                 $w = $i+1;
-                $value = DB::table('destinasi_wisata_visitors')->where('destinasi_wisata_id', $objek->id)->where('periode', 'like', (($w<10)? '%-0'.$w.'-%' : '%-'.$w.'-%'))->first();
+                $value = DB::table('destinasi_wisata_visitors')->where('destinasi_wisata_id', $objek->id)->where('periode', 'like', (($w<10)? $tahun.'-0'.$w.'-%' : $tahun.'-'.$w.'-%'))->first();
 
                 if($value != null) {
                     $data[$i] = [
