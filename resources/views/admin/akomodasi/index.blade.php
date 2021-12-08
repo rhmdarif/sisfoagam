@@ -56,7 +56,7 @@
                                             <iframe width="300" height="170" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=<?= $a->lat; ?>,<?= $a->long; ?>&hl=in&z=14&amp;output=embed"></iframe>
                                         </td>
                                         <td>
-                                            <button onclick="visitorModal({{ $a->id }})" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>
+                                            <button onclick="visitorModal({{ $a->id }})" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-glasses"></i></button>
                                             <a href="{{ route('admin.akomodasi.detail', $a->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
                                             <button onclick="location.href='<?= route('admin.akomodasi.edit-page', $a->id) ?>'" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></button>
                                             <button onclick="hapus('<?= $a->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>

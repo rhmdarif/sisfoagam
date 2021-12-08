@@ -151,4 +151,25 @@ class AkomodasiController extends Controller
 
         return response()->json(ApiResponse::Ok(null, 200, "Rating telah diterapkan"));
     }
+
+    public function getDataChart($slug, Request $request)
+    {
+        $objek = DB::table('akomodasi')->where('slug_akomodasi', $slug)->first();
+
+        if($objek != null) {
+            $tahun = $request->tahun ?? date("Y");
+            $visitor = DB::table('akomodasi_visitors')->where('akomodasi_id', $objek->id)->where('periode', 'like', $tahun."%")->get();
+
+            $legend = [];
+            $data = [];
+            foreach ($visitor as $key => $value) {
+                $legend[$key] = $value->periode;
+                $data[$key] = $value->visitor;
+            }
+
+            return ['status' => true, 'legend' => $legend, 'data' => $data];
+        } else {
+            return ['status' => false, 'msg' => "Akomodasi tidak ditemukan"];
+        }
+    }
 }
