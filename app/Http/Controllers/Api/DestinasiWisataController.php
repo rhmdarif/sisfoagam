@@ -177,14 +177,19 @@ class DestinasiWisataController extends Controller
             $tahun = $request->tahun ?? date("Y");
             $visitor = DB::table('destinasi_wisata_visitors')->where('destinasi_wisata_id', $objek->id)->where('periode', 'like', $tahun."%")->get();
 
-            $legend = [];
+            // $legend = [];
             $data = [];
             foreach ($visitor as $key => $value) {
-                $legend[$key] = $value->periode;
-                $data[$key] = $value->visitor;
+                // $legend[$key] = $value->periode;
+                // $data[$key] = $value->visitor;
+                $data[$key] = [
+                    'legend' => $value->periode,
+                    'data' => $value->visitor,
+                ];
             }
 
-            return ['status' => true, 'legend' => $legend, 'data' => $data];
+            // return ['status' => true, 'legend' => $legend, 'data' => $data];
+            return ['status' => true, 'data' => $data];
         } else {
             return ['status' => false, 'msg' => "Akomodasi tidak ditemukan"];
         }
