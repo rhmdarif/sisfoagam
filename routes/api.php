@@ -41,6 +41,7 @@ Route::get('/akomodasi/{slugakomodasi}', [AkomodasiController::class, 'getDetail
 Route::get('/akomodasi/{slugakomodasi}/review', [AkomodasiController::class, 'getReview']);
 
 Route::get('/akomodasi/{slugakomodasi}/galery', [AkomodasiController::class, 'galeriAkomodasi']);
+Route::any('/akomodasi/{slugakomodasi}/chart', [AkomodasiController::class, 'getDataChart']);
 
 // DESTINASI
 Route::get('/destinasi', [DestinasiWisataController::class, 'getDestinasiWisata']);
@@ -53,6 +54,7 @@ Route::post("/destinasi/rating", [DestinasiWisataController::class, 'reviewDesti
 
 Route::get('/destinasi/{slugkategori}', [DestinasiWisataController::class, 'getDetailDestinasiWisata']);
 Route::get('/destinasi/{slugDestinasiWisata}/review', [DestinasiWisataController::class, 'getReview']);
+Route::any('/destinasi/{slugDestinasiWisata}/chart', [DestinasiWisataController::class, 'getDataChart']);
 
 // EVENT PARAWISATA
 Route::get('/event-parawisata', [EventParawisataController::class, 'eventAllParawisata']);
