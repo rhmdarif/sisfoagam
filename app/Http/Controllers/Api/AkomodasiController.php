@@ -158,6 +158,49 @@ class AkomodasiController extends Controller
 
         if($objek != null) {
             $tahun = $request->tahun ?? date("Y");
+            // $visitor = DB::table('destinasi_wisata_visitors')->where('destinasi_wisata_id', $objek->id)->where('periode', 'like', $tahun."%")->get();
+
+            // $legend = [];
+            $data = [];
+
+            for ($i=0; $i < 12; $i++) {
+                $w = $i+1;
+                $value = DB::table('akomodasi_visitors')->where('akomodasi_id', $objek->id)->where('periode', 'like', (($w<10)? $tahun.'-0'.$w.'-%' : $tahun.'-'.$w.'-%'))->first();
+
+                if($value != null) {
+                    $data[$i] = [
+                        'legend' => $value->periode,
+                        'data' => $value->visitor,
+                    ];
+                } else {
+                    $data[$i] = [
+                        'legend' => $tahun.(($w<10)? '-0'.$w.'-01' : '-'.$w.'-01'),
+                        'data' => 0,
+                    ];
+                }
+            }
+            // foreach ($visitor as $key => $value) {
+            //     // $legend[$key] = $value->periode;
+            //     // $data[$key] = $value->visitor;
+            //     $data[$key] = [
+            //         'legend' => $value->periode,
+            //         'data' => $value->visitor,
+            //     ];
+            // }
+
+            // return ['status' => true, 'legend' => $legend, 'data' => $data];
+            return ['status' => true, 'data' => $data];
+        } else {
+            return ['status' => false, 'msg' => "Akomodasi tidak ditemukan"];
+        }
+    }
+    /*
+    public function getDataChart($slug, Request $request)
+    {
+        $objek = DB::table('akomodasi')->where('slug_akomodasi', $slug)->first();
+
+        if($objek != null) {
+            $tahun = $request->tahun ?? date("Y");
             $visitor = DB::table('akomodasi_visitors')->where('akomodasi_id', $objek->id)->where('periode', 'like', $tahun."%")->get();
 
             $legend = [];
@@ -172,4 +215,5 @@ class AkomodasiController extends Controller
             return ['status' => false, 'msg' => "Akomodasi tidak ditemukan"];
         }
     }
+    */
 }
