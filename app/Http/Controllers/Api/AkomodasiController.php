@@ -43,20 +43,49 @@ class AkomodasiController extends Controller
 
     public function getAkomodasi()
     {
-        try {
-            $data = Akomodasi::with(["kategori", "fasilitas", "fotovideo"])
-            ->join("kategori_akomodasi", "kategori_akomodasi.id", '=', "akomodasi.kategori_akomodasi_id")
-            ->select("akomodasi.*",
-                    "kategori_akomodasi.slug_kategori_akomodasi"
-                    )->paginate(8);
-            if ($data->count() > 0) {
-                $data->makeHidden('kategori_akomodasi_id');
-                return response()->json(ApiResponse::Ok($data, 200, "Ok"));
-            } else {
+
+        if(request()->has("lat") || request()->has("long")) {
+            try {
+                $data = Akomodasi::with(["kategori", "fasilitas", "fotovideo"])
+                ->join("kategori_akomodasi", "kategori_akomodasi.id", '=', "akomodasi.kategori_akomodasi_id")
+                ->select("akomodasi.*",
+                        "kategori_akomodasi.slug_kategori_akomodasi"
+                        )
+                        ->orderByRaw("(
+                            6371 * acos (
+                              cos ( radians(".request()->lat.") )
+                              * cos( radians( akomodasi.lat ) )
+                              * cos( radians( akomodasi.long ) - radians(".request()->long.") )
+                              + sin ( radians(".request()->lat.") )
+                              * sin( radians( akomodasi.lat ) )
+                            )
+                          )")
+                          ->paginate(8);
+                if ($data->count() > 0) {
+                    $data->makeHidden('kategori_akomodasi_id');
+                    return response()->json(ApiResponse::Ok($data, 200, "Ok"));
+                } else {
+                    return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
+                }
+            } catch (ModelNotFoundException $e) {
                 return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
             }
-        } catch (ModelNotFoundException $e) {
-            return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
+        } else {
+            try {
+                $data = Akomodasi::with(["kategori", "fasilitas", "fotovideo"])
+                ->join("kategori_akomodasi", "kategori_akomodasi.id", '=', "akomodasi.kategori_akomodasi_id")
+                ->select("akomodasi.*",
+                        "kategori_akomodasi.slug_kategori_akomodasi"
+                        )->paginate(8);
+                if ($data->count() > 0) {
+                    $data->makeHidden('kategori_akomodasi_id');
+                    return response()->json(ApiResponse::Ok($data, 200, "Ok"));
+                } else {
+                    return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
+                }
+            } catch (ModelNotFoundException $e) {
+                return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
+            }
         }
     }
     public function getDetailAkomodasi($slugakomodasi = null)

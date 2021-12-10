@@ -81,6 +81,7 @@ Route::get('/berita-parawisata/{slug_event_parawisata}', [BeritaParawisataContro
 
 // FASILITAS UMUM
 Route::get('/fasilitas-umum', [FasilitasUmumController::class, 'getFasilitasUmum']);
+Route::get('/fasilitas-umum/jarak', [FasilitasUmumController::class, 'getFasilitasUmumSortByJarak']);
 Route::get('/fasilitas-umum/{slugfasilitas_umum}', [FasilitasUmumController::class, 'getDetailFasilitasUmum']);
 Route::get('/fasilitas-umum/{slugfasilitas_umum}/galery', [FasilitasUmumController::class, 'galeriFasilitasUmum']);
 
