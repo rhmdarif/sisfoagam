@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
+use PDF;
 use App\Models\Akomodasi;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\AkomodasiVisitor;
 use App\Models\GaleriParawisata;
 use App\Models\FotoVideoAkomodasi;
 use Illuminate\Support\Facades\DB;
@@ -264,6 +265,7 @@ class AkomodasiController extends Controller
                                         ->join("fasilitas_akomodasi", "fasilitas_akomodasi.id", "=", "akomodasi_fasilitas_akomodasi.fasilitas_akomodasi_id")
                                         ->where('akomodasi_id', $id)->get();
     }
+
     public function edit_page($id)
     {
         $data['data'] = Akomodasi::find($id);
@@ -338,11 +340,23 @@ class AkomodasiController extends Controller
 
     }
 
-
     public function destroy($id)
     {
         DB::table('review_akomodasi')->where('id',$id)->delete();
                 return Redirect()->back();
     }
 
+    public function report(Request $request)
+    {
+        $tahun = $request->tahun ?? date('Y');
+
+        $visitors = AkomodasiVisitor::where('periode', 'like', $tahun.'%')->orderBy('periode', 'asc')->get()->groupBy('periode');
+        // return $visitors;
+
+        view()->share('visitors', $visitors);
+        $pdf_doc = PDF::loadView('admin.destinasi_wisata.report', $visitors);
+
+        return $pdf_doc->download('pdf.pdf');
+        // view('admin.destinasi_wisata.report', compact('visitors'));
+    }
 }
