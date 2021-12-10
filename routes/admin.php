@@ -19,6 +19,7 @@ Route::prefix('admin')->as("admin.")->group(function () {
         Route::get('/', function() {
             return redirect()->route("admin.home");
         });
+
         Route::get('home', [Admin\HomeController::class, 'index'])->name('home');
         Route::get('data/chart', [Admin\HomeController::class, 'chart'])->name('chart');
 

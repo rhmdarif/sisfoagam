@@ -1,18 +1,19 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\AkomodasiController;
-use App\Http\Controllers\Api\BeritaParawisataController;
-use App\Http\Controllers\Api\DestinasiWisataController;
-use App\Http\Controllers\Api\EkonomiKreatifController;
-use App\Http\Controllers\Api\EventParawisataController;
 use App\Http\Controllers\Api\Auth;
-use App\Http\Controllers\Api\FasilitasUmumController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\GaleryController;
 use App\Http\Controllers\Api\SearchController;
-use App\Http\Controllers\Api\UserController;
-use Illuminate\Support\Facades\Auth as FacadesAuth;
 use App\Http\Controllers\Api\VisitorController;
+use App\Http\Controllers\Api\AkomodasiController;
+use App\Http\Controllers\Api\VidioHomeController;
+use Illuminate\Support\Facades\Auth as FacadesAuth;
+use App\Http\Controllers\Api\FasilitasUmumController;
+use App\Http\Controllers\Api\EkonomiKreatifController;
+use App\Http\Controllers\Api\DestinasiWisataController;
+use App\Http\Controllers\Api\EventParawisataController;
+use App\Http\Controllers\Api\BeritaParawisataController;
 
 /*
 |--------------------------------------------------------------------------
@@ -111,3 +112,5 @@ Route::post("visitor-count", [VisitorController::class, 'count']);
 
 // SLIDER
 Route::get("slider", [GaleryController::class, 'slider']);
+Route::get("vidio", [VidioHomeController::class, 'toClient']);
+Route::any("change-vidio", [VidioHomeController::class, 'change']);

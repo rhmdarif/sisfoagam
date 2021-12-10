@@ -72,7 +72,7 @@ class FasilitasUmumController extends Controller
             'thumbnail' => storage_url(substr($file_location, 7))
         ]);
 
-        return back()->with("success", "Fasilitas Umum berhasil ditambahkan");
+        return redirect()->route('admin.fasilitas-umum.index')->with("success", "Fasilitas Umum berhasil ditambahkan");
     }
 
     /**
@@ -144,7 +144,7 @@ class FasilitasUmumController extends Controller
 
         $fasilitas_umum->update($update);
 
-        return back()->with("success", "Fasilitas Umum berhasil diperbaharui");
+        return redirect()->route('admin.fasilitas-umum.index')->with("success", "Fasilitas Umum berhasil diperbaharui");
     }
 
     /**

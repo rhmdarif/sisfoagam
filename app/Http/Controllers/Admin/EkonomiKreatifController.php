@@ -133,7 +133,7 @@ class EkonomiKreatifController extends Controller
         }
         GaleriParawisata::insert($ins_to_galery);
 
-        return back()->with("success", "Ekonomi Kreatif berhasil ditambahkan");
+        return redirect()->route('admin.ekonomi-kreatif.index')->with("success", "Ekonomi Kreatif berhasil ditambahkan");
     }
 
     /**
@@ -272,7 +272,7 @@ class EkonomiKreatifController extends Controller
         }
         GaleriParawisata::whereIn("file", $rmv_from_galery)->delete();
 
-        return back()->with("success", "Ekonomi Kreatif berhasil ditambahkan");
+        return redirect()->route('admin.ekonomi-kreatif.index')->with("success", "Ekonomi Kreatif berhasil ditambahkan");
     }
 
     /**
@@ -300,7 +300,7 @@ class EkonomiKreatifController extends Controller
     public function destroy1($id)
     {
         DB::table('review_ekonomi_kreatif')->where('id', $id)->delete();
-        return Redirect()->back();
+        return redirect()->back();
     }
 
     public function detail($id)
