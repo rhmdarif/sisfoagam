@@ -456,6 +456,11 @@
             decimalCharacter: ',',
             digitGroupSeparator: '.',
         });
+        var biaya_parkir_r6 = new AutoNumeric('#biaya_parkir_r6', {
+            currencySymbol: 'Rp.',
+            decimalCharacter: ',',
+            digitGroupSeparator: '.',
+        });
         var biaya_parkir_r4 = new AutoNumeric('#biaya_parkir_r4', {
             currencySymbol: 'Rp.',
             decimalCharacter: ',',

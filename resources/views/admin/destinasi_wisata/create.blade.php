@@ -81,7 +81,7 @@
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label for="">Biaya Parkir R. 4</label>
-                                                    <input type="text" name="biaya_parkir_r4" id="biaya_parkir_r2" class="form-control"
+                                                    <input type="text" name="biaya_parkir_r4" id="biaya_parkir_r4" class="form-control"
                                                         placeholder="Kelas">
                                                 </div>
                                             </div>
