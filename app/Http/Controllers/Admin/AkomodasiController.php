@@ -186,9 +186,11 @@ class AkomodasiController extends Controller
                 }
 
                 if($r->filled("gallery_video")) {
-                    $not_inc = DB::table('foto_video_akomodasi')->where("akomodasi_id", $r->id)->where('kategori', 'video')->get();
-                    foreach ($not_inc as $key => $value) {
-                        $rmv_from_galery[] = $value->file;
+                    $video_now = DB::table('foto_video_akomodasi')->where("akomodasi_id", $r->id)->where('kategori', 'video')->get();
+                    foreach ($video_now as $key => $value) {
+                        if(!in_array($value->file, $r->gallery_video)) {
+                            $rmv_from_galery[] = $value->file;
+                        }
                     }
 
                     DB::table('foto_video_akomodasi')->where("akomodasi_id", $r->id)->where('kategori', 'video')->delete();
@@ -336,7 +338,7 @@ class AkomodasiController extends Controller
 
     }
 
- 
+
     public function destroy($id)
     {
         DB::table('review_akomodasi')->where('id',$id)->delete();

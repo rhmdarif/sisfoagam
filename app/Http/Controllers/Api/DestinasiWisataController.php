@@ -43,18 +43,43 @@ class DestinasiWisataController extends Controller
 
     public function getDestinasiWisata()
     {
-        try {
+        if(request()->has("lat") || request()->has("long")) {
+            try {
 
-            $data = DestinasiWisata::with(["kategori", "fasilitas", "fotovideo"])->join("kategori_wisata", "kategori_wisata.id", '=', "destinasi_wisata.kategori_wisata_id")->select("destinasi_wisata.*", "kategori_wisata.slug_kategori_wisata")->paginate(8);
+                $data = DestinasiWisata::with(["kategori", "fasilitas", "fotovideo"])->join("kategori_wisata", "kategori_wisata.id", '=', "destinasi_wisata.kategori_wisata_id")->select("destinasi_wisata.*", "kategori_wisata.slug_kategori_wisata")
+                        ->orderByRaw("(
+                            6371 * acos (
+                            cos ( radians(".request()->lat.") )
+                            * cos( radians( destinasi_wisata.lat ) )
+                            * cos( radians( destinasi_wisata.long ) - radians(".request()->long.") )
+                            + sin ( radians(".request()->lat.") )
+                            * sin( radians( destinasi_wisata.lat ) )
+                            )
+                        )")->paginate(8);
 
-            if ($data->count() > 0) {
-                $data->makeHidden('kategori_wisata_id');
-                return response()->json(ApiResponse::Ok($data, 200, "Ok"));
-            } else {
+                if ($data->count() > 0) {
+                    $data->makeHidden('kategori_wisata_id');
+                    return response()->json(ApiResponse::Ok($data, 200, "Ok"));
+                } else {
+                    return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
+                }
+            } catch (ModelNotFoundException $e) {
                 return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
             }
-        } catch (ModelNotFoundException $e) {
-            return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
+        } else {
+            try {
+
+                $data = DestinasiWisata::with(["kategori", "fasilitas", "fotovideo"])->join("kategori_wisata", "kategori_wisata.id", '=', "destinasi_wisata.kategori_wisata_id")->select("destinasi_wisata.*", "kategori_wisata.slug_kategori_wisata")->paginate(8);
+
+                if ($data->count() > 0) {
+                    $data->makeHidden('kategori_wisata_id');
+                    return response()->json(ApiResponse::Ok($data, 200, "Ok"));
+                } else {
+                    return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
+                }
+            } catch (ModelNotFoundException $e) {
+                return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
+            }
         }
     }
     public function getDetailDestinasiWisata($slugDestinasiWisata = null)

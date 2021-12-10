@@ -195,6 +195,7 @@ class DestinasiWisataController extends Controller
     public function update(Request $request, DestinasiWisata $destinasi_wisatum)
     {
         //
+        // return $request->all();
         $validator = Validator::make($request->all(), [
             'kategori' => 'required|exists:kategori_wisata,id',
             'destinasi_wisata' => 'required|string|unique:destinasi_wisata,nama_wisata,' . $destinasi_wisatum->id,
@@ -293,10 +294,17 @@ class DestinasiWisataController extends Controller
         }
 
         if ($request->filled("gallery_video")) {
-            $not_inc = DB::table('destinasi_wisata_foto_vidio_wisata')->where("destinasi_wisata_id", $destinasi_wisatum->id)->where('kategori', 'video')->get();
+            // $not_inc = DB::table('destinasi_wisata_foto_vidio_wisata')->where("destinasi_wisata_id", $destinasi_wisatum->id)->where('kategori', 'video')->get();
 
-            foreach ($not_inc as $key => $value) {
-                $rmv_from_galery[] = $value->file;
+            // foreach ($not_inc as $key => $value) {
+            //     $rmv_from_galery[] = $value->file;
+            // }
+
+            $video_now = DB::table('destinasi_wisata_foto_vidio_wisata')->where("destinasi_wisata_id", $destinasi_wisatum->id)->where('kategori', 'video')->get();
+            foreach ($video_now as $key => $value) {
+                if(!in_array($value->file, $request->gallery_video)) {
+                    $rmv_from_galery[] = $value->file;
+                }
             }
 
             DB::table('destinasi_wisata_foto_vidio_wisata')->where("destinasi_wisata_id", $destinasi_wisatum->id)->where('kategori', 'video')->delete();
@@ -313,7 +321,10 @@ class DestinasiWisataController extends Controller
                     'file' => $value,
                 ];
             }
+            DB::table('destinasi_wisata_foto_vidio_wisata')->insert($videos);
         }
+
+        // return $rmv_from_galery;
 
         GaleriParawisata::insert($ins_to_galery);
 

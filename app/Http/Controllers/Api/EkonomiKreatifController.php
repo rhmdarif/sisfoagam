@@ -43,20 +43,46 @@ class EkonomiKreatifController extends Controller
 
     public function getEkonomiKreatif()
     {
-        try {
-            $data = EkonomiKreatif::with(["kategori", "fotovideo"])
-            ->join("kategori_ekonomi_kreatif", "kategori_ekonomi_kreatif.id", '=', "ekonomi_kreatif.kategori_ekonomi_kreatif_id")
-            ->select("ekonomi_kreatif.*",
-                    "kategori_ekonomi_kreatif.slug_kategori_kreatif"
-                    )->paginate(8);
-            if ($data->count() > 0) {
-                $data->makeHidden('kategori_ekonomi_kreatif_id');
-                return response()->json(ApiResponse::Ok($data, 200, "Ok"));
-            } else {
+        if(request()->has("lat") || request()->has("long")) {
+            try {
+                $data = EkonomiKreatif::with(["kategori", "fotovideo"])
+                ->join("kategori_ekonomi_kreatif", "kategori_ekonomi_kreatif.id", '=', "ekonomi_kreatif.kategori_ekonomi_kreatif_id")
+                ->select("ekonomi_kreatif.*",
+                        "kategori_ekonomi_kreatif.slug_kategori_kreatif"
+                        )->orderByRaw("(
+                            6371 * acos (
+                            cos ( radians(".request()->lat.") )
+                            * cos( radians( ekonomi_kreatif.lat ) )
+                            * cos( radians( ekonomi_kreatif.long ) - radians(".request()->long.") )
+                            + sin ( radians(".request()->lat.") )
+                            * sin( radians( ekonomi_kreatif.lat ) )
+                            )
+                        )")->paginate(8);
+                if ($data->count() > 0) {
+                    $data->makeHidden('kategori_ekonomi_kreatif_id');
+                    return response()->json(ApiResponse::Ok($data, 200, "Ok"));
+                } else {
+                    return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
+                }
+            } catch (ModelNotFoundException $e) {
                 return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
             }
-        } catch (ModelNotFoundException $e) {
-            return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
+        } else {
+            try {
+                $data = EkonomiKreatif::with(["kategori", "fotovideo"])
+                ->join("kategori_ekonomi_kreatif", "kategori_ekonomi_kreatif.id", '=', "ekonomi_kreatif.kategori_ekonomi_kreatif_id")
+                ->select("ekonomi_kreatif.*",
+                        "kategori_ekonomi_kreatif.slug_kategori_kreatif"
+                        )->paginate(8);
+                if ($data->count() > 0) {
+                    $data->makeHidden('kategori_ekonomi_kreatif_id');
+                    return response()->json(ApiResponse::Ok($data, 200, "Ok"));
+                } else {
+                    return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
+                }
+            } catch (ModelNotFoundException $e) {
+                return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
+            }
         }
     }
     public function getDetailEkonomiKreatif($slugekonomi_kreatif = null)
