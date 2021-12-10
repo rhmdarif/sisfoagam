@@ -10,8 +10,9 @@ class VidioHomeController extends Controller
     //
     public function toClient()
     {
-        return (file_exists(public_path("vidio.txt")))? file_get_contents(public_path("vidio.txt")) : "";
+        return (file_exists(public_path("vidio.txt")))? ['status' => true, 'url' => file_get_contents(public_path("vidio.txt"))] : ['status' => false, 'url' => "Vidio tidak tersedia"];
     }
+
     public function change(Request $request)
     {
         if($request->has('url')) {

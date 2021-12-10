@@ -54,4 +54,27 @@ class FotoSliderController extends Controller
 
         return redirect()->route('admin.foto-slider.index')->with("success", "Slide berhasil diubah");
     }
+
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'foto_slider' => 'required|image',
+            'deskripsi' => 'required|string',
+        ]);
+
+        if($validator->fails()) {
+            return back()->with("error", $validator->errors()->first());
+        }
+
+        $file_upload = $request->file("foto_slider");
+        $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
+        $file_location = $file_upload->storeAs("public/foto_slider", $file_name);
+
+        Slider::create([
+            'file' => storage_url(substr($file_location, 7)),
+            'description' => $request->deskripsi,
+        ]);
+
+        return redirect()->route('admin.foto-slider.index')->with("success", "Slide berhasil diubah");
+    }
 }

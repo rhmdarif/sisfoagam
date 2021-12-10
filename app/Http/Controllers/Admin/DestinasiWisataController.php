@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use PDF;
 use App\Models\Akomodasi;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Models\DestinasiWisataFotoVidioWisata;
 use App\Models\DestinasiWisataJumlahKunjungan;
+use App\Models\DestinasiWisataVisitor;
 
 class DestinasiWisataController extends Controller
 {
@@ -422,5 +424,18 @@ class DestinasiWisataController extends Controller
         ]);
 
         return ['pesan' => 'berhasil'];
+    }
+    public function report(Request $request)
+    {
+        $tahun = $request->tahun ?? date('Y');
+
+        $visitors = DestinasiWisataVisitor::where('periode', 'like', $tahun.'%')->orderBy('periode', 'asc')->get()->groupBy('periode');
+        // return $visitors;
+
+        view()->share('visitors', $visitors);
+        $pdf_doc = PDF::loadView('admin.destinasi_wisata.report', $visitors);
+
+        return $pdf_doc->download('pdf.pdf');
+        // view('admin.destinasi_wisata.report', compact('visitors'));
     }
 }
