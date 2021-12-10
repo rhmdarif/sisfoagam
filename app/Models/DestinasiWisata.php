@@ -18,6 +18,7 @@ class DestinasiWisata extends Model
                             'harga_tiket_anak',
                             'biaya_parkir_roda_2',
                             'biaya_parkir_roda_4',
+                            'biaya_parkir_roda_6',
                             'lat',
                             'long',
                             'slug_destinasi',

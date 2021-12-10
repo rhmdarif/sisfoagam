@@ -65,6 +65,7 @@ class DestinasiWisataController extends Controller
             'destinasi_wisata' => 'required|string|unique:destinasi_wisata,nama_wisata',
             'harga_tiket_dewasa' => 'required|string',
             'harga_tiket_anak' => 'required|string',
+            'biaya_parkir_r6' => 'required|string',
             'biaya_parkir_r4' => 'required|string',
             'biaya_parkir_r2' => 'required|string',
             'lat' => 'required|string',
@@ -80,6 +81,7 @@ class DestinasiWisataController extends Controller
         $harga_tiket_anak  = preg_replace("/[^0-9]/", '', explode(",", $request->harga_tiket_anak)[0]);
         $biaya_parkir_r2  = preg_replace("/[^0-9]/", '', explode(",", $request->biaya_parkir_r2)[0]);
         $biaya_parkir_r4  = preg_replace("/[^0-9]/", '', explode(",", $request->biaya_parkir_r4)[0]);
+        $biaya_parkir_r6  = preg_replace("/[^0-9]/", '', explode(",", $request->biaya_parkir_r6)[0]);
 
 
         if ($request->has("thumbnail")) {
@@ -95,6 +97,7 @@ class DestinasiWisataController extends Controller
             'harga_tiket_anak' => $harga_tiket_anak,
             'biaya_parkir_roda_2' => $biaya_parkir_r2,
             'biaya_parkir_roda_4' => $biaya_parkir_r4,
+            'biaya_parkir_roda_6' => $biaya_parkir_r6,
             'lat' => $request->lat,
             'long' => $request->lng,
             'slug_destinasi' => rand(10000, 99999) . '-' . Str::slug($request->destinasi_wisata),
@@ -197,6 +200,7 @@ class DestinasiWisataController extends Controller
             'destinasi_wisata' => 'required|string|unique:destinasi_wisata,nama_wisata,' . $destinasi_wisatum->id,
             'harga_tiket_dewasa' => 'required|string',
             'harga_tiket_anak' => 'required|string',
+            'biaya_parkir_r6' => 'required|string',
             'biaya_parkir_r4' => 'required|string',
             'biaya_parkir_r2' => 'required|string',
             'lat' => 'required|string',
@@ -212,6 +216,7 @@ class DestinasiWisataController extends Controller
         $harga_tiket_anak  = preg_replace("/[^0-9]/", '', explode(",", $request->harga_tiket_anak)[0]);
         $biaya_parkir_r2  = preg_replace("/[^0-9]/", '', explode(",", $request->biaya_parkir_r2)[0]);
         $biaya_parkir_r4  = preg_replace("/[^0-9]/", '', explode(",", $request->biaya_parkir_r4)[0]);
+        $biaya_parkir_r6  = preg_replace("/[^0-9]/", '', explode(",", $request->biaya_parkir_r6)[0]);
 
         $update = [
             'kategori_wisata_id' => $request->kategori,
@@ -220,6 +225,7 @@ class DestinasiWisataController extends Controller
             'harga_tiket_anak' => $harga_tiket_anak,
             'biaya_parkir_roda_2' => $biaya_parkir_r2,
             'biaya_parkir_roda_4' => $biaya_parkir_r4,
+            'biaya_parkir_roda_6' => $biaya_parkir_r6,
             'lat' => $request->lat,
             'long' => $request->lng,
             'slug_destinasi' => rand(10000, 99999) . '-' . Str::slug($request->destinasi_wisata),
@@ -287,13 +293,13 @@ class DestinasiWisataController extends Controller
         }
 
         if ($request->filled("gallery_video")) {
-            $not_inc = DB::table('foto_video_akomodasi')->where("destinasi_wisata_id", $destinasi_wisatum->id)->where('kategori', 'video')->get();
+            $not_inc = DB::table('destinasi_wisata_foto_vidio_wisata')->where("destinasi_wisata_id", $destinasi_wisatum->id)->where('kategori', 'video')->get();
 
             foreach ($not_inc as $key => $value) {
                 $rmv_from_galery[] = $value->file;
             }
 
-            DB::table('foto_video_akomodasi')->where("destinasi_wisata_id", $destinasi_wisatum->id)->where('kategori', 'video')->delete();
+            DB::table('destinasi_wisata_foto_vidio_wisata')->where("destinasi_wisata_id", $destinasi_wisatum->id)->where('kategori', 'video')->delete();
             $videos = [];
 
             foreach ($request->gallery_video as $key => $value) {
