@@ -71,14 +71,21 @@
                                                         placeholder="Kelas">
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label for="">Biaya Parkir R. 4</label>
-                                                    <input type="text" name="biaya_parkir_r4" id="biaya_parkir_r4" class="form-control"
+                                                    <label for="">Biaya Parkir R. 6</label>
+                                                    <input type="text" name="biaya_parkir_r6" id="biaya_parkir_r6" class="form-control"
                                                         placeholder="Kelas">
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="">Biaya Parkir R. 4</label>
+                                                    <input type="text" name="biaya_parkir_r4" id="biaya_parkir_r2" class="form-control"
+                                                        placeholder="Kelas">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label for="">Biaya Parkir R. 2</label>
                                                     <input type="text" name="biaya_parkir_r2" id="biaya_parkir_r2" class="form-control"
@@ -396,6 +403,11 @@
             digitGroupSeparator: '.',
         });
         var harga_tiket_anak = new AutoNumeric('#harga_tiket_anak', {
+            currencySymbol: 'Rp.',
+            decimalCharacter: ',',
+            digitGroupSeparator: '.',
+        });
+        var biaya_parkir_r6 = new AutoNumeric('#biaya_parkir_r6', {
             currencySymbol: 'Rp.',
             decimalCharacter: ',',
             digitGroupSeparator: '.',

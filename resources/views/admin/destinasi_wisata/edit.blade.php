@@ -61,28 +61,35 @@
                                                 <div class="form-group">
                                                     <label for="">Harga Tiket Dewasa</label>
                                                     <input type="text" name="harga_tiket_dewasa" id="harga_tiket_dewasa" class="form-control" value="{{ $destinasi_wisata->harga_tiket_dewasa }}"
-                                                        placeholder="Kelas">
+                                                        placeholder="Harga Tiket Dewasa">
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="">Harga Tiket Anak2</label>
                                                     <input type="text" name="harga_tiket_anak" id="harga_tiket_anak" class="form-control" value="{{ $destinasi_wisata->harga_tiket_anak }}"
-                                                        placeholder="Kelas">
+                                                        placeholder="Harga Tiket Anak2">
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="">Biaya Parkir R. 6</label>
+                                                    <input type="text" name="biaya_parkir_r6" id="biaya_parkir_r6" class="form-control" value="{{ $destinasi_wisata->biaya_parkir_roda_6 }}"
+                                                        placeholder="Biaya Parkir R. 6">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label for="">Biaya Parkir R. 4</label>
                                                     <input type="text" name="biaya_parkir_r4" id="biaya_parkir_r4" class="form-control" value="{{ $destinasi_wisata->biaya_parkir_roda_4 }}"
-                                                        placeholder="Kelas">
+                                                        placeholder="Biaya Parkir R. 4">
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label for="">Biaya Parkir R. 2</label>
                                                     <input type="text" name="biaya_parkir_r2" id="biaya_parkir_r2" class="form-control" value="{{ $destinasi_wisata->biaya_parkir_roda_2 }}"
-                                                        placeholder="Kelas">
+                                                        placeholder="Biaya Parkir R. 2">
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
