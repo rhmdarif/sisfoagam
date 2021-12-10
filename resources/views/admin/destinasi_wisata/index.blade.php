@@ -29,49 +29,50 @@
                             <a href="{{ route('admin.destinasi-wisata.create') }}" class="btn btn-primary" >Tambah Data</a>
                         </div>
                         <div class="card-body">
-                            <table id="table1" class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th style="width:2%">No</th>
-                                        <th style="width:10%">Thumbnail</th>
-                                        <th style="width:10%">Kategori</th>
-                                        <th style="width:10%">Nama Wisata</th>
-                                        <th style="width:10%">HTM Dewasa</th>
-                                        <th style="width:10%">HTM Anak</th>
-                                        <th style="width:10%">Biaya Parkir Roda 2</th>
-                                        <th style="width:10%">Biaya Parkir Roda 4</th>
-                                        <th style="width:10%">Jumlah Kunjungan</th>
-                                        <th style="width:10%">Lokasi</th>
-                                        <!-- <th style="width:18%">Keterangan</th> -->
-                                        <th style="width:10%">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($destinasi_wisata as $i => $d)
-                                    <tr>
-                                        <td>{{$i+1}}</td>
-                                        <td><img src="{{ $d->thumbnail_destinasi_wisata }}" alt="{{ $d->thumbnail_destinasi_wisata }}" class="img-fluid" width="100px"></td>
-                                        <td>{{$d->kategori->nama_kategori_wisata}}</td>
-                                        <td>{{$d->nama_wisata}}</td>
-                                        <td>{{number_format($d->harga_tiket_dewasa)}}</td>
-                                        <td>{{number_format($d->harga_tiket_anak)}}</td>
-                                        <td>{{number_format($d->biaya_parkir_roda_2)}}</td>
-                                        <td>{{number_format($d->biaya_parkir_roda_4)}}</td>
-                                        <td>{{number_format($d->jumlah_pengunjung->jumlah_kunjungan ?? 0)}}</td>
-                                        <td>
-                                            <iframe width="300" height="170" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=<?= $d->lat; ?>,<?= $d->long; ?>&hl=in&z=14&amp;output=embed"></iframe>
-                                        </td>
-                                        <td>
-                                            <button onclick="visitorModal({{ $d->id }})" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-glasses"></i></button>
-                                            <a href="{{ route('admin.destinasi-wisata.detail', $d->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
-                                            <a href="{{ route('admin.destinasi-wisata.edit', $d->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
-                                            <button onclick="hapus('<?= $d->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-
+                            <div class="table-responsive">
+                                <table id="table1" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:2%">No</th>
+                                            <th style="width:10%">Thumbnail</th>
+                                            <th style="width:10%">Kategori</th>
+                                            <th style="width:10%">Nama Wisata</th>
+                                            <th style="width:10%">HTM Dewasa</th>
+                                            <th style="width:10%">HTM Anak</th>
+                                            <th style="width:10%">Biaya Parkir Roda 2</th>
+                                            <th style="width:10%">Biaya Parkir Roda 4</th>
+                                            <th style="width:10%">Jumlah Kunjungan</th>
+                                            <th style="width:10%">Lokasi</th>
+                                            <!-- <th style="width:18%">Keterangan</th> -->
+                                            <th style="width:10%">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($destinasi_wisata as $i => $d)
+                                        <tr>
+                                            <td>{{$i+1}}</td>
+                                            <td><img src="{{ $d->thumbnail_destinasi_wisata }}" alt="{{ $d->thumbnail_destinasi_wisata }}" class="img-fluid" width="100px"></td>
+                                            <td>{{$d->kategori->nama_kategori_wisata}}</td>
+                                            <td>{{$d->nama_wisata}}</td>
+                                            <td>{{number_format($d->harga_tiket_dewasa)}}</td>
+                                            <td>{{number_format($d->harga_tiket_anak)}}</td>
+                                            <td>{{number_format($d->biaya_parkir_roda_2)}}</td>
+                                            <td>{{number_format($d->biaya_parkir_roda_4)}}</td>
+                                            <td>{{number_format($d->jumlah_pengunjung->jumlah_kunjungan ?? 0)}}</td>
+                                            <td>
+                                                <iframe width="300" height="170" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=<?= $d->lat; ?>,<?= $d->long; ?>&hl=in&z=14&amp;output=embed"></iframe>
+                                            </td>
+                                            <td>
+                                                <button onclick="visitorModal({{ $d->id }})" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-glasses"></i></button>
+                                                <a href="{{ route('admin.destinasi-wisata.detail', $d->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
+                                                <a href="{{ route('admin.destinasi-wisata.edit', $d->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
+                                                <button onclick="hapus('<?= $d->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -29,42 +29,44 @@
                             <a href="{{ route('admin.akomodasi.add') }}" class="btn btn-primary" >Tambah Data</a>
                         </div>
                         <div class="card-body">
-                            <table id="table1" class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th style="width:2%">No</th>
-                                        <th style="width:10%">Thumbnail</th>
-                                        <th style="width:10%">Kategori</th>
-                                        <th style="width:10%">Akomodasi</th>
-                                        <th style="width:10%">Kelas</th>
-                                        <th style="width:10%">Harga</th>
-                                        <th style="width:10%">lokasi</th>
-                                        <!-- <th style="width:18%">Keterangan</th> -->
-                                        <th style="width:10%">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($akomodasi as $i => $a)
-                                    <tr>
-                                        <td>{{$i+1}}</td>
-                                        <td><img src="{{ $a->thumbnail_akomodasi }}" alt="{{ $a->thumbnail_akomodasi }}" class="img-fluid" width="100px"></td>
-                                        <td>{{$a->kategori->nama_kategori_akomodasi}}</td>
-                                        <td>{{$a->nama_akomodasi}}</td>
-                                        <td>{{$a->kelas}}</td>
-                                        <td>Rp.{{number_format($a->harga)}}</td>
-                                        <td>
-                                            <iframe width="300" height="170" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=<?= $a->lat; ?>,<?= $a->long; ?>&hl=in&z=14&amp;output=embed"></iframe>
-                                        </td>
-                                        <td>
-                                            <button onclick="visitorModal({{ $a->id }})" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-glasses"></i></button>
-                                            <a href="{{ route('admin.akomodasi.detail', $a->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
-                                            <button onclick="location.href='<?= route('admin.akomodasi.edit-page', $a->id) ?>'" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></button>
-                                            <button onclick="hapus('<?= $a->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                            <div class="table-responsive">
+                                <table id="table1" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:2%">No</th>
+                                            <th style="width:10%">Thumbnail</th>
+                                            <th style="width:10%">Kategori</th>
+                                            <th style="width:10%">Akomodasi</th>
+                                            <th style="width:10%">Kelas</th>
+                                            <th style="width:10%">Harga</th>
+                                            <th style="width:10%">lokasi</th>
+                                            <!-- <th style="width:18%">Keterangan</th> -->
+                                            <th style="width:10%">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($akomodasi as $i => $a)
+                                        <tr>
+                                            <td>{{$i+1}}</td>
+                                            <td><img src="{{ $a->thumbnail_akomodasi }}" alt="{{ $a->thumbnail_akomodasi }}" class="img-fluid" width="100px"></td>
+                                            <td>{{$a->kategori->nama_kategori_akomodasi}}</td>
+                                            <td>{{$a->nama_akomodasi}}</td>
+                                            <td>{{$a->kelas}}</td>
+                                            <td>Rp.{{number_format($a->harga)}}</td>
+                                            <td>
+                                                <iframe width="300" height="170" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=<?= $a->lat; ?>,<?= $a->long; ?>&hl=in&z=14&amp;output=embed"></iframe>
+                                            </td>
+                                            <td>
+                                                <button onclick="visitorModal({{ $a->id }})" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-glasses"></i></button>
+                                                <a href="{{ route('admin.akomodasi.detail', $a->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
+                                                <button onclick="location.href='<?= route('admin.akomodasi.edit-page', $a->id) ?>'" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></button>
+                                                <button onclick="hapus('<?= $a->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
 
                         </div>
                     </div>

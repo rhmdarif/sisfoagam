@@ -71,7 +71,7 @@ class EventParawisataController extends Controller
             'slug_event_parawisata' => rand(10000,99999).'-'.Str::slug($request->jenis_event)
         ]);
 
-        return back()->with("success", "Event Parawisata berhasil ditambahkan");
+        return redirect()->route('admin.event-parawisata.index')->with("success", "Event Parawisata berhasil ditambahkan");
     }
 
     /**
@@ -141,7 +141,7 @@ class EventParawisataController extends Controller
 
         $event_parawisatum->update($update);
 
-        return back()->with("success", "Event Parawisata berhasil diperbaharui");
+        return redirect()->route('admin.event-parawisata.index')->with("success", "Event Parawisata berhasil diperbaharui");
     }
 
     /**

@@ -234,14 +234,14 @@ class AkomodasiController extends Controller
             if($r->ajax()) {
                 return response()->json(['pesan' => 'berhasil']);
             } else {
-                return back()->with("success", "berhasil");
+                return redirect()->route('admin.akomodasi.home')->with("success", "berhasil");
             }
         }else{
 
             if($r->ajax()) {
                 return response()->json(['pesan' => 'error']);
             } else {
-                return back()->with("error", "error");
+                return redirect()->route('admin.akomodasi.home')->with("error", "error");
             }
 
         }

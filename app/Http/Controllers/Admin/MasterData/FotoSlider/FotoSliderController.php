@@ -52,6 +52,6 @@ class FotoSliderController extends Controller
             'description' => $request->deskripsi,
         ]);
 
-        return back()->with("success", "Slide berhasil diubah");
+        return redirect()->route('admin.foto-slider.index')->with("success", "Slide berhasil diubah");
     }
 }

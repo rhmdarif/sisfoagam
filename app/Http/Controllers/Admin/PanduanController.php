@@ -57,7 +57,7 @@ class PanduanController extends Controller
             'body' => $request->body
         ]);
 
-        return back()->with("success", "Panduan berhasil ditambahkan");
+        return redirect()->route('admin.galeri-parawisata.index')->with("success", "Panduan berhasil ditambahkan");
     }
 
     /**
@@ -112,7 +112,7 @@ class PanduanController extends Controller
             'body' => $request->body
         ]);
 
-        return back()->with("success", "Panduan berhasil ditambahkan");
+        return redirect()->route('admin.galeri-parawisata.index')->with("success", "Panduan berhasil ditambahkan");
     }
 
     /**

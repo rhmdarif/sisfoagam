@@ -68,7 +68,7 @@ class BeritaParawisataController extends Controller
         ]);
 
 
-        return back()->with("success", "Berita Parawisata berhasil ditambahkan");
+        return redirect()->route('admin.berita-parawisata.index')->with("success", "Berita Parawisata berhasil ditambahkan");
     }
 
     /**
@@ -137,7 +137,7 @@ class BeritaParawisataController extends Controller
         $berita_parawisatum->update($update);
 
 
-        return back()->with("success", "Berita Parawisata berhasil ditambahkan");
+        return redirect()->route('admin.berita-parawisata.index')->with("success", "Berita Parawisata berhasil ditambahkan");
     }
 
     /**

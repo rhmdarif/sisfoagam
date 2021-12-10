@@ -153,7 +153,7 @@ class DestinasiWisataController extends Controller
             DB::table('destinasi_wisata_foto_vidio_wisata')->insert($videos);
         }
 
-        return back()->with("success", "Destinasi berhasil ditambahkan");
+        return redirect()->route('admin.destinasi-wisata.index')->with("success", "Destinasi berhasil ditambahkan");
     }
 
     /**
@@ -330,7 +330,7 @@ class DestinasiWisataController extends Controller
 
         GaleriParawisata::whereIn("file", $rmv_from_galery)->delete();
 
-        return back()->with("success", "Destinasi berhasil ditambahkan");
+        return redirect()->route('admin.destinasi-wisata.index')->with("success", "Destinasi berhasil ditambahkan");
     }
 
     /**
