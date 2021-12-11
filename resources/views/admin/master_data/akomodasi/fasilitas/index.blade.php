@@ -167,6 +167,7 @@
                     timeout: 800000,
                     success: function(hasil) {
                         console.log("SUCCESS : ", hasil);
+                        location.reload();
                     },
                     error: function(e) {
                         console.log("ERROR : ", e);

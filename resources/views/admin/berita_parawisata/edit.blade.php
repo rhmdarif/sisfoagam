@@ -68,7 +68,7 @@
                                             <label for="">Thumbnail</label>
 
                                             <div style="margin-top:30px" id="tampilFoto">
-                                                <img src="{{ storage_url($berita_parawisatum->foto) }}" width="60%"/>
+                                                <img src="{{ $berita_parawisatum->foto }}" width="60%"/>
                                             </div>
 
                                             <input type="file" name="thumbnail" id="thumbnail"

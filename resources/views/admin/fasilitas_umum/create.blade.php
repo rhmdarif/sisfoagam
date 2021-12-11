@@ -77,11 +77,11 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <label for="">Latitude</label>
-                                                <input type="text" id="lat" class="form-control" onkeyup="showLocation()">
+                                                <input type="text" name="lat" id="lat" class="form-control" onkeyup="showLocation()">
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="">Longtitude</label>
-                                                <input type="text" id="lng" class="form-control" onkeyup="showLocation()">
+                                                <input type="text" name="lng" id="lng" class="form-control" onkeyup="showLocation()">
                                             </div>
                                         </div>
                                     </div>

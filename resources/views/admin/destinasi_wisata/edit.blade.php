@@ -125,11 +125,11 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <label for="">Latitude</label>
-                                                <input type="text" id="lat" class="form-control" value="{{ $destinasi_wisata->lat }}" onkeyup="showLocation()">
+                                                <input type="text" name="lat" id="lat" class="form-control" value="{{ $destinasi_wisata->lat }}" onkeyup="showLocation()">
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="">Longtitude</label>
-                                                <input type="text" id="lng" class="form-control" value="{{ $destinasi_wisata->long }}" onkeyup="showLocation()">
+                                                <input type="text" name="lng" id="lng" class="form-control" value="{{ $destinasi_wisata->long }}" onkeyup="showLocation()">
                                             </div>
                                         </div>
                                     </div>
