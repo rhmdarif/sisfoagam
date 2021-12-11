@@ -115,6 +115,14 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ route('admin.master-data.video.index') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>
+                                    Video Home
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('admin.master-data.panduan.index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>

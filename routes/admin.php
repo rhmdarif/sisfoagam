@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin;
+use App\Http\Controllers\Api;
 use Illuminate\Support\Facades\Route;
 
 
@@ -38,6 +39,11 @@ Route::prefix('admin')->as("admin.")->group(function () {
 
             Route::prefix("ekonomi-kreatif")->as("ekonomi-kreatif.")->group(function () {
                 Route::resource('kategori', Admin\MasterData\EkonomiKreatif\KategoriController::class);
+            });
+
+            Route::prefix("video")->as("video.")->group(function () {
+                Route::get('/', [Api\VidioHomeController::class, 'index'])->name('index');
+                Route::post('/', [Api\VidioHomeController::class, 'change']);
             });
 
             Route::resource('panduan', Admin\PanduanController::class);

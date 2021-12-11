@@ -13,6 +13,12 @@ class VidioHomeController extends Controller
         return (file_exists(public_path("vidio.txt")))? ['status' => true, 'url' => file_get_contents(public_path("vidio.txt"))] : ['status' => false, 'url' => "Vidio tidak tersedia"];
     }
 
+    public function index()
+    {
+        $url = (file_exists(public_path("vidio.txt")))? file_get_contents(public_path("vidio.txt")) : '';
+        return view('admin.master_data.vidio_banner.index', compact('url'));
+    }
+
     public function change(Request $request)
     {
         if($request->has('url')) {
@@ -28,6 +34,6 @@ class VidioHomeController extends Controller
 
             file_put_contents(public_path('vidio.txt'), "https://www.youtube.com/embed/".$code);
         }
-        return ['status' => true, 'pesan' => 'success'];
+        return back()->with('success', "Berhasil diubah");
     }
 }
