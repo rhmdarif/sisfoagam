@@ -164,6 +164,7 @@
                             icon: 'success',
                             position: 'top-right'
                         });
+                        location.reload();
                     },
                     error: function (e) {
                         console.log("ERROR : ", e);

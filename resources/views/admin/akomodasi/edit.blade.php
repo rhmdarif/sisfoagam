@@ -96,11 +96,11 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <label for="">Latitude</label>
-                                                <input type="text" id="lat" class="form-control" value="{{ $data->lat }}" onkeyup="showLocation()">
+                                                <input type="text" id="lat" name="lat" class="form-control" value="{{ $data->lat }}" onkeyup="showLocation()">
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="">Longtitude</label>
-                                                <input type="text" id="lng" class="form-control" value="{{ $data->long }}" onkeyup="showLocation()">
+                                                <input type="text" id="lng" name="lng" class="form-control" value="{{ $data->long }}" onkeyup="showLocation()">
                                             </div>
                                         </div>
                                     </div>
@@ -431,7 +431,7 @@
                 contentType: false,
                 dataType: 'JSON',
                 success: function(data) {
-                    // location.reload();
+                    location.reload();
                     alert("Fasilitas berhasil ditambahkan")
                     $('#tambah-fasilitas').modal('hide')
                     console.log(data);
