@@ -354,9 +354,9 @@ class AkomodasiController extends Controller
         // return $visitors;
 
         view()->share('visitors', $visitors);
-        $pdf_doc = PDF::loadView('admin.destinasi_wisata.report', $visitors);
+        $pdf_doc = PDF::loadView('admin.akomodasi.report', $visitors);
 
         return $pdf_doc->download('pdf.pdf');
-        // view('admin.destinasi_wisata.report', compact('visitors'));
+        // view('admin.akomodasi.report', compact('visitors'));
     }
 }
