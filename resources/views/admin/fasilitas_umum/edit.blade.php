@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'ekonomi_kreatif')
+@section('title', 'Edit Fasilitas Umum')
 @push('css')
     <!-- Select2 -->
     <link rel="stylesheet" href="{{ url('admin/assets') }}/plugins/select2/css/select2.min.css">
@@ -14,12 +14,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Edit Ekonomi Kreatif</h1>
+                    <h1 class="m-0">Edit Fasilitas Umum</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Edit Ekonomi Kreatif</li>
+                        <li class="breadcrumb-item active">Edit Fasilitas Umum</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->

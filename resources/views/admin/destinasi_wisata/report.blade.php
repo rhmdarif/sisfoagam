@@ -21,8 +21,8 @@
                     <img src="{{ url('admin/assets') }}/bg/kab-agam.png" alt="" width="50px">
                 </th>
                 <th class="text-center">
-                    <h6>REKAP DATA PENGUNJUNG AKOMODASI</h6>
-                    <h6>DINAS PARAWISATA KAB. AGAM</h6>
+                    <h6>REKAP DATA PENGUNJUNG WISATA</h6>
+                    <h6>DINAS PARIWISATA KAB. AGAM</h6>
 
                 </th>
                 <th class="text-center" width="20%"></th>

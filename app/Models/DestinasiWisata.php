@@ -37,6 +37,11 @@ class DestinasiWisata extends Model
         return;
     }
 
+    public function getTotalPengunjungAttribute()
+    {
+        return DestinasiWisataVisitor::selectRaw('SUM(visitor) as total')->where('destinasi_wisata_id', $this->id)->first()->total ?? 0;
+    }
+
     public function getRatingAttribute()
     {
         return (double) DB::table('destinasi_wisata_review_wisata')->selectRaw("AVG(tingkat_kepuasan) as rating")->first()->rating;

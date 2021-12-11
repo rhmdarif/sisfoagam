@@ -58,7 +58,7 @@
                                             <td>{{number_format($d->harga_tiket_anak)}}</td>
                                             <td>{{number_format($d->biaya_parkir_roda_2)}}</td>
                                             <td>{{number_format($d->biaya_parkir_roda_4)}}</td>
-                                            <td>{{number_format($d->jumlah_pengunjung->jumlah_kunjungan ?? 0)}}</td>
+                                            <td>{{number_format($d->total_pengunjung ?? 0)}}</td>
                                             <td>
                                                 <iframe width="300" height="170" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=<?= $d->lat; ?>,<?= $d->long; ?>&hl=in&z=14&amp;output=embed"></iframe>
                                             </td>

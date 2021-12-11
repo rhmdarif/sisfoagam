@@ -112,8 +112,8 @@ class KategoriController extends Controller
 
         $slug = Str::slug($request->nama_kategori);
         $update =   [
-                        'nama_kategori_wisata' => $request->nama_kategori,
-                        'slug_kategori_wisata' => $slug
+                        'nama_kategori_akomodasi' => $request->nama_kategori,
+                        'slug_kategori_akomodasi' => $slug
                     ];
         if($request->hasFile('icon_kategori')) {
 

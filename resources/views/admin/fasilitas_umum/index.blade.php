@@ -1,17 +1,17 @@
 @extends('admin.layouts.app')
-@section('title', 'Akomodasi')
+@section('title', 'Fasilitas Umum')
 @section('content')
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Ekonomi Kreatif</h1>
+                    <h1 class="m-0">Fasilitas Umum</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Ekonomi Kreatif</li>
+                        <li class="breadcrumb-item active">Fasilitas Umum</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -53,8 +53,6 @@
                                                 <iframe width="300" height="170" id="map" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=<?= $d->lat; ?>,<?= $d->long; ?>&hl=in&z=14&amp;output=embed"></iframe>
                                             </td>
                                             <td>
-                                                <button style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>
-                                                <button onclick="fasilitas('<?= $d->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-plus"></i></button>
                                                 <a href="{{ route('admin.fasilitas-umum.edit', $d->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
                                                 <button onclick="hapus('<?= $d->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
                                             </td>
