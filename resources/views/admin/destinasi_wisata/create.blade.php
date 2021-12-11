@@ -97,8 +97,6 @@
                                                     <label for="">Thumbnail</label>
                                                     <input type="file" name="thumbnail" id="thumbnail"
                                                         onchange="return tampilfoto()" class="form-control">
-                                                    <input type="hidden" name="lat" id="lat" class="form-control">
-                                                    <input type="hidden" name="lng" id="lng" class="form-control">
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="">Fasilitas</label>
@@ -121,6 +119,16 @@
                                         <div class="form-group">
                                             <label for="">Lokasi</label>
                                             <div style="height: 337px;" id="map"></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="">Latitude</label>
+                                                <input type="text" id="lat" class="form-control" onkeyup="showLocation()">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="">Longtitude</label>
+                                                <input type="text" id="lng" class="form-control" onkeyup="showLocation()">
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -510,17 +518,11 @@
         }
 
         function showLocation() {
-
-            // pas lokasi basobok, jalankan kode yg ado didalam function ko
-            var geolocation = navigator.geolocation.getCurrentPosition(function(pos) {
-                // kode dibawah ko dijalankan pas posisi gps basobok
-                var lat = pos.coords.latitude; // ambiak lat gps
-                var lng = pos.coords.longitude; // ambiak lng gps
+                lat = $('#lat').val()
+                lng = $('#lng').val();
                 map.addControl(controlSearch);
                 map.setView([lat, lng]); // ubah tampilan posisi peta ke posisi gps
                 marker.setLatLng([lat, lng]); // pindahkan posisi marker ke posisi gps
-            });
-
         }
 
         map.on('click', klik);

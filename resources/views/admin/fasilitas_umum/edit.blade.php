@@ -51,9 +51,6 @@
                                                 <div class="form-group">
                                                     <label for="">Keterangan</label>
                                                     <textarea name="keterangan" id="keterangan" class="note">{{ $fasilitas_umum->keterangan }}</textarea>
-
-                                                    <input type="hidden" name="lat" id="lat" class="form-control" value="{{ $fasilitas_umum->lat }}">
-                                                    <input type="hidden" name="lng" id="lng" class="form-control" value="{{ $fasilitas_umum->long }}">
                                                 </div>
                                             </div>
                                         </div>
@@ -74,6 +71,16 @@
                                         <div class="form-group">
                                             <label for="">Lokasi</label>
                                             <div style="height: 337px;" id="map"></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="">Latitude</label>
+                                                <input type="text" id="lat" class="form-control" value="{{ $fasilitas_umum->lat }}" onkeyup="showLocation()">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="">Longtitude</label>
+                                                <input type="text" id="lng" class="form-control" value="{{ $fasilitas_umum->long }}" onkeyup="showLocation()">
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-12 mb-2">
@@ -261,17 +268,11 @@
         }
 
         function showLocation() {
-
-            // pas lokasi basobok, jalankan kode yg ado didalam function ko
-            var geolocation = navigator.geolocation.getCurrentPosition(function(pos) {
-                // kode dibawah ko dijalankan pas posisi gps basobok
-                var lat =$('#lat').val(); // ambiak lat gps
-                var lng = $('#lng').val(); // ambiak lng gps
+                lat = $('#lat').val()
+                lng = $('#lng').val();
                 map.addControl(controlSearch);
                 map.setView([lat, lng]); // ubah tampilan posisi peta ke posisi gps
                 marker.setLatLng([lat, lng]); // pindahkan posisi marker ke posisi gps
-            });
-
         }
 
         map.on('click', klik);
