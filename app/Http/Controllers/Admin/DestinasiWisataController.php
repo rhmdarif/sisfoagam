@@ -429,13 +429,13 @@ class DestinasiWisataController extends Controller
     {
         $tahun = $request->tahun ?? date('Y');
 
-        $visitors = DestinasiWisataVisitor::where('periode', 'like', $tahun.'%')->orderBy('periode', 'asc')->get()->groupBy('periode');
+        $visitors = DestinasiWisataVisitor::where('periode', 'like', $tahun.'%')->whereRaw("(SELECT COUNT(id) FROM destinasi_wisata WHERE id=destinasi_wisata_visitors.destinasi_wisata_id) > 0")->orderBy('periode', 'asc')->get()->groupBy('periode');
         // return $visitors;
 
         view()->share('visitors', $visitors);
         $pdf_doc = PDF::loadView('admin.destinasi_wisata.report', $visitors);
 
-        return $pdf_doc->download('pdf.pdf');
+        return $pdf_doc->download('Report_Destinasi_Wisata_Th_'.$tahun.'.pdf');
         // view('admin.destinasi_wisata.report', compact('visitors'));
     }
 }

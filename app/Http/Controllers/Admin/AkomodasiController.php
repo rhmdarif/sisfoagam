@@ -350,13 +350,13 @@ class AkomodasiController extends Controller
     {
         $tahun = $request->tahun ?? date('Y');
 
-        $visitors = AkomodasiVisitor::where('periode', 'like', $tahun.'%')->orderBy('periode', 'asc')->get()->groupBy('periode');
+        $visitors = AkomodasiVisitor::where('periode', 'like', $tahun.'%')->whereRaw("(SELECT COUNT(id) FROM akomodasi WHERE id=akomodasi_visitors.akomodasi_id) > 0")->orderBy('periode', 'asc')->get()->groupBy('periode');
         // return $visitors;
 
         view()->share('visitors', $visitors);
         $pdf_doc = PDF::loadView('admin.akomodasi.report', $visitors);
 
-        return $pdf_doc->download('pdf.pdf');
+        return $pdf_doc->download('Report_Akomodasi_Th_'.$tahun.'.pdf');
         // view('admin.akomodasi.report', compact('visitors'));
     }
 }
