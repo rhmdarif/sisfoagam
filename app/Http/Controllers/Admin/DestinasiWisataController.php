@@ -435,7 +435,7 @@ class DestinasiWisataController extends Controller
         view()->share('visitors', $visitors);
         $pdf_doc = PDF::loadView('admin.destinasi_wisata.report', $visitors);
 
-        return $pdf_doc->download('pdf.pdf');
+        return $pdf_doc->download('Report_Destinasi_Wisata_Th_'.$tahun.'.pdf');
         // view('admin.destinasi_wisata.report', compact('visitors'));
     }
 }
