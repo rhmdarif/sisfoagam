@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Akomodasi')
+@section('title', 'Galeri Parawisata')
 @push('css')
     <link rel="stylesheet" href="{{ url('/') }}/admin/assets/plugins/lightbox2/css/lightbox.css">
 @endpush

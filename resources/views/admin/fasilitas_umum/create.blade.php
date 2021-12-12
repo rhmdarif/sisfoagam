@@ -52,9 +52,6 @@
                                                 <div class="form-group">
                                                     <label for="">Keterangan</label>
                                                     <textarea name="keterangan" id="keterangan" class="note"></textarea>
-
-                                                    <input type="hidden" name="lat" id="lat" class="form-control">
-                                                    <input type="hidden" name="lng" id="lng" class="form-control">
                                                 </div>
                                             </div>
                                         </div>

@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Akomodasi')
+@section('title', 'Event Parawisata')
 @section('content')
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -53,7 +53,6 @@
                                                 <img src="{{ $d->foto }}" alt="{{ $d->jenis_event }}" class="img-fluid" width="100px">
                                             </td>
                                             <td>
-                                                <button style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>
                                                 <a href="{{ route('admin.event-parawisata.edit', $d->id) }}" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
                                                 <button onclick="hapus('<?= $d->id ?>')" style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
                                             </td>
