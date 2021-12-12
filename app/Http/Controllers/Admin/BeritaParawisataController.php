@@ -156,7 +156,7 @@ class BeritaParawisataController extends Controller
     public function detail($id)
     {
 
-        $data['berita_parawisata'] = DB::table('berita_parawisata')->get();
+        $data['berita_parawisata'] = DB::table('berita_parawisata')->where('id', $id)->first();
 
         return view('admin.berita_parawisata.detail',$data);
 
