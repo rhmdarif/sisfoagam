@@ -117,4 +117,4 @@ Route::get("vidio", [VidioHomeController::class, 'toClient']);
 Route::any("change-vidio", [VidioHomeController::class, 'change']);
 
 
-Route::get('banner/{kategori}', [BannerController::class, 'toClient']);
+Route::get('banner/{kategori}', [BannerController::class, 'toClient'])->middleware(['banner.verif']);

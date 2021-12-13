@@ -16,19 +16,20 @@ class BannerVerify
      */
     public function handle(Request $request, Closure $next)
     {
-        $routeName = $request->route()->getRouteName();
+        $routeName = $request->route()->getName();
         $kategori = $request->route()->parameter('kategori');
         if(in_array($routeName, ['admin.master-data.banner.index','admin.master-data.banner.store'])) {
-            if(!array($kategori, ['akomodasi'])) {
-                return redirect()->back();
-            } else {
+            // return response($kategori);
+            if(in_array($kategori, ['akomodasi', 'destinasi_wisata', 'ekonomi_kreatif', 'event', 'berita', 'fasilitas_umum'])) {
                 return $next($request);
+            } else {
+                return redirect()->back();
             }
         } else {
-            if(!array($kategori, ['akomodasi'])) {
-                return response()->json(['status' => false, 'msg' => "kategori tidak tersedia"]);
-            } else {
+            if(in_array($kategori, ['akomodasi', 'destinasi_wisata', 'ekonomi_kreatif', 'event', 'berita', 'fasilitas_umum'])) {
                 return $next($request);
+            } else {
+                return response()->json(['status' => false, 'msg' => "kategori tidak tersedia"]);
             }
         }
     }
