@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\EkonomiKreatifController;
 use App\Http\Controllers\Api\DestinasiWisataController;
 use App\Http\Controllers\Api\EventParawisataController;
 use App\Http\Controllers\Api\BeritaParawisataController;
+use App\Http\Controllers\Admin\MasterData\BannerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -114,3 +115,6 @@ Route::post("visitor-count", [VisitorController::class, 'count']);
 Route::get("slider", [GaleryController::class, 'slider']);
 Route::get("vidio", [VidioHomeController::class, 'toClient']);
 Route::any("change-vidio", [VidioHomeController::class, 'change']);
+
+
+Route::get('banner/{kategori}', [BannerController::class, 'toClient']);

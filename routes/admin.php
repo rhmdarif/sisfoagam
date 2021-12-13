@@ -47,6 +47,12 @@ Route::prefix('admin')->as("admin.")->group(function () {
             });
 
             Route::resource('panduan', Admin\PanduanController::class);
+
+
+            Route::prefix("banner")->as("banner.")->middleware(['banner.verif'])->group(function () {
+                Route::get('{kategori}', [Admin\MasterData\BannerController::class, 'index'])->name('index');
+                Route::post('{kategori}', [Admin\MasterData\BannerController::class, 'change']);
+            });
         });
 
         Route::get('panduan-aplikasi/{slug?}', [Admin\PanduanController::class, "show"])->name('panduan.show');
