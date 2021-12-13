@@ -51,7 +51,7 @@ Route::prefix('admin')->as("admin.")->group(function () {
 
             Route::prefix("banner")->as("banner.")->middleware(['banner.verif'])->group(function () {
                 Route::get('{kategori}', [Admin\MasterData\BannerController::class, 'index'])->name('index');
-                Route::post('{kategori}', [Admin\MasterData\BannerController::class, 'change']);
+                Route::post('{kategori}', [Admin\MasterData\BannerController::class, 'change'])->name('store');
             });
         });
 
