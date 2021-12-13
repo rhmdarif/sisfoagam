@@ -56,12 +56,12 @@ class BannerController extends Controller
         return view('admin.master_data.banner.index', compact('file', 'kategori'));
     }
 
-    public function change(Request $request)
+    public function change($kategori, Request $request)
     {
         if($request->hasFile('photo')) {
             $file_file = $request->file("photo");
-            $file_location = $file_file->storeAs("public/banner", 'akomodasi.'.$file_file->getClientOriginalExtension());
-            SettingMedia::updateOrCreate(['code' => 'akomodasi'], ['url' => storage_url(substr($file_location, 7))]);
+            $file_location = $file_file->storeAs("public/banner", $kategori.'.'.$file_file->getClientOriginalExtension());
+            SettingMedia::updateOrCreate(['code' => $kategori], ['url' => storage_url(substr($file_location, 7))]);
         }
 
         return back()->with('success', "Berhasil diubah");
