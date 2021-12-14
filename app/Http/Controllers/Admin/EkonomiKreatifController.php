@@ -216,14 +216,14 @@ class EkonomiKreatifController extends Controller
 
         $rmv_from_galery = [];
         if ($request->filled('old')) {
-            $not_inc = DB::table('foto_video_ekonomi_kreatif')->where("kategori", "foto")->where("destinasi_wisata_id", $ekonomi_kreatif->id)->whereNotIn("id", $request->old)->get();
+            $not_inc = DB::table('foto_video_ekonomi_kreatif')->where("kategori", "foto")->where("ekonomi_kreatif_id", $ekonomi_kreatif->id)->whereNotIn("id", $request->old)->get();
             foreach ($not_inc as $key => $value) {
                 list($protocol, $blank, $domain, $path, $dir, $file) = explode("/", $value->file);
                 Storage::disk('public')->delete(implode('/', [$dir, $file]));
                 $rmv_from_galery[] = $value->file;
             }
 
-            DB::table('foto_video_ekonomi_kreatif')->where("destinasi_wisata_id", $ekonomi_kreatif->id)->whereNotIn("id", $request->old)->delete();
+            DB::table('foto_video_ekonomi_kreatif')->where("ekonomi_kreatif_id", $ekonomi_kreatif->id)->whereNotIn("id", $request->old)->delete();
         }
 
         if ($request->hasfile('photos')) {
@@ -249,7 +249,7 @@ class EkonomiKreatifController extends Controller
                 }
             }
             DB::table('foto_video_ekonomi_kreatif')->insert($photos);
-            GaleriParawisata::insert($$ins_to_galery);
+            GaleriParawisata::insert($ins_to_galery);
         }
 
         if ($request->filled("gallery_video")) {
