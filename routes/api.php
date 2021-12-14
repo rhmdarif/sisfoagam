@@ -34,7 +34,7 @@ use App\Http\Controllers\Admin\MasterData\BannerController;
 // header('Access-Control-Allow-Methods: GET, POST, DELETE, PUT, OPTIONS, HEAD, PATCH');
 // header('Access-Control-Allow-Headers: Authorization,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Set-Cookie');
 // header('Access-Control-Allow-Credentials: true');
-// Route::middleware(['cors'])->group(function () {
+Route::middleware(['cors'])->group(function () {
     // AKOMODASI
     Route::get('/akomodasi', [AkomodasiController::class, 'getAkomodasi']);
     Route::get('/akomodasi/jarak', [AkomodasiController::class, 'getAkomodasiSortByJarak']);
@@ -123,4 +123,4 @@ use App\Http\Controllers\Admin\MasterData\BannerController;
 
     Route::get('banner/{kategori}', [BannerController::class, 'toClient'])->middleware(['banner.verif']);
 
-// });
+});
