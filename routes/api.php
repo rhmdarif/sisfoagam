@@ -113,7 +113,7 @@ use App\Http\Controllers\Admin\MasterData\BannerController;
     });
 
     // VISITOR COUNT
-    Route::post("visitor-count", [VisitorController::class, 'count']);
+    Route::any("visitor-count", [VisitorController::class, 'count']);
 
     // SLIDER
     Route::get("slider", [GaleryController::class, 'slider']);
