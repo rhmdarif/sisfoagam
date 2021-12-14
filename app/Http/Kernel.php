@@ -45,7 +45,7 @@ class Kernel extends HttpKernel
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\Cors::class, // added
+            // \App\Http\Middleware\Cors::class, // added
         ],
     ];
 
@@ -68,5 +68,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'verify.api' => \App\Http\Middleware\VerifyApi::class,
         'banner.verif' => \App\Http\Middleware\BannerVerify::class,
+        'cors'          => \App\Http\Middleware\Cors::class, // added
     ];
 }
