@@ -11,7 +11,13 @@ class BannerController extends Controller
 {
     public function toClient2()
     {
-        return SettingMedia::all();
+        $setting = SettingMedia::all();
+
+        foreach ($setting as $key => $value) {
+            $data[$value->code] = $value->url;
+        }
+
+        return ['status' => true, 'data' => $data];
     }
     public function toClient($kategori)
     {
