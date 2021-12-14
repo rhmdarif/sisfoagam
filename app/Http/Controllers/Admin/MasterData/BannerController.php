@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Storage;
 
 class BannerController extends Controller
 {
+    public function toClient2()
+    {
+        return SettingMedia::all();
+    }
     public function toClient($kategori)
     {
         $media = SettingMedia::where('code', $kategori)->first();

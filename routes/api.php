@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\DestinasiWisataController;
 use App\Http\Controllers\Api\EventParawisataController;
 use App\Http\Controllers\Api\BeritaParawisataController;
 use App\Http\Controllers\Admin\MasterData\BannerController;
+use Illuminate\Support\Facades\Http;
 
 /*
 |--------------------------------------------------------------------------
@@ -121,6 +122,11 @@ Route::middleware(['cors'])->group(function () {
     Route::any("change-vidio", [VidioHomeController::class, 'change']);
 
 
-    Route::get('banner/{kategori}', [BannerController::class, 'toClient'])->middleware(['banner.verif']);
+    Route::get('banner/{kategori}', [BannerController::class, 'toClient']);
+    Route::get('banner', [BannerController::class, 'toClient2']);
 
+
+    Route::get('test', function() {
+        return Http::get("http://admin.agampesonaberagam.com/api/akomodasi")->json();
+    });
 });
