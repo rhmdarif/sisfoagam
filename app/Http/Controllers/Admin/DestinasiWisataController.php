@@ -240,7 +240,7 @@ class DestinasiWisataController extends Controller
             $file_name = rand(100, 333) . "-" . time() . "." . $file_upload->getClientOriginalExtension();
             $file_location = $file_upload->storeAs("public/destinasi_wisata", $file_name);
 
-            list($baseUrl, $path, $dir, $file) = explode("/", $destinasi_wisatum->thumbnail_destinasi_wisata);
+            list($protocol, $blank, $domain, $path, $dir, $file) = explode("/", $destinasi_wisatum->thumbnail_destinasi_wisata);
             Storage::disk('public')->delete(implode('/', [$dir, $file]));
 
             $update['thumbnail_destinasi_wisata'] =  storage_url(substr($file_location, 7));
@@ -262,7 +262,7 @@ class DestinasiWisataController extends Controller
         if ($request->filled('old')) {
             $not_inc = DB::table('destinasi_wisata_foto_vidio_wisata')->where('kategori', 'foto')->where("destinasi_wisata_id", $destinasi_wisatum->id)->whereNotIn("id", $request->old)->get();
             foreach ($not_inc as $key => $value) {
-                list($baseUrl, $path, $dir, $file) = explode("/", $value->file);
+                list($protocol, $blank, $domain, $path, $dir, $file) = explode("/", $value->file);
                 Storage::disk('public')->delete(implode('/', [$dir, $file]));
                 $rmv_from_galery[] = $value->file;
             }
@@ -345,7 +345,7 @@ class DestinasiWisataController extends Controller
     {
         //
 
-        list($baseUrl, $path, $dir, $file) = explode("/", $destinasi_wisatum->thumbnail_destinasi_wisata);
+        list($protocol, $blank, $domain, $path, $dir, $file) = explode("/", $destinasi_wisatum->thumbnail_destinasi_wisata);
         Storage::disk('public')->delete(implode('/', [$dir, $file]));
 
         $rmv_from_galery = [];

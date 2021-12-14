@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\MasterData;
 use App\Models\SettingMedia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class BannerController extends Controller
 {
@@ -60,7 +61,22 @@ class BannerController extends Controller
     {
         if($request->hasFile('photo')) {
             $file_file = $request->file("photo");
-            $file_location = $file_file->storeAs("public/banner", $kategori.'.'.$file_file->getClientOriginalExtension());
+            $file_location = $file_file->storeAs("public/banner", $kategori.'-'.time().'.'.$file_file->getClientOriginalExtension());
+            $setting = SettingMedia::where('code', $kategori)->first();
+
+            if($setting == null) {
+                SettingMedia::create([
+                                        'code' => $kategori,
+                                        'url' => storage_url(substr($file_location, 7))
+                                    ]);
+            } else {
+                list($protocol, $blank, $domain, $path, $dir, $file) = explode("/", $setting->url);
+                Storage::disk('public')->delete(implode('/', [$dir, $file]));
+                $setting->update([
+                    'url' => storage_url(substr($file_location, 7))
+                ]);
+            }
+
             SettingMedia::updateOrCreate(['code' => $kategori], ['url' => storage_url(substr($file_location, 7))]);
         }
 

@@ -124,7 +124,7 @@ class AkomodasiController extends Controller
                     $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
                     $file_location = $file_upload->storeAs("public/thumbnail", $file_name);
 
-                    list($baseUrl, $path, $dir, $file) = explode("/", $datacek->thumbnail_akomodasi);
+                    list($protocol, $blank, $domain, $path, $dir, $file) = explode("/", $datacek->thumbnail_akomodasi);
                     Storage::disk('public')->delete(implode('/', [$dir, $file]));
 
                     $update = array(
@@ -156,7 +156,7 @@ class AkomodasiController extends Controller
                 if($r->filled('old')) {
                     $not_inc = DB::table('foto_video_akomodasi')->where("akomodasi_id", $r->id)->where('kategori', 'foto')->whereNotIn("id", $r->old)->get();
                     foreach ($not_inc as $key => $value) {
-                        list($baseUrl, $path, $dir, $file) = explode("/", $value->file);
+                        list($protocol, $blank, $domain, $path, $dir, $file) = explode("/", $value->file);
                         Storage::disk('public')->delete(implode('/', [$dir, $file]));
                         $rmv_from_galery[] = $value->file;
                     }
@@ -281,7 +281,7 @@ class AkomodasiController extends Controller
     {
         $data = Akomodasi::find($r->id);
 
-        list($baseUrl, $path, $dir, $file) = explode("/", $data->thumbnail_akomodasi);
+        list($protocol, $blank, $domain, $path, $dir, $file) = explode("/", $data->thumbnail_akomodasi);
         Storage::disk('public')->delete(implode('/', [$dir, $file]));
 
         $rmv_from_galery = [];
@@ -343,7 +343,7 @@ class AkomodasiController extends Controller
     public function destroy($id)
     {
         DB::table('review_akomodasi')->where('id',$id)->delete();
-                return Redirect()->back();
+                return redirect()->back();
     }
 
     public function report(Request $request)

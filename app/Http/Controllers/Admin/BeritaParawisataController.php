@@ -128,7 +128,7 @@ class BeritaParawisataController extends Controller
             $file_name = rand(100,333)."-".time().".".$file_upload->getClientOriginalExtension();
             $file_location = $file_upload->storeAs("public/berita_parawisata", $file_name);
 
-            list($baseUrl, $path, $dir, $file) = explode("/", $berita_parawisatum->foto);
+            list($protocol, $blank, $domain, $path, $dir, $file) = explode("/", $berita_parawisatum->foto);
             Storage::disk('public')->delete(implode('/', [$dir, $file]));
 
             $update['foto'] = storage_url(substr($file_location, 7));

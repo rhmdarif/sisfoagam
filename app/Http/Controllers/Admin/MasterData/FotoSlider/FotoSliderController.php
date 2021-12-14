@@ -38,7 +38,7 @@ class FotoSliderController extends Controller
         }
         $foto = Slider::find($id);
 
-        list($baseUrl, $path, $dir, $file) = explode("/", $foto->file);
+        list($protocol, $blank, $domain, $path, $dir, $file) = explode("/", $foto->file);
         if(Storage::disk("public")->exists(implode('/', [$dir, $file]))) {
             Storage::disk('public')->delete(implode('/', [$dir, $file]));
         }
