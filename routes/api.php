@@ -30,8 +30,11 @@ use App\Http\Controllers\Admin\MasterData\BannerController;
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
-
-Route::middleware(['cors'])->group(function () {
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, DELETE, PUT, OPTIONS, HEAD, PATCH');
+header('Access-Control-Allow-Headers: Authorization,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Set-Cookie');
+header('Access-Control-Allow-Credentials: true');
+// Route::middleware(['cors'])->group(function () {
     // AKOMODASI
     Route::get('/akomodasi', [AkomodasiController::class, 'getAkomodasi']);
     Route::get('/akomodasi/jarak', [AkomodasiController::class, 'getAkomodasiSortByJarak']);
@@ -120,4 +123,4 @@ Route::middleware(['cors'])->group(function () {
 
     Route::get('banner/{kategori}', [BannerController::class, 'toClient'])->middleware(['banner.verif']);
 
-});
+// });
