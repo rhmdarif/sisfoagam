@@ -66,6 +66,10 @@
                                             <input type="text" name="harga" id="harga" class="form-control" placeholder="Harga Mulai">
                                         </div>
                                         <div class="form-group">
+                                            <label for="" id="label_harga">Harga Atas</label>
+                                            <input type="text" name="harga_atas" id="harga_atas" class="form-control" placeholder="Harga Atas">
+                                        </div>
+                                        <div class="form-group">
                                             <label for="">Thumbnail</label>
                                             <input type="file" name="thumbnail" id="thumbnail"
                                                 onchange="return tampilfoto()" class="form-control">
@@ -390,6 +394,11 @@
             decimalCharacter: ',',
             digitGroupSeparator: '.',
         });
+        var harga_atas = new AutoNumeric('#harga_atas', {
+            currencySymbol: 'Rp.',
+            decimalCharacter: ',',
+            digitGroupSeparator: '.',
+        });
 
         function tampil() {
             $('#tampilFoto').html(`<img src="../img/noimages.png" width="60%"/>`)
@@ -416,6 +425,7 @@
             form_data.append("kelas", kelas);
             form_data.append("tipe", tipe);
             form_data.append("harga", harga.getNumber());
+            form_data.append("harga_atas", harga_atas.getNumber());
             form_data.append("lat", lat);
             form_data.append("lng", lng);
             form_data.append("keterangan", keterangan);

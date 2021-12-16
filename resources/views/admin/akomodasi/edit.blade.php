@@ -55,8 +55,12 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="">Harga</label>
+                                                    <label for="">Harga Mulai</label>
                                                     <input type="text" name="harga" id="harga" class="form-control" placeholder="Harga" value="{{ $data->harga ?? 0 }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="">Harga Atas</label>
+                                                    <input type="text" name="harga_atas" id="harga_atas" class="form-control" placeholder="Harga Atas" value="{{ $data->harga_atas ?? 0 }}">
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="">Thumbnail</label>
@@ -391,6 +395,12 @@
         }
 
         var harga = new AutoNumeric('#harga', {
+            currencySymbol: 'Rp.',
+            decimalCharacter: ',',
+            digitGroupSeparator: '.',
+        });
+
+        var harga_atas = new AutoNumeric('#harga_atas', {
             currencySymbol: 'Rp.',
             decimalCharacter: ',',
             digitGroupSeparator: '.',

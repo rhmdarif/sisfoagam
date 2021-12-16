@@ -42,6 +42,7 @@ class AkomodasiController extends Controller
             'akomodasi' => 'required|string',
             'kelas' => 'nullable|string',
             'harga' => 'required|string',
+            'harga_atas' => 'required|string',
             'keterangan' => 'nullable|string',
             'lat' => 'nullable',
             'lng' => 'nullable',
@@ -54,6 +55,9 @@ class AkomodasiController extends Controller
         }
         list($harga) = explode(",", $r->harga);
         $harga = preg_replace("/[^0-9]/", '', $harga);
+
+        list($harga_atas) = explode(",", $r->harga_atas);
+        $harga_atas = preg_replace("/[^0-9]/", '', $harga_atas);
 
         // return $r;
         if($r->id == NULL)
@@ -69,6 +73,7 @@ class AkomodasiController extends Controller
                 'nama_akomodasi' => $r->akomodasi,
                 'kelas' => $r->kelas ?? null,
                 'harga' => $harga,
+                'harga_atas' => $harga_atas,
                 'keterangan' => $r->keterangan,
                 'lat' => $r->lat,
                 'long' => $r->lng,
@@ -131,6 +136,7 @@ class AkomodasiController extends Controller
                         'nama_akomodasi' => $r->akomodasi,
                         'kelas' => $r->kelas,
                         'harga' => $harga,
+                        'harga_atas' => $harga_atas,
                         'keterangan' => $r->keterangan,
                         'lat' => $r->lat,
                         'long' => $r->lng,
@@ -143,6 +149,7 @@ class AkomodasiController extends Controller
                         'nama_akomodasi' => $r->akomodasi,
                         'kelas' => $r->kelas,
                         'harga' => $harga,
+                        'harga_atas' => $harga_atas,
                         'keterangan' => $r->keterangan,
                         'lat' => $r->lat,
                         'long' => $r->lng,

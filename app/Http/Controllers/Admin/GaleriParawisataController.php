@@ -42,36 +42,33 @@ class GaleriParawisataController extends Controller
     {
         //
         $validator = Validator::make($request->all(), [
-            'medias.*' => 'required|mimetypes:image/*,video/*,application/x-mpegURL'
+            'thumbnail' => 'nullable|mimetypes:image/*',
+            'kategori' => 'required|in:foto,video',
+            'vidio_url' => 'nullable|string',
+            'keterangan' => 'nullable|string'
         ]);
 
         if($validator->fails()) {
             return back()->with("error", $validator->errors()->first());
         }
 
-        if($request->hasFile('medias')) {
-            foreach ($request->file('medias') as $key => $media) {
-                # code...
-                $name = $key."-".time().'.'.$media->extension();
-                // $photo->move(storage_path('app/public').'/akomodasi/', $name);
-                $location = $media->storeAs("public/galeri_parawisata", $name);
-                $mime = $media->getMimeType();
-                if(preg_match("/image/i", $mime)) {
-                    $kategori = "foto";
-                } else if(preg_match("/image/i", $mime)) {
-                    $kategori = "video";
-                }
+        if($request->hasFile('thumbnail')) {
+            $media = $request->file('thumbnail');
+            $name = time().'-'.$media->getClientOriginalName().'.'.$media->getClientOriginalExtension();
 
-                if(isset($kategori)) {
-                    $photos[] = [
-                        'kategori' => $kategori,
-                        'file' => storage_url(substr($location, 7))
-                    ];
-                }
-            }
-
-            GaleriParawisata::insert($photos);
+            $location = $media->storeAs("public/galeri_parawisata", $name);
+            $code = storage_url(substr($location, 7));
         }
+
+        if($request->filled('vidio_url')) {
+            $code = $request->vidio_url;
+        }
+
+        GaleriParawisata::create([
+            'kategori' => $request->kategori,
+            'file' => $code,
+            'keterangan' => $request->keterangan ?? ""
+        ]);
 
         return redirect()->route('admin.galeri-parawisata.index')->with("success", "Media berhasil diupload");
     }
@@ -85,6 +82,7 @@ class GaleriParawisataController extends Controller
     public function show(GaleriParawisata $galeri_parawisatum)
     {
         //
+        return $galeri_parawisatum;
     }
 
     /**
@@ -108,6 +106,39 @@ class GaleriParawisataController extends Controller
     public function update(Request $request, GaleriParawisata $galeri_parawisatum)
     {
         //
+        // return $request->all();
+        $validator = Validator::make($request->all(), [
+            'thumbnail' => 'nullable|mimetypes:image/*',
+            'kategori' => 'required|in:foto,video',
+            'vidio_url' => 'nullable|string',
+            'keterangan' => 'nullable|string'
+        ]);
+
+        if($validator->fails()) {
+            return back()->with("error", $validator->errors()->first());
+        }
+
+        $update = [
+            'kategori' => $request->kategori,
+            'keterangan' => $request->keterangan ?? ""
+        ];
+
+        if($request->hasFile('thumbnail')) {
+            $media = $request->file('thumbnail');
+            $name = time().'-'.$media->getClientOriginalName().'.'.$media->getClientOriginalExtension();
+
+            $location = $media->storeAs("public/galeri_parawisata", $name);
+            $code = storage_url(substr($location, 7));
+        }
+
+        if($request->filled('vidio_url')) {
+            $code = $request->vidio_url;
+        }
+
+        $update['file'] = $code;
+        $galeri_parawisatum->update($update);
+
+        return redirect()->route('admin.galeri-parawisata.index')->with("success", "Media berhasil diupload");
     }
 
     /**

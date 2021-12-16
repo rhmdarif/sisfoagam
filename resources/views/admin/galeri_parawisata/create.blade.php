@@ -48,6 +48,11 @@
                                     </div>
                                 </div>
 
+                                <div class="form-group">
+                                    <label for="keterangan">Keterangan</label>
+                                    <textarea name="keterangan" id="keterangan" class="form-control" cols="30" rows="10"></textarea>
+                                </div>
+
                                 <button type="submit" class="btn btn-primary">Unggah</button>
                             </form>
                         </div>
