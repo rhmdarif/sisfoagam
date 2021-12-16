@@ -100,6 +100,7 @@ class FasilitasUmumController extends Controller
 
     public function getTempatIbadah()
     {
+        $limit = request()->limit ?? 5;
         $filter = ['masjid', 'mesjid', 'musholla', 'mushola', 'surau', 'gereja'];
         if(request()->has("lat") || request()->has("long")) {
             try {
@@ -117,7 +118,7 @@ class FasilitasUmumController extends Controller
                     + sin ( radians(".request()->lat.") )
                     * sin( radians( fasilitas_umum.lat ) )
                     )
-                )")->paginate(8);
+                )")->limit($limit);
                 if ($data->count() > 0) {
                     $data->makeHidden('fasilitas_umum_id');
                     return response()->json(ApiResponse::Ok($data, 200, "Ok"));
@@ -136,7 +137,7 @@ class FasilitasUmumController extends Controller
                         $query->orwhere('nama_fasilitas_umum', 'like',  '%' . $filter[$i] .'%');
                     }
                 })
-                ->paginate(8);
+                ->limit($limit);
                 if ($data->count() > 0) {
                     $data->makeHidden('fasilitas_umum_id');
                     return response()->json(ApiResponse::Ok($data, 200, "Ok"));
