@@ -9,5 +9,5 @@ class GaleriParawisata extends Model
 {
     use HasFactory;
     protected $table = "galeri_parawisata";
-    protected $fillable = ['kategori', 'file'];
+    protected $fillable = ['kategori', 'file', 'keterangan'];
 }

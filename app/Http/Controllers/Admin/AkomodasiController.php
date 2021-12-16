@@ -6,7 +6,7 @@ use App\Models\Akomodasi;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\AkomodasiVisitor;
-use App\Models\GaleriParawisata;
+// use App\Models\GaleriParawisata;
 use App\Models\FotoVideoAkomodasi;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -94,7 +94,6 @@ class AkomodasiController extends Controller
                         'kategori' => "foto",
                         'file' => storage_url(substr($file_location, 7))
                     ];
-
                 }
                 DB::table('foto_video_akomodasi')->insert($photos);
             }
@@ -113,7 +112,7 @@ class AkomodasiController extends Controller
                 DB::table('foto_video_akomodasi')->insert($videos);
             }
 
-            GaleriParawisata::insert($ins_to_galery);
+            // GaleriParawisata::insert($ins_to_galery);
 
         }else{
             $datacek = DB::table('akomodasi')->where('id', $r->id)->first();
@@ -211,9 +210,9 @@ class AkomodasiController extends Controller
                     DB::table('foto_video_akomodasi')->insert($videos);
                 }
 
-                GaleriParawisata::whereIn("file", $rmv_from_galery)->delete();
+                // GaleriParawisata::whereIn("file", $rmv_from_galery)->delete();
 
-                GaleriParawisata::insert($ins_to_galery);
+                // GaleriParawisata::insert($ins_to_galery);
 
             }
         }
@@ -288,7 +287,7 @@ class AkomodasiController extends Controller
         foreach($data->fotovideo as $k => $f) {
             $rmv_from_galery[] = $f->file;
         }
-        GaleriParawisata::whereIn("file", $rmv_from_galery)->delete();
+        // GaleriParawisata::whereIn("file", $rmv_from_galery)->delete();
 
 
         $hapus = Akomodasi::findOrFail($r->id)->delete();

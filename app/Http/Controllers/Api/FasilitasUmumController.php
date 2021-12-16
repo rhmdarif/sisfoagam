@@ -97,4 +97,55 @@ class FasilitasUmumController extends Controller
             return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
         }
     }
+
+    public function getTempatIbadah()
+    {
+        $filter = ['masjid', 'mesjid', 'musholla', 'mushola', 'surau', 'gereja'];
+        if(request()->has("lat") || request()->has("long")) {
+            try {
+                $data = FasilitasUmum::with(["fotovideo"])->select("fasilitas_umum.*")
+                ->where(function($query) use($filter) {
+                    for ($i = 0; $i < count($filter); $i++){
+                        $query->orwhere('nama_fasilitas_umum', 'like',  '%' . $filter[$i] .'%');
+                    }
+                })
+                ->orderByRaw("(
+                    6371 * acos (
+                    cos ( radians(".request()->lat.") )
+                    * cos( radians( fasilitas_umum.lat ) )
+                    * cos( radians( fasilitas_umum.long ) - radians(".request()->long.") )
+                    + sin ( radians(".request()->lat.") )
+                    * sin( radians( fasilitas_umum.lat ) )
+                    )
+                )")->paginate(8);
+                if ($data->count() > 0) {
+                    $data->makeHidden('fasilitas_umum_id');
+                    return response()->json(ApiResponse::Ok($data, 200, "Ok"));
+                } else {
+                    return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
+                }
+            } catch (ModelNotFoundException $e) {
+                return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
+            }
+        } else {
+            try {
+                $data = FasilitasUmum::with(["fotovideo"])
+                ->select("fasilitas_umum.*")
+                ->where(function($query) use($filter) {
+                    for ($i = 0; $i < count($filter); $i++){
+                        $query->orwhere('nama_fasilitas_umum', 'like',  '%' . $filter[$i] .'%');
+                    }
+                })
+                ->paginate(8);
+                if ($data->count() > 0) {
+                    $data->makeHidden('fasilitas_umum_id');
+                    return response()->json(ApiResponse::Ok($data, 200, "Ok"));
+                } else {
+                    return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
+                }
+            } catch (ModelNotFoundException $e) {
+                return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));
+            }
+        }
+    }
 }

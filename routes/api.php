@@ -91,6 +91,7 @@ Route::middleware(['cors'])->group(function () {
     Route::get('/fasilitas-umum/jarak', [FasilitasUmumController::class, 'getFasilitasUmumSortByJarak']);
     Route::get('/fasilitas-umum/{slugfasilitas_umum}', [FasilitasUmumController::class, 'getDetailFasilitasUmum']);
     Route::get('/fasilitas-umum/{slugfasilitas_umum}/galery', [FasilitasUmumController::class, 'galeriFasilitasUmum']);
+    Route::get('/tempat-ibadah', [FasilitasUmumController::class, 'getTempatIbadah']);
 
     // SEARCH
     Route::any('/search', [SearchController::class, 'home']);

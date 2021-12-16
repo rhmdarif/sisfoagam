@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\EkonomiKreatif;
-use App\Models\GaleriParawisata;
+// use App\Models\GaleriParawisata;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\KategoriEkonomiKreatif;
@@ -131,7 +131,7 @@ class EkonomiKreatifController extends Controller
             }
             DB::table('foto_video_ekonomi_kreatif')->insert($videos);
         }
-        GaleriParawisata::insert($ins_to_galery);
+        // GaleriParawisata::insert($ins_to_galery);
 
         return redirect()->route('admin.ekonomi-kreatif.index')->with("success", "Ekonomi Kreatif berhasil ditambahkan");
     }
@@ -249,7 +249,7 @@ class EkonomiKreatifController extends Controller
                 }
             }
             DB::table('foto_video_ekonomi_kreatif')->insert($photos);
-            GaleriParawisata::insert($ins_to_galery);
+            // GaleriParawisata::insert($ins_to_galery);
         }
 
         if ($request->filled("gallery_video")) {
@@ -270,7 +270,7 @@ class EkonomiKreatifController extends Controller
             }
             DB::table('foto_video_ekonomi_kreatif')->insert($videos);
         }
-        GaleriParawisata::whereIn("file", $rmv_from_galery)->delete();
+        // GaleriParawisata::whereIn("file", $rmv_from_galery)->delete();
 
         return redirect()->route('admin.ekonomi-kreatif.index')->with("success", "Ekonomi Kreatif berhasil ditambahkan");
     }
@@ -291,7 +291,7 @@ class EkonomiKreatifController extends Controller
         foreach ($ekonomi_kreatif->fotovideo as $k => $f) {
             $rmv_from_galery[] = $f->file;
         }
-        GaleriParawisata::whereIn("file", $rmv_from_galery)->delete();
+        // GaleriParawisata::whereIn("file", $rmv_from_galery)->delete();
 
         $ekonomi_kreatif->delete();
         return ['pesan' => 'berhasil'];

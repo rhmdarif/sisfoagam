@@ -139,7 +139,7 @@ class DestinasiWisataController extends Controller
                 }
             }
             DB::table('destinasi_wisata_foto_vidio_wisata')->insert($photos);
-            GaleriParawisata::insert($ins_to_galery);
+            // GaleriParawisata::insert($ins_to_galery);
         }
 
         if ($request->filled("gallery_video")) {
@@ -328,9 +328,9 @@ class DestinasiWisataController extends Controller
 
         // return $rmv_from_galery;
 
-        GaleriParawisata::insert($ins_to_galery);
+        // GaleriParawisata::insert($ins_to_galery);
 
-        GaleriParawisata::whereIn("file", $rmv_from_galery)->delete();
+        // GaleriParawisata::whereIn("file", $rmv_from_galery)->delete();
 
         return redirect()->route('admin.destinasi-wisata.index')->with("success", "Destinasi berhasil ditambahkan");
     }
@@ -352,7 +352,7 @@ class DestinasiWisataController extends Controller
         foreach ($destinasi_wisatum->fotovideo as $k => $f) {
             $rmv_from_galery[] = $f->file;
         }
-        GaleriParawisata::whereIn("file", $rmv_from_galery)->delete();
+        // GaleriParawisata::whereIn("file", $rmv_from_galery)->delete();
 
         $destinasi_wisatum->delete();
         return ['pesan' => 'berhasil'];
