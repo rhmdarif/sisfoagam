@@ -137,7 +137,7 @@ class FasilitasUmumController extends Controller
                         $query->orwhere('nama_fasilitas_umum', 'like',  '%' . $filter[$i] .'%');
                     }
                 })
-                ->limit($limit);
+                ->limit($limit)->get();
                 if ($data->count() > 0) {
                     $data->makeHidden('fasilitas_umum_id');
                     return response()->json(ApiResponse::Ok($data, 200, "Ok"));
