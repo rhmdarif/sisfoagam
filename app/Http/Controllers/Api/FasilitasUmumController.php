@@ -118,7 +118,7 @@ class FasilitasUmumController extends Controller
                     + sin ( radians(".request()->lat.") )
                     * sin( radians( fasilitas_umum.lat ) )
                     )
-                )")->limit($limit);
+                )")->limit($limit)->get();
                 if ($data->count() > 0) {
                     $data->makeHidden('fasilitas_umum_id');
                     return response()->json(ApiResponse::Ok($data, 200, "Ok"));
