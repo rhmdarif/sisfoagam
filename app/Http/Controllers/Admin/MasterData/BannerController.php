@@ -23,23 +23,23 @@ class BannerController extends Controller
     {
         $media = SettingMedia::where('code', $kategori)->first();
         if($media == null) {
-            $file = "/images/breadcrumb/akomodasi.jpg";
+            $file = url('/')."/images/breadcrumb/akomodasi.jpg";
             if($kategori == "akomodasi") {
-                $file = "/images/breadcrumb/akomodasi.jpg";
+                $file = url('/')."/images/breadcrumb/akomodasi.jpg";
             } else if($kategori == "destinasi_wisata") {
-                $file = "/images/breadcrumb/wisata.jpg";
+                $file = url('/')."/images/breadcrumb/wisata.jpg";
             } else if($kategori == "ekonomi_kreatif") {
-                $file = "/images/breadcrumb/ekonomikreatif.jpg";
+                $file = url('/')."/images/breadcrumb/ekonomikreatif.jpg";
             } else if($kategori == "event") {
-                $file = "/images/breadcrumb/event.jpg";
+                $file = url('/')."/images/breadcrumb/event.jpg";
             } else if($kategori == "berita") {
-                $file = "/images/breadcrumb/berita.jpg";
+                $file = url('/')."/images/breadcrumb/berita.jpg";
             } else if($kategori == "fasilitas_umum") {
-                $file = "/images/breadcrumb/fasilitas.jpg";
+                $file = url('/')."/images/breadcrumb/fasilitas.jpg";
             } else if($kategori == "galeri_pariwisata") {
-                $file = "/images/breadcrumb/galery.jpg";
+                $file = url('/')."/images/breadcrumb/galery.jpg";
             } else if($kategori == "rekap_kunjungan") {
-                $file = "/images/breadcrumb/statistik.jpg";
+                $file = url('/')."/images/breadcrumb/statistik.jpg";
             }
         } else {
             $file = $media->url;
@@ -51,23 +51,23 @@ class BannerController extends Controller
     {
         $media = SettingMedia::where('code', $kategori)->first();
         if($media == null) {
-            $file = "/images/breadcrumb/akomodasi.jpg";
+            $file = url('/')."/images/breadcrumb/akomodasi.jpg";
             if($kategori == "akomodasi") {
-                $file = "/images/breadcrumb/akomodasi.jpg";
+                $file = url('/')."/images/breadcrumb/akomodasi.jpg";
             } else if($kategori == "destinasi_wisata") {
-                $file = "/images/breadcrumb/wisata.jpg";
+                $file = url('/')."/images/breadcrumb/wisata.jpg";
             } else if($kategori == "ekonomi_kreatif") {
-                $file = "/images/breadcrumb/ekonomikreatif.jpg";
+                $file = url('/')."/images/breadcrumb/ekonomikreatif.jpg";
             } else if($kategori == "event") {
-                $file = "/images/breadcrumb/event.jpg";
+                $file = url('/')."/images/breadcrumb/event.jpg";
             } else if($kategori == "berita") {
-                $file = "/images/breadcrumb/berita.jpg";
+                $file = url('/')."/images/breadcrumb/berita.jpg";
             } else if($kategori == "fasilitas_umum") {
-                $file = "/images/breadcrumb/fasilitas.jpg";
+                $file = url('/')."/images/breadcrumb/fasilitas.jpg";
             } else if($kategori == "galeri_pariwisata") {
-                $file = "/images/breadcrumb/galery.jpg";
+                $file = url('/')."/images/breadcrumb/galery.jpg";
             } else if($kategori == "rekap_kunjungan") {
-                $file = "/images/breadcrumb/statistik.jpg";
+                $file = url('/')."/images/breadcrumb/statistik.jpg";
             }
         } else {
             $file = $media->url;
