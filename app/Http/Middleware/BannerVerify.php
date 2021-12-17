@@ -19,7 +19,7 @@ class BannerVerify
         $routeName = $request->route()->getName();
         $kategori = $request->route()->parameter('kategori');
 
-        if(in_array($kategori, ['akomodasi', 'destinasi_wisata', 'ekonomi_kreatif', 'event', 'berita', 'fasilitas_umum', 'bg-ekonomi', 'bg-wisata', 'bg-event'])) {
+        if(in_array($kategori, ['akomodasi', 'destinasi_wisata', 'ekonomi_kreatif', 'event', 'berita', 'fasilitas_umum', 'bg-ekonomi', 'bg-wisata', 'bg-event', 'galeri_pariwisata', 'rekap_kunjungan'])) {
             return $next($request);
         } else {
             if(in_array($routeName, ['admin.master-data.banner.index','admin.master-data.banner.store'])) {
