@@ -135,7 +135,7 @@
                         $('#formModal #data_edit').html(`<img src="${result.file}" alt="" class="img-fluid" width="100px">`);
                     } else {
                         $('#formModal #data_edit').html(`<iframe src="https://www.youtube.com/embed/${result.file}" width="100%" height="400px"></iframe>`);
-                        $('#formModal #vidio_url').val(`https://youtube.com?v=${result.file}`);
+                        $('#formModal #vidio_url').val(`${result.file}`);
                     }
 
 
