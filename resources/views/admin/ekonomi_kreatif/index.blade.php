@@ -182,7 +182,7 @@
         function tampilfoto() {
             var fileInput = document.getElementById('thumbnail');
             var filePath = fileInput.value;
-            var extensions = /(\.jpg|\.png)$/i;
+            var extensions = /(\.jpg|\.jpeg|\.png)$/i;
             var ukuran = fileInput.files[0].size;
             if (ukuran > 1000000) {
                 alert('ukuran terlalu besar. Maksimal 1MB')

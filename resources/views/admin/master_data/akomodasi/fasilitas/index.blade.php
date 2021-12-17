@@ -232,7 +232,7 @@
         function tampilfoto() {
             var fileInput = document.getElementById('icon_kategori');
             var filePath = fileInput.value;
-            var extensions = /(\.jpg|\.png)$/i;
+            var extensions = /(\.jpg|\.jpeg|\.png)$/i;
             var ukuran = fileInput.files[0].size;
             if (ukuran > 100000) {
                 alert('ukuran terlalu besar. Maksimal 100KB')

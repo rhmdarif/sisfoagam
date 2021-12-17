@@ -95,7 +95,8 @@
                         <div class="form-group">
                             <label for="keterangan">Kategori</label>
                             <select name="kategori" id="kategori" class="form-control" onchange="changeKategori()">
-                                <option value="foto" selected>Foto</option>
+                                <option value="" selected>Pilih Kategori</option>
+                                <option value="foto">Foto</option>
                                 <option value="video">Vidio</option>
                             </select>
                         </div>
@@ -153,7 +154,9 @@
         function changeKategori() {
             let kategori = $('#kategori').val();
 
-            if(kategori == "foto") {
+            if(kategori == "") {
+                $('#formModal #data_kategori').html(``);
+            } else if(kategori == "foto") {
                 $('#formModal #data_kategori').html(`
                             <div class="text-center">
                                 <div id="tampilFoto"></div>
@@ -194,7 +197,7 @@
         {
             var fileInput = document.getElementById('thumbnail');
             var filePath = fileInput.value;
-            var extensions = /(\.jpg|\.png)$/i;
+            var extensions = /(\.jpg|\.jpeg|\.png)$/i;
             var ukuran = fileInput.files[0].size;
             if(ukuran > 1000000)
             {
