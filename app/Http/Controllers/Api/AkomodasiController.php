@@ -42,6 +42,10 @@ class AkomodasiController extends Controller
                         )")
                         ->paginate(8);
 
+                        $data->each(function ($reply) {
+                            $reply->append('jarak_aktual');
+                        });
+
                 if ($data->count() > 0) {
                     $data->makeHidden('kategori_akomodasi_id');
                     return response()->json(ApiResponse::Ok($data, 200, "Ok"));
@@ -87,8 +91,15 @@ class AkomodasiController extends Controller
                             )
                           )")
                           ->paginate(8);
+
                 if ($data->count() > 0) {
                     $data->makeHidden('kategori_akomodasi_id');
+
+
+                    $data->each(function ($reply) {
+                        $reply->append('jarak_aktual');
+                    });
+
                     return response()->json(ApiResponse::Ok($data, 200, "Ok"));
                 } else {
                     return response()->json(ApiResponse::NotFound("Data Tidak Ditemukan"));

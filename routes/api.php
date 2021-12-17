@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\DestinasiWisataController;
 use App\Http\Controllers\Api\EventParawisataController;
 use App\Http\Controllers\Api\BeritaParawisataController;
 use App\Http\Controllers\Admin\MasterData\BannerController;
+use App\Http\Controllers\MapBoxController;
 use Illuminate\Support\Facades\Http;
 
 /*
@@ -136,4 +137,7 @@ Route::middleware(['cors'])->group(function () {
     Route::get('test', function() {
         return Http::get("http://admin.agampesonaberagam.com/api/akomodasi")->json();
     });
+
+
+    Route::get('map-box', [MapBoxController::class, 'fromController']);
 });

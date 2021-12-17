@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use App\Http\Controllers\MapBoxController;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -32,6 +33,21 @@ class DestinasiWisata extends Model
         $request = request();
         if($request->has('long') && $request->has('lat')) {
             return distance($request->lat, $request->long, $this->lat, $this->long);
+        }
+
+        return;
+    }
+
+    public function getJarakAktualAttribute()
+    {
+        $request = request();
+        if($request->has('long') && $request->has('lat')) {
+            $mapbox = MapBoxController::takeLocation([$request->long, $request->lat], [$this->long, $this->lat]);
+            if(isset($mapbox['routes'])) {
+                return $mapbox['routes'][0]['distance'];
+            } else {
+                return $mapbox;
+            }
         }
 
         return;
