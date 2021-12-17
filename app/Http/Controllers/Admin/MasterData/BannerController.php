@@ -64,6 +64,10 @@ class BannerController extends Controller
                 $file = "/images/breadcrumb/berita.jpg";
             } else if($kategori == "fasilitas_umum") {
                 $file = "/images/breadcrumb/fasilitas.jpg";
+            } else if($kategori == "galeri_pariwisata") {
+                $file = "/images/breadcrumb/galery.jpg";
+            } else if($kategori == "rekap_kunjungan") {
+                $file = "/images/breadcrumb/statistik.jpg";
             }
         } else {
             $file = $media->url;
