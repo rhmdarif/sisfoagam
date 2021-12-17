@@ -13,7 +13,7 @@ class Akomodasi extends Model
     use HasFactory;
 
     protected $table = "akomodasi";
-    protected $appends = ['jarak', 'rating'];
+    protected $appends = ['jarak', 'rating', 'jarak_aktual'];
 
     public function getJarakAttribute()
     {
