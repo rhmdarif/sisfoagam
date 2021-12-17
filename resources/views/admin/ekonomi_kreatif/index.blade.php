@@ -39,6 +39,7 @@
                                             <th style="width:10%">Kategori</th>
                                             <th style="width:10%">Produk</th>
                                             <th style="width:10%">Harga</th>
+                                            <th style="width:10%">Harga Atas</th>
                                             <th style="width:10%">Lokasi</th>
                                             <!-- <th style="width:18%">Keterangan</th> -->
                                             <th style="width:10%">Aksi</th>
@@ -54,6 +55,7 @@
                                                 <td>{{ $d->kategori->nama_kategori_kreatif }}</td>
                                                 <td>{{ $d->nama_ekonomi_kreatif }}</td>
                                                 <td>{{ number_format($d->harga) }}</td>
+                                                <td>{{ number_format($d->harga_atas) }}</td>
                                                 <td>
                                                     <iframe width="300" height="170" frameborder="0" scrolling="no"
                                                         marginheight="0" marginwidth="0"

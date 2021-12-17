@@ -45,6 +45,10 @@
                                     <th>Rp. {{ number_format($item->harga) }}</th>
                                 </tr>
                                 <tr>
+                                    <th style="width:35%">Harga Atas</th>
+                                    <th>Rp. {{ number_format($item->harga_atas) }}</th>
+                                </tr>
+                                <tr>
                                     <th style="width:35%; vertical-align:middle;">Thumbnail</th>
                                     <th>
                                     <img src="{{ $item->thumbnail_ekonomi_kreatif }}" alt="{{ $item->thumbnail_ekonomi_kreatif }}" class="img-fluid" width="100px">

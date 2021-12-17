@@ -59,6 +59,7 @@ class EkonomiKreatifController extends Controller
             'kategori' => 'required|exists:kategori_ekonomi_kreatif,id',
             'ekonomi_kreatif' => 'required|string|unique:ekonomi_kreatif,nama_ekonomi_kreatif',
             'harga' => 'required|string',
+            'harga_atas' => 'required|string',
             'lat' => 'required|string',
             'lng' => 'required|string',
             'keterangan' => 'required|string',
@@ -70,6 +71,7 @@ class EkonomiKreatifController extends Controller
         }
 
         $harga  = preg_replace("/[^0-9]/", '', explode(",", $request->harga)[0]);
+        $harga_atas  = preg_replace("/[^0-9]/", '', explode(",", $request->harga_atas)[0]);
 
 
         if ($request->has("thumbnail")) {
@@ -82,6 +84,7 @@ class EkonomiKreatifController extends Controller
             'kategori_ekonomi_kreatif_id' => $request->kategori,
             'nama_ekonomi_kreatif' => $request->ekonomi_kreatif,
             'harga' => $harga,
+            'harga_atas' => $harga_atas,
             'lat' => $request->lat,
             'long' => $request->lng,
             'keterangan' => $request->keterangan,
@@ -179,6 +182,7 @@ class EkonomiKreatifController extends Controller
             'kategori' => 'required|exists:kategori_ekonomi_kreatif,id',
             'ekonomi_kreatif' => 'required|string|unique:ekonomi_kreatif,nama_ekonomi_kreatif,' . $ekonomi_kreatif->id,
             'harga' => 'required|string',
+            'harga_atas' => 'required|string',
             'lat' => 'required|string',
             'lng' => 'required|string',
             'keterangan' => 'required|string',
@@ -190,11 +194,13 @@ class EkonomiKreatifController extends Controller
         }
 
         $harga  = preg_replace("/[^0-9]/", '', explode(",", $request->harga)[0]);
+        $harga_atas  = preg_replace("/[^0-9]/", '', explode(",", $request->harga_atas)[0]);
 
         $update = [
             'kategori_ekonomi_kreatif_id' => $request->kategori,
             'nama_ekonomi_kreatif' => $request->ekonomi_kreatif,
             'harga' => $harga,
+            'harga_atas' => $harga_atas,
             'lat' => $request->lat,
             'long' => $request->lng,
             'keterangan' => $request->keterangan,

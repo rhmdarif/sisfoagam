@@ -64,6 +64,13 @@
                                                         placeholder="Harga">
                                                 </div>
                                             </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="">Harga Atas</label>
+                                                    <input type="text" name="harga_atas" id="harga_atas" class="form-control"
+                                                        placeholder="Harga Atas">
+                                                </div>
+                                            </div>
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label for="">Thumbnail</label>
@@ -288,6 +295,11 @@
         }
 
         var harga = new AutoNumeric('#harga', {
+            currencySymbol: 'Rp.',
+            decimalCharacter: ',',
+            digitGroupSeparator: '.',
+        });
+        var harga_atas = new AutoNumeric('#harga_atas', {
             currencySymbol: 'Rp.',
             decimalCharacter: ',',
             digitGroupSeparator: '.',

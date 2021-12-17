@@ -15,6 +15,7 @@ class AddHargaAtasToEkonomiKreatifTable extends Migration
     {
         Schema::table('ekonomi_kreatif', function (Blueprint $table) {
             //
+            $table->bigInteger('harga_atas')->default(0)->after('harga');
         });
     }
 
@@ -27,6 +28,7 @@ class AddHargaAtasToEkonomiKreatifTable extends Migration
     {
         Schema::table('ekonomi_kreatif', function (Blueprint $table) {
             //
+            $table->dropColumn(['harga_atas']);
         });
     }
 }

@@ -167,6 +167,18 @@
                                         <p>Fasilitas Umum</p>
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.master-data.banner.index', 'galeri_pariwisata') }}" class="nav-link">
+                                        <i class="far fa-dot-circle nav-icon"></i>
+                                        <p>Galeri Pariwisata</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.master-data.banner.index', 'rekap_kunjungan') }}" class="nav-link">
+                                        <i class="far fa-dot-circle nav-icon"></i>
+                                        <p>Rekap Kunjungan</p>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                         <li class="nav-item">
