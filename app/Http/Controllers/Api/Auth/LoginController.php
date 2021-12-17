@@ -39,10 +39,10 @@ class LoginController extends Controller
             ];
             $token_id = DB::table('user_tokens')->insertGetId($add_token);
 
+            $add_token['name'] = $user->name;
+
             $token = collect($add_token);
         }
-
-        $token->nama = $user->name ?? "";
 
         return response()->json(ApiResponse::Ok($token, 200, "Login berhasil"));
     }
