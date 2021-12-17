@@ -26,9 +26,26 @@
                 <div class="col-lg-12">
                     <div class="card card-outline card-primary">
                         <div class="card-header">
+                            <form method="get">
+                                <div class="row">
+                                    <div class="col-md-9">
+                                        <select name="tahun" id="tahun" class="form-control">
+                                            @for ($i = 0; $i < 5; $i++)
+                                                <option value="{{ date("Y", strtotime("-".$i." years", time())) }}" {{ ($i == 0)? "selected" : "" }}>{{ date("Y", strtotime("-".$i." years", time())) }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button type="submit" class="btn btn-primary btn-block">Terapkan</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-header">
                             <a href="{{ route('admin.report.akomodasi.download') }}" class="btn btn-primary float-right">Download</a>
                         </div>
                         <div class="card-body">
+
                             <table class="table table-borderless">
                                 <tr>
                                     <td width="15%" class="text-center">

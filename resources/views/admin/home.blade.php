@@ -187,7 +187,7 @@
 
                 let legends = ['mobile', 'tablet', 'desktop'];
                 let options = {
-                    "mobile" : {
+                    "mobile": {
                         backgroundColor: '#2E4C6D',
                         borderColor: '#396EB0',
                         pointColor: '#3b8bba',
@@ -195,7 +195,7 @@
                         pointHighlightFill: '#fff',
                         pointHighlightStroke: 'rgba(60,141,188,1)',
                     },
-                    "tablet" : {
+                    "tablet": {
                         backgroundColor: '#D0CAB2',
                         borderColor: '#96C7C1',
                         pointColor: '#3b8bba',
@@ -203,7 +203,7 @@
                         pointHighlightFill: '#fff',
                         pointHighlightStroke: 'rgba(60,141,188,1)',
                     },
-                    "desktop" : {
+                    "desktop": {
                         backgroundColor: '#FFE699',
                         borderColor: '#F1CA89',
                         pointColor: '#3b8bba',
@@ -226,17 +226,13 @@
                         data.push(d[l])
                     });
                     lineDataset.push({
-                        label: l,
-                        backgroundColor: options[l].backgroundColor,
-                        borderColor: options[l].borderColor,
-                        pointRadius: true,
-                        fill: false,
-                        pointColor: options[l].pointColor,
-                        pointStrokeColor: options[l].pointStrokeColor,
-                        pointHighlightFill: options[l].pointHighlightFill,
-                        pointHighlightStroke: options[l].pointHighlightStroke,
-                        data: data,
-                    });
+                            label: l,
+                            backgroundColor: options[l].borderColor,
+                            borderColor: options[l].borderColor,
+                            fill: false,
+                            data: data,
+                        }
+                    );
                 });
 
                 areaChartData = {
@@ -290,7 +286,9 @@
                     labels: pie_label,
                     datasets: [{
                         data: pie_data,
-                        backgroundColor: ['#00a65a', '#f39c12', '#f56954', '#d2d6de', '#3c8dbc', '#00c0ef', '#000'],
+                        backgroundColor: ['#00a65a', '#f39c12', '#f56954', '#d2d6de',
+                            '#3c8dbc', '#00c0ef', '#000'
+                        ],
                     }]
                 }
                 var donutOptions = {
@@ -306,8 +304,5 @@
                 });
             })
         })
-
-
-
     </script>
 @endpush
