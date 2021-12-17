@@ -122,6 +122,10 @@ Route::middleware(['cors'])->group(function () {
     Route::get("vidio", [VidioHomeController::class, 'toClient']);
     Route::any("change-vidio", [VidioHomeController::class, 'change']);
 
+    Route::prefix('report/pengunjung')->group(function () {
+        Route::get("akomodasi", [AkomodasiController::class, 'rekapDataKunjungan']);
+        Route::get("destinasi_wisata", [DestinasiWisataController::class, 'rekapDataKunjungan']);
+    });
 
     Route::get('banner/{kategori}', [BannerController::class, 'toClient']);
     Route::get('banner', [BannerController::class, 'toClient2']);

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin;
+use App\Http\Controllers\Admin\Report\AkomodasiController;
 use App\Http\Controllers\Api;
 use Illuminate\Support\Facades\Route;
 
@@ -144,6 +145,14 @@ Route::prefix('admin')->as("admin.")->group(function () {
 
         // USER ADMIN
         Route::resource('user/admin', Admin\UserAdminController::class);
+
+        Route::prefix('report')->as('report.')->group(function() {
+            Route::get("akomodasi", [Admin\Report\AkomodasiController::class, 'index'])->name('akomodasi');
+            Route::get("akomodasi/download", [Admin\Report\AkomodasiController::class, 'download'])->name('akomodasi.download');
+            Route::get("destinasi_wisata", [Admin\Report\DestinasiWisataController::class, 'index'])->name('destinasi_wisata');
+            Route::get("destinasi_wisata/download", [Admin\Report\DestinasiWisataController::class, 'download'])->name('destinasi_wisata.download');
+
+        });
     });
 
     Route::prefix('select2')->as('select2.')->group(function () {

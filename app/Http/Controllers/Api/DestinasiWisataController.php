@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Models\DestinasiWisataReviewWisata;
+use App\Models\DestinasiWisataVisitor;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class DestinasiWisataController extends Controller
@@ -260,5 +261,34 @@ class DestinasiWisataController extends Controller
         } else {
             return ['status' => false, 'msg' => "Akomodasi tidak ditemukan"];
         }
+    }
+
+    public function rekapDataKunjungan(Request $request)
+    {
+        $periode = $request->tahun ?? date('Y');
+
+        $destinasi = DestinasiWisata::all();
+
+        $data['status'] = true;
+        $data['periode'] = $periode;
+
+        foreach ($destinasi as $key => $value) {
+            $detail['nama_wisata'] = $value->nama_wisata;
+
+            $pengunjung = DestinasiWisataVisitor::where('destinasi_wisata_id', $value->id)->where('periode', 'like', $periode.'-%')->get();
+
+            for ($i=0; $i < 12; $i++) {
+                if($i < 9) {
+                    $detail['data'][$i] = $pengunjung->where('periode', $periode.'-0'.($i+1).'-01')->first()->visitor ?? 0;
+                } else {
+                    $detail['data'][$i] = $pengunjung->where('periode', $periode.'-'.($i+1).'-01')->first()->visitor ?? 0;
+                }
+            }
+
+            $data['data'][] = $detail;
+        }
+
+
+        return $data;
     }
 }

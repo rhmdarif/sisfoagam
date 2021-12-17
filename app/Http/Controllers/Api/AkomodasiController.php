@@ -9,6 +9,7 @@ use App\Models\ReviewAkomodasi;
 use App\Models\KategoriAkomodasi;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\AkomodasiVisitor;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -113,6 +114,7 @@ class AkomodasiController extends Controller
             }
         }
     }
+
     public function getDetailAkomodasi($slugakomodasi = null)
     {
         try {
@@ -247,6 +249,35 @@ class AkomodasiController extends Controller
         } else {
             return ['status' => false, 'msg' => "Akomodasi tidak ditemukan"];
         }
+    }
+
+    public function rekapDataKunjungan(Request $request)
+    {
+        $periode = $request->tahun ?? date('Y');
+
+        $akomodasi = Akomodasi::all();
+
+        $data['status'] = true;
+        $data['periode'] = $periode;
+
+        foreach ($akomodasi as $key => $value) {
+            $detail['nama_akomodasi'] = $value->nama_akomodasi;
+
+            $pengunjung = AkomodasiVisitor::where('akomodasi_id', $value->id)->where('periode', 'like', $periode.'-%')->get();
+
+            for ($i=0; $i < 12; $i++) {
+                if($i < 9) {
+                    $detail['data'][$i] = $pengunjung->where('periode', $periode.'-0'.($i+1).'-01')->first()->visitor ?? 0;
+                } else {
+                    $detail['data'][$i] = $pengunjung->where('periode', $periode.'-'.($i+1).'-01')->first()->visitor ?? 0;
+                }
+            }
+
+            $data['data'][] = $detail;
+        }
+
+
+        return $data;
     }
     /*
     public function getDataChart($slug, Request $request)

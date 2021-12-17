@@ -16,6 +16,11 @@ class DestinasiWisataVisitorController extends Controller
         return view('admin.destinasi_wisata.visitor.index', compact('visitors', 'destinasi_wisata_id'));
     }
 
+    public function report()
+    {
+        # code...
+    }
+
     public function edit($destinasi_wisata_id, DestinasiWisataVisitor $visitor)
     {
         $bulan = date("m", strtotime($visitor->periode));
