@@ -271,7 +271,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('admin.galeri-parawisata.index') }}" class="nav-link">
-                        <i class="nav-icon fas fa-users"></i>
+                        <i class="nav-icon fas fa-image"></i>
                         <p>
                             Galeri Pariwisata
                         </p>
