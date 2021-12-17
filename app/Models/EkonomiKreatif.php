@@ -2,22 +2,38 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Model;
+use App\Http\Controllers\MapBoxController;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class EkonomiKreatif extends Model
 {
     use HasFactory;
     protected $table = "ekonomi_kreatif";
     protected $fillable = ['kategori_ekonomi_kreatif_id', 'nama_ekonomi_kreatif', 'slug_ekonomi_kreatif', 'harga', 'harga_atas', 'lat', 'long', 'thumbnail_ekonomi_kreatif', 'keterangan'];
-    protected $appends = ['jarak', 'rating'];
+    protected $appends = ['jarak', 'rating', 'jarak_aktual'];
 
     public function getJarakAttribute()
     {
         $request = request();
         if($request->has('long') && $request->has('lat')) {
             return distance($request->lat, $request->long, $this->lat, $this->long);
+        }
+
+        return;
+    }
+
+    public function getJarakAktualAttribute()
+    {
+        $request = request();
+        if($request->has('long') && $request->has('lat')) {
+            $mapbox = MapBoxController::takeLocation([$request->long, $request->lat], [$this->long, $this->lat]);
+            if(isset($mapbox['routes'])) {
+                return $mapbox['routes'][0]['distance'];
+            } else {
+                return $mapbox;
+            }
         }
 
         return;

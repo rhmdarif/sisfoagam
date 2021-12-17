@@ -26,7 +26,7 @@ class DestinasiWisata extends Model
                             'keterangan',
                             'thumbnail_destinasi_wisata'
                         ];
-    protected $appends = ['jarak', 'rating'];
+    protected $appends = ['jarak', 'rating', 'jarak_aktual'];
 
     public function getJarakAttribute()
     {
