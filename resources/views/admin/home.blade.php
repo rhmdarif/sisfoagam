@@ -7,7 +7,7 @@
             <div class="row mb-2">
                 <div class="col-sm-12">
                     <h1 class="m-0">
-                        <marquee>SELAMAT DATANG DI MENU ADMIN SISFO AGAM . . . !</marquee>
+                        <marquee>SELAMAT DATANG DI MENU ADMIN AGAM PESONA BERAGAM . . . !</marquee>
                     </h1>
                 </div><!-- /.col -->
 
@@ -184,6 +184,7 @@
             await $.get("{{ route('admin.chart') }}", (result) => {
                 lineDataset = [];
 
+
                 let legends = ['mobile', 'tablet', 'desktop'];
                 let options = {
                     "mobile" : {
@@ -247,6 +248,7 @@
 
                 // Get context with jQuery - using jQuery's .get() method.
                 var areaChartCanvas = $('#areaChart').get(0).getContext('2d')
+
 
                 var areaChartOptions = {
                     maintainAspectRatio: false,

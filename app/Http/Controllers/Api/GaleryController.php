@@ -56,7 +56,7 @@ class GaleryController extends Controller
 
     public function slider()
     {
-
-        return ['data' => DB::table('sliders')->orderBy('id', request()->sortir ?? "desc")->get()];
+        // return request()->sortir;
+        return ['data' => DB::table('sliders')->orderBy('id', (request()->sortir ?? "desc"))->get()];
     }
 }
