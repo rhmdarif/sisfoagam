@@ -299,4 +299,30 @@ class DestinasiWisataController extends Controller
 
         return $data;
     }
+
+    public function rekapDataKunjunganWebView(Request $request)
+    {
+        $periode = $request->tahun ?? date('Y');
+
+        $destinasi = DestinasiWisata::all();
+
+        foreach ($destinasi as $key => $value) {
+            $detail['nama_wisata'] = $value->nama_wisata;
+
+            $pengunjung = DestinasiWisataVisitor::where('destinasi_wisata_id', $value->id)->where('periode', 'like', $periode.'-%')->get();
+
+            for ($i=0; $i < 12; $i++) {
+                if($i < 9) {
+                    $detail['data'][$i] = $pengunjung->where('periode', $periode.'-0'.($i+1).'-01')->first()->visitor ?? 0;
+                } else {
+                    $detail['data'][$i] = $pengunjung->where('periode', $periode.'-'.($i+1).'-01')->first()->visitor ?? 0;
+                }
+            }
+
+            $data['data'][] = $detail;
+        }
+
+
+        return view('admin.report.destinasi_wisata.download', compact('data', 'periode'));
+    }
 }

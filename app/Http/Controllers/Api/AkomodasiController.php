@@ -313,7 +313,7 @@ class AkomodasiController extends Controller
         }
 
 
-        return view('admin.report.akomodasi.download', compact('data'));
+        return view('admin.report.akomodasi.download', compact('data', 'periode'));
     }
     /*
     public function getDataChart($slug, Request $request)

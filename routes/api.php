@@ -124,7 +124,9 @@ Route::middleware(['cors'])->group(function () {
 
     Route::prefix('report/pengunjung')->group(function () {
         Route::get("akomodasi", [AkomodasiController::class, 'rekapDataKunjungan']);
+        Route::get("akomodasi/view", [AkomodasiController::class, 'rekapDataKunjunganWebView']);
         Route::get("destinasi_wisata", [DestinasiWisataController::class, 'rekapDataKunjungan']);
+        Route::get("destinasi_wisata/view", [DestinasiWisataController::class, 'rekapDataKunjunganWebView']);
     });
 
     Route::get('banner/{kategori}', [BannerController::class, 'toClient']);
