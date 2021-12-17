@@ -266,6 +266,29 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-file nav-icon"></i>
+                        <p>
+                            Laporan Pengunjung
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('admin.report.akomodasi') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Akomodasi</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.report.destinasi_wisata') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Destinasi Wisata</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
                     <a href="{{ route('admin.panduan.show') }}" class="nav-link">
                         <i class="nav-icon fas fa-users"></i>
                         <p>
