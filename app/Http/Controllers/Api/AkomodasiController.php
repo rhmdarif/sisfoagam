@@ -260,6 +260,42 @@ class AkomodasiController extends Controller
         $data['status'] = true;
         $data['periode'] = $periode;
 
+        for ($i=0; $i < 12; $i++) {
+            if($i < 9) {
+                $bulan[$i] = date('F', strtotime($periode.'-0'.($i+1).'-01'));
+            } else {
+                $bulan[$i] = date('F', strtotime($periode.'-'.($i+1).'-01'));
+            }
+        }
+
+
+        foreach ($akomodasi as $key => $value) {
+            $detail['nama_akomodasi'] = $value->nama_akomodasi;
+
+            $pengunjung = AkomodasiVisitor::where('akomodasi_id', $value->id)->where('periode', 'like', $periode.'-%')->get();
+
+            for ($i=0; $i < 12; $i++) {
+
+                if($i < 9) {
+                    $detail['data'][$bulan[$i]] = $pengunjung->where('periode', $periode.'-0'.($i+1).'-01')->first()->visitor ?? 0;
+                } else {
+                    $detail['data'][$bulan[$i]] = $pengunjung->where('periode', $periode.'-'.($i+1).'-01')->first()->visitor ?? 0;
+                }
+            }
+
+            $data['data'][] = $detail;
+        }
+
+
+        return $data;
+    }
+
+    public function rekapDataKunjunganWebView(Request $request)
+    {
+        $periode = $request->tahun ?? date('Y');
+
+        $akomodasi = Akomodasi::all();
+
         foreach ($akomodasi as $key => $value) {
             $detail['nama_akomodasi'] = $value->nama_akomodasi;
 
@@ -277,7 +313,7 @@ class AkomodasiController extends Controller
         }
 
 
-        return $data;
+        return view('admin.report.akomodasi.download', compact('data'));
     }
     /*
     public function getDataChart($slug, Request $request)

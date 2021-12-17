@@ -272,6 +272,14 @@ class DestinasiWisataController extends Controller
         $data['status'] = true;
         $data['periode'] = $periode;
 
+        for ($i=0; $i < 12; $i++) {
+            if($i < 9) {
+                $bulan[$i] = date('F', strtotime($periode.'-0'.($i+1).'-01'));
+            } else {
+                $bulan[$i] = date('F', strtotime($periode.'-'.($i+1).'-01'));
+            }
+        }
+
         foreach ($destinasi as $key => $value) {
             $detail['nama_wisata'] = $value->nama_wisata;
 
@@ -279,9 +287,9 @@ class DestinasiWisataController extends Controller
 
             for ($i=0; $i < 12; $i++) {
                 if($i < 9) {
-                    $detail['data'][$i] = $pengunjung->where('periode', $periode.'-0'.($i+1).'-01')->first()->visitor ?? 0;
+                    $detail['data'][$bulan[$i]] = $pengunjung->where('periode', $periode.'-0'.($i+1).'-01')->first()->visitor ?? 0;
                 } else {
-                    $detail['data'][$i] = $pengunjung->where('periode', $periode.'-'.($i+1).'-01')->first()->visitor ?? 0;
+                    $detail['data'][$bulan[$i]] = $pengunjung->where('periode', $periode.'-'.($i+1).'-01')->first()->visitor ?? 0;
                 }
             }
 
