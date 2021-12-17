@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
         'verify.api' => \App\Http\Middleware\VerifyApi::class,
         'banner.verif' => \App\Http\Middleware\BannerVerify::class,
         'cors'          => \App\Http\Middleware\Cors::class, // added
+        'only.admin'          => \App\Http\Middleware\OnlyAdmin::class, // added
     ];
 }

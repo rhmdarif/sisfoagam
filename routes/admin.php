@@ -144,7 +144,7 @@ Route::prefix('admin')->as("admin.")->group(function () {
         Route::resource('fasilitas-umum', Admin\FasilitasUmumController::class);
 
         // USER ADMIN
-        Route::resource('user/admin', Admin\UserAdminController::class);
+        Route::resource('user/admin', Admin\UserAdminController::class)->middleware('only.admin');
 
         Route::prefix('report')->as('report.')->group(function() {
             Route::get("akomodasi", [Admin\Report\AkomodasiController::class, 'index'])->name('akomodasi');

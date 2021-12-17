@@ -257,14 +257,16 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ route('admin.admin.index') }}" class="nav-link">
-                        <i class="nav-icon fas fa-users"></i>
-                        <p>
-                            User Admin
-                        </p>
-                    </a>
-                </li>
+                @if (auth()->user()->level == "Super Admin")
+                    <li class="nav-item">
+                        <a href="{{ route('admin.admin.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-users"></i>
+                            <p>
+                                User Admin
+                            </p>
+                        </a>
+                    </li>
+                @endif
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="far fa-file nav-icon"></i>
