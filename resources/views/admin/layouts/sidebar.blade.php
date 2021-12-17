@@ -257,6 +257,14 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.galeri-parawisata.index') }}" class="nav-link">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>
+                            Galeri Pariwisata
+                        </p>
+                    </a>
+                </li>
                 @if (auth()->user()->level == "Super Admin")
                     <li class="nav-item">
                         <a href="{{ route('admin.admin.index') }}" class="nav-link">
