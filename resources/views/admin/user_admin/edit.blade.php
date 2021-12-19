@@ -51,7 +51,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="">Jabatan</label>
-                                    <input type="text" name="level" id="level" class="form-control" placeholder="Jabatan" value="{{ $user->level }}">
+                                    <select name="level" id="level" class="form-control">
+                                        <option value="">Pilih Jabatan User</option>
+                                        <option value="Super Admin" {{ ($user->level == "Super Admin")? "selected" : "" }}>Super Admin</option>
+                                        <option value="Pegawai" {{ ($user->level == "Pegawai")? "selected" : "" }}>Pegawai</option>
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="">Status</label>

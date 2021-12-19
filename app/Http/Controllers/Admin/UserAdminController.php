@@ -47,7 +47,7 @@ class UserAdminController extends Controller
             'email' => 'required|email',
             'no_hp' => 'required|string|digits_between:10,13|unique:users,no_hp',
             'password' => 'required|string',
-            'level' => 'required|string',
+            'level' => 'required|string|in:Super Admin,Pegawai',
             'status' => 'required|in:1,0',
         ]);
 

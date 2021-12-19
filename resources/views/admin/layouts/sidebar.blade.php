@@ -33,194 +33,196 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-database"></i>
-                        <p>
-                            Master Data
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>
-                                    Akomodasi
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.master-data.akomodasi.fasilitas.index') }}" class="nav-link">
-                                        <i class="far fa-dot-circle nav-icon"></i>
-                                        <p>Fasilitas</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.master-data.akomodasi.kategori.index') }}" class="nav-link">
-                                        <i class="far fa-dot-circle nav-icon"></i>
-                                        <p>Kategori</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>
-                                    Destinasi
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.master-data.destinasi-wisata.fasilitas.index') }}" class="nav-link">
-                                        <i class="far fa-dot-circle nav-icon"></i>
-                                        <p>Fasilitas</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.master-data.destinasi-wisata.kategori.index') }}" class="nav-link">
-                                        <i class="far fa-dot-circle nav-icon"></i>
-                                        <p>Kategori</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                @if (auth()->user()->level == "Super Admin")
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-database"></i>
+                            <p>
+                                Master Data
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>
+                                        Akomodasi
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.master-data.akomodasi.fasilitas.index') }}" class="nav-link">
+                                            <i class="far fa-dot-circle nav-icon"></i>
+                                            <p>Fasilitas</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.master-data.akomodasi.kategori.index') }}" class="nav-link">
+                                            <i class="far fa-dot-circle nav-icon"></i>
+                                            <p>Kategori</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>
+                                        Destinasi
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.master-data.destinasi-wisata.fasilitas.index') }}" class="nav-link">
+                                            <i class="far fa-dot-circle nav-icon"></i>
+                                            <p>Fasilitas</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.master-data.destinasi-wisata.kategori.index') }}" class="nav-link">
+                                            <i class="far fa-dot-circle nav-icon"></i>
+                                            <p>Kategori</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
 
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>
-                                    Ekonomi Kreatif
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.master-data.ekonomi-kreatif.kategori.index') }}" class="nav-link">
-                                        <i class="far fa-dot-circle nav-icon"></i>
-                                        <p>Kategori</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.foto-slider.index') }}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>
-                                    Foto Slider
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.master-data.video.index') }}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>
-                                    Video Home
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>
-                                    Banner
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.master-data.banner.index', 'akomodasi') }}" class="nav-link">
-                                        <i class="far fa-dot-circle nav-icon"></i>
-                                        <p>Akomodasi</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.master-data.banner.index', 'destinasi_wisata') }}" class="nav-link">
-                                        <i class="far fa-dot-circle nav-icon"></i>
-                                        <p>Destinasi Wisata</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.master-data.banner.index', 'ekonomi_kreatif') }}" class="nav-link">
-                                        <i class="far fa-dot-circle nav-icon"></i>
-                                        <p>Ekonomi Kreatif</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.master-data.banner.index', 'event') }}" class="nav-link">
-                                        <i class="far fa-dot-circle nav-icon"></i>
-                                        <p>Event</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.master-data.banner.index', 'berita') }}" class="nav-link">
-                                        <i class="far fa-dot-circle nav-icon"></i>
-                                        <p>Berita</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.master-data.banner.index', 'fasilitas_umum') }}" class="nav-link">
-                                        <i class="far fa-dot-circle nav-icon"></i>
-                                        <p>Fasilitas Umum</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.master-data.banner.index', 'galeri_pariwisata') }}" class="nav-link">
-                                        <i class="far fa-dot-circle nav-icon"></i>
-                                        <p>Galeri Pariwisata</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.master-data.banner.index', 'rekap_kunjungan') }}" class="nav-link">
-                                        <i class="far fa-dot-circle nav-icon"></i>
-                                        <p>Rekap Kunjungan</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>
-                                    Background Image
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.master-data.banner.index', 'bg-wisata') }}" class="nav-link">
-                                        <i class="far fa-dot-circle nav-icon"></i>
-                                        <p>Destinasi Wisata</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.master-data.banner.index', 'bg-ekonomi') }}" class="nav-link">
-                                        <i class="far fa-dot-circle nav-icon"></i>
-                                        <p>Ekonomi Kreatif</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.master-data.banner.index', 'bg-event') }}" class="nav-link">
-                                        <i class="far fa-dot-circle nav-icon"></i>
-                                        <p>Event</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.master-data.panduan.index') }}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>
-                                    Panduan Aplikasi
-                                </p>
-                            </a>
-                        </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>
+                                        Ekonomi Kreatif
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.master-data.ekonomi-kreatif.kategori.index') }}" class="nav-link">
+                                            <i class="far fa-dot-circle nav-icon"></i>
+                                            <p>Kategori</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.foto-slider.index') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>
+                                        Foto Slider
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.master-data.video.index') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>
+                                        Video Home
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>
+                                        Banner
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.master-data.banner.index', 'akomodasi') }}" class="nav-link">
+                                            <i class="far fa-dot-circle nav-icon"></i>
+                                            <p>Akomodasi</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.master-data.banner.index', 'destinasi_wisata') }}" class="nav-link">
+                                            <i class="far fa-dot-circle nav-icon"></i>
+                                            <p>Destinasi Wisata</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.master-data.banner.index', 'ekonomi_kreatif') }}" class="nav-link">
+                                            <i class="far fa-dot-circle nav-icon"></i>
+                                            <p>Ekonomi Kreatif</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.master-data.banner.index', 'event') }}" class="nav-link">
+                                            <i class="far fa-dot-circle nav-icon"></i>
+                                            <p>Event</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.master-data.banner.index', 'berita') }}" class="nav-link">
+                                            <i class="far fa-dot-circle nav-icon"></i>
+                                            <p>Berita</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.master-data.banner.index', 'fasilitas_umum') }}" class="nav-link">
+                                            <i class="far fa-dot-circle nav-icon"></i>
+                                            <p>Fasilitas Umum</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.master-data.banner.index', 'galeri_pariwisata') }}" class="nav-link">
+                                            <i class="far fa-dot-circle nav-icon"></i>
+                                            <p>Galeri Pariwisata</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.master-data.banner.index', 'rekap_kunjungan') }}" class="nav-link">
+                                            <i class="far fa-dot-circle nav-icon"></i>
+                                            <p>Rekap Kunjungan</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>
+                                        Background Image
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.master-data.banner.index', 'bg-wisata') }}" class="nav-link">
+                                            <i class="far fa-dot-circle nav-icon"></i>
+                                            <p>Destinasi Wisata</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.master-data.banner.index', 'bg-ekonomi') }}" class="nav-link">
+                                            <i class="far fa-dot-circle nav-icon"></i>
+                                            <p>Ekonomi Kreatif</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.master-data.banner.index', 'bg-event') }}" class="nav-link">
+                                            <i class="far fa-dot-circle nav-icon"></i>
+                                            <p>Event</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.master-data.panduan.index') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>
+                                        Panduan Aplikasi
+                                    </p>
+                                </a>
+                            </li>
 
-                    </ul>
-                </li>
+                        </ul>
+                    </li>
+                @endif
                 <li class="nav-item">
                     <a href="{{ route('admin.akomodasi.home') }}" class="nav-link">
                         <i class="nav-icon fas fa-hotel"></i>

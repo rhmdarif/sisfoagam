@@ -45,7 +45,9 @@
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label for="">Kategori</label>
-                                                    <button type="button" class="btn btn-primary float-right btn-sm mb-2" data-toggle="modal" data-target="#tambah-kategori">Tambah</button>
+                                                    @if (auth()->user()->level == "Super Admin")
+                                                        <button type="button" class="btn btn-primary float-right btn-sm mb-2" data-toggle="modal" data-target="#tambah-kategori">Tambah</button>
+                                                    @endif
                                                     <select name="kategori" id="kategori" class="form-control select2bs4">
                                                     </select>
                                                 </div>

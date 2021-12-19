@@ -25,7 +25,7 @@ Route::prefix('admin')->as("admin.")->group(function () {
         Route::get('home', [Admin\HomeController::class, 'index'])->name('home');
         Route::get('data/chart', [Admin\HomeController::class, 'chart'])->name('chart');
 
-        Route::prefix('master-data')->as('master-data.')->group(function () {
+        Route::prefix('master-data')->as('master-data.')->middleware(['only.admin'])->group(function () {
 
             Route::prefix("akomodasi")->as("akomodasi.")->group(function () {
                 Route::resource('kategori', Admin\MasterData\Akomodasi\KategoriController::class);

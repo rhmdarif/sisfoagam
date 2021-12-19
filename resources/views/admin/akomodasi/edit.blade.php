@@ -42,7 +42,11 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="">Kategori</label>
-                                                    <button type="button" class="btn btn-primary float-right btn-sm mb-2" data-toggle="modal" data-target="#tambah-kategori">Tambah</button>
+
+                                                    @if (auth()->user()->level == "Super Admin")
+                                                        <button type="button" class="btn btn-primary float-right btn-sm mb-2" data-toggle="modal" data-target="#tambah-kategori">Tambah</button>
+                                                    @endif
+
                                                     <select name="kategori" id="kategori" class="form-control select2bs4">
                                                         {{-- <option value="{{ $data->kategori_akomodasi_id }}" selected>{{ $data->nama_kategori_akomodasi }}</option> --}}
                                                     </select>
@@ -84,7 +88,9 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="">Fasilitas</label>
-                                            <button type="button" class="btn btn-sm btn-primary float-right mb-2" onclick="tampil_fasilitas()">Tambah</button>
+                                            @if (auth()->user()->level == "Super Admin")
+                                                <button type="button" class="btn btn-sm btn-primary float-right mb-2" onclick="tampil_fasilitas()">Tambah</button>
+                                            @endif
                                             <select name="fasilitas[]" id="fasilitas" class="form-control sl2multi" multiple style="width: 100% !important"></select>
                                         </div>
                                         <div class="form-group">

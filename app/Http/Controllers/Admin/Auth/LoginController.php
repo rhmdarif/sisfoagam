@@ -29,7 +29,14 @@ class LoginController extends Controller
             return back()->with("error", $validator->errors()->first());
         }
 
-        $user = User::where('no_hp', $request->nohp)->first();
+        $user = User::where('no_hp', $request->nohp)->where('role', 'ADMIN')->first();
+        if($user == null) {
+            return back()->with("error", "Admin tidak ditemukan");
+        }
+
+        if(!$user->status) {
+            return back()->with("error", "Anda tidak diizinkan masuk, silahkan hubungi super admin.");
+        }
         if(!Hash::check($request->password, $user->password)) {
             return back()->with("error", "Password Salah");
         }
