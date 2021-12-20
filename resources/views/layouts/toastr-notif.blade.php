@@ -23,3 +23,25 @@
         });
     </script>
 @endif
+
+<script>
+    function alertDanger(msg=null) {
+        $.toast({
+            heading: 'Failed',
+            text: msg,
+            showHideTransition: 'slide',
+            icon: 'error',
+            position: 'top-right'
+        });
+    }
+
+    function alertSuccess(msg=null) {
+        $.toast({
+            heading: 'Success',
+            text: msg,
+            showHideTransition: 'slide',
+            icon: 'success',
+            position: 'top-right'
+        });
+    }
+</script>

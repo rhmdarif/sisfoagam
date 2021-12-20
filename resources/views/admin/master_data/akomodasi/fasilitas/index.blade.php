@@ -105,6 +105,8 @@
 @endsection
 
 @push('js')
+    @include('layouts.toastr-notif')
+
     <script>
         $(document).ready(() => {
             $('#tambah-fasilitas form').submit((e) => {
@@ -125,17 +127,23 @@
                     cache: false,
                     timeout: 800000,
                     success: async function(hasil) {
+                        console.log(hasil)
                         // hasil = JSON.parse(hasil);
-                        console.log("SUCCESS : ", hasil);
-                        await $.toast({
-                            heading: 'Success',
-                            text: hasil.msg,
-                            showHideTransition: 'slide',
-                            icon: 'success',
-                            position: 'top-right'
-                        });
 
-                        location.reload();
+                        if(hasil.status) {
+                            await $.toast({
+                                heading: 'Success',
+                                text: hasil.msg,
+                                showHideTransition: 'slide',
+                                icon: 'success',
+                                position: 'top-right'
+                            });
+
+                            location.reload();
+                        } else {
+                            alertDanger(hasil.msg);
+                        }
+
                     },
                     error: function(e) {
                         console.log("ERROR : ", e);
@@ -223,7 +231,20 @@
                     },
                     dataType: 'JSON',
                     success: function(data) {
-                        location.reload();
+                        if(data.status) {
+                            $.toast({
+                                heading: 'Success',
+                                text: data.msg,
+                                showHideTransition: 'slide',
+                                icon: 'success',
+                                position: 'top-right'
+                            });
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2000);
+                        } else {
+                            alertDanger(data.msg);
+                        }
                     }
                 });
             }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\MasterData\Akomodasi;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\KategoriAkomodasi;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -141,6 +142,11 @@ class KategoriController extends Controller
     public function destroy(KategoriAkomodasi $kategori)
     {
         //
+        $count = DB::table('akomodasi')->where('kategori_akomodasi_id', $kategori->id)->count();
+        if($count > 0){
+            return ['status' => false, 'msg' => "Kategori tidak dapat dihapus, karena kategori telah digunakan."];
+        }
+
         $kategori->delete();
         return ['status' => true, 'msg' => "Kategori berhasil dihapus"];
     }

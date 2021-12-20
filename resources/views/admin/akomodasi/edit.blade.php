@@ -94,6 +94,10 @@
                                             <select name="fasilitas[]" id="fasilitas" class="form-control sl2multi" multiple style="width: 100% !important"></select>
                                         </div>
                                         <div class="form-group">
+                                            <label for="">Tipe Kamar</label>
+                                            <textarea name="tipe_kamar" id="tipe_kamar" class="note">{{ $data->tipe_kamar }}</textarea>
+                                        </div>
+                                        <div class="form-group">
                                             <label for="">Keterangan</label>
                                             <textarea name="keterangan" id="keterangan" class="note">{{ $data->keterangan }}</textarea>
                                         </div>

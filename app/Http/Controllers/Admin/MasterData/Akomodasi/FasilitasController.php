@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\MasterData\Akomodasi;
 
 use Illuminate\Http\Request;
 use App\Models\FasilitasAkomodasi;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -133,6 +134,14 @@ class FasilitasController extends Controller
     public function destroy(FasilitasAkomodasi $fasilita)
     {
         //
+        $count = DB::table('akomodasi_fasilitas_akomodasi')->where('fasilitas_akomodasi_id', $fasilita->id)
+                    ->whereRaw("(SELECT count(id) FROM akomodasi WHERE id=akomodasi_fasilitas_akomodasi.akomodasi_id) > 0")
+                    ->count();
+
+        if($count > 0){
+            return ['status' => false, 'msg' => "Fasilitas tidak dapat dihapus, karena fasilitas telah digunakan."];
+        }
+
         $fasilita->delete();
         return ['status' => true, 'msg' => "Fasilitas berhasil dihapus"];
     }

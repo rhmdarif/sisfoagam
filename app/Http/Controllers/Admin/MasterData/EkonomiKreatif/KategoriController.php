@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\MasterData\EkonomiKreatif;
 
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\KategoriEkonomiKreatif;
 use Illuminate\Support\Facades\Storage;
@@ -146,6 +147,11 @@ class KategoriController extends Controller
     public function destroy(KategoriEkonomiKreatif $kategori)
     {
         //
+        $count = DB::table('ekonomi_kreatif')->where('kategori_ekonomi_kreatif_id', $kategori->id)->count();
+        if($count > 0){
+            return ['status' => false, 'msg' => "Kategori tidak dapat dihapus, karena kategori telah digunakan."];
+        }
+
         $kategori->delete();
         return ['status' => true, 'msg' => "Kategori berhasil dihapus"];
     }

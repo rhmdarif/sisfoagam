@@ -90,7 +90,11 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="">Keterangan</label>
+                                            <label for="tipe_kamar">Tipe Kamar</label>
+                                            <textarea name="tipe_kamar" id="tipe_kamar" class="note"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="keterangan">Keterangan</label>
                                             <textarea name="keterangan" id="keterangan" class="note"></textarea>
                                         </div>
                                     </div>
@@ -418,6 +422,7 @@
             var tipe = $('#tipe').val();
             var lat = $('#lat').val();
             var lng = $('#lng').val();
+            var tipe_kamar = $('#tipe_kamar').val();
             var keterangan = $('#keterangan').val();
             var thumbnail = $('#thumbnail').prop('files')[0];
             let form_data = new FormData();
@@ -432,6 +437,7 @@
             form_data.append("harga_atas", harga_atas.getNumber());
             form_data.append("lat", lat);
             form_data.append("lng", lng);
+            form_data.append("tipe_kamar", tipe_kamar);
             form_data.append("keterangan", keterangan);
             form_data.append("thumbnail", thumbnail);
             form_data.append("id", id);

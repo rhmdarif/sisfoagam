@@ -49,26 +49,26 @@
                                         @foreach ($ekonomi_kreatif as $i => $d)
                                             <tr>
                                                 <td>{{ $i + 1 }}</td>
-                                                <td><img src="{{ $d->thumbnail_ekonomi_kreatif }}"
-                                                        alt="{{ $d->thumbnail_ekonomi_kreatif }}" class="img-fluid"
+                                                <td><img src="{{ $d->thumbnail_ekonomi_kreatif ?? "" }}"
+                                                        alt="{{ $d->thumbnail_ekonomi_kreatif ?? "" }}" class="img-fluid"
                                                         width="100px"></td>
-                                                <td>{{ $d->kategori->nama_kategori_kreatif }}</td>
-                                                <td>{{ $d->nama_ekonomi_kreatif }}</td>
-                                                <td>{{ number_format($d->harga) }}</td>
-                                                <td>{{ number_format($d->harga_atas) }}</td>
+                                                <td>{{ $d->kategori->nama_kategori_kreatif ?? "" }}</td>
+                                                <td>{{ $d->nama_ekonomi_kreatif ?? "" }}</td>
+                                                <td>{{ number_format($d->harga ?? 0) }}</td>
+                                                <td>{{ number_format($d->harga_atas ?? 0) }}</td>
                                                 <td>
                                                     <iframe width="300" height="170" frameborder="0" scrolling="no"
                                                         marginheight="0" marginwidth="0"
-                                                        src="https://maps.google.com/maps?q=<?= $d->lat ?>,<?= $d->long ?>&hl=in&z=14&amp;output=embed"></iframe>
+                                                        src="https://maps.google.com/maps?q=<?= $d->lat ?? 0 ?>,<?= $d->long ?>&hl=in&z=14&amp;output=embed"></iframe>
                                                 </td>
                                                 <td>
-                                                    <a href="{{ route('admin.ekonomi-kreatif.detail', $d->id) }}"
+                                                    <a href="{{ route('admin.ekonomi-kreatif.detail', $d->id ?? 0) }}"
                                                         style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i
                                                             class="fas fa-eye"></i></a>
-                                                    <a href="{{ route('admin.ekonomi-kreatif.edit', $d->id) }}"
+                                                    <a href="{{ route('admin.ekonomi-kreatif.edit', $d->id ?? 0) }}"
                                                         style="width:40px; margin-top:5px" class="btn btn-info btn-sm"><i
                                                             class="fas fa-edit"></i></a>
-                                                    <button onclick="hapus('<?= $d->id ?>')" style="width:40px; margin-top:5px"
+                                                    <button onclick="hapus('<?= $d->id ?? 0 ?>')" style="width:40px; margin-top:5px"
                                                         class="btn btn-info btn-sm"><i class="fas fa-trash"></i></button>
                                                 </td>
                                             </tr>

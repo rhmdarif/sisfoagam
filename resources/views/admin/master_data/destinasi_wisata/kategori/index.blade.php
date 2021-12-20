@@ -98,6 +98,8 @@
 @endsection
 
 @push('js')
+    @include('layouts.toastr-notif')
+
     <script>
         $(document).ready(() => {
             $('#tambah-kategori form').submit((e) => {
@@ -200,8 +202,15 @@
                         '_method':"DELETE"
                     },
                     dataType: 'JSON',
-                    success: function(data) {
-                        location.reload();
+                    success: async function(data) {
+                        if(data.status) {
+                            alertSuccess(data.msg);
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2000);
+                        } else {
+                            alertDanger(data.msg);
+                        }
                     },
                     complete: function() {
                         $('#edit-kategori').modal('hide');

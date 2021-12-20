@@ -98,6 +98,7 @@
 @endsection
 
 @push('js')
+    @include('layouts.toastr-notif')
     <script>
         $(document).ready(() => {
             $('#tambah-kategori form').submit((e) => {
@@ -119,14 +120,12 @@
                     timeout: 800000,
                     success: function (hasil) {
                         // hasil = JSON.parse(hasil);
-                        console.log("SUCCESS : ", hasil);
-                        $.toast({
-                            heading: 'Success',
-                            text: hasil.msg,
-                            showHideTransition: 'slide',
-                            icon: 'success',
-                            position: 'top-right'
-                        });
+                        if(hasil.status) {
+                            location.reload();
+                            alertSuccess(hasil.msg);
+                        } else {
+                            alertDanger(hasil.msg);
+                        }
                     },
                     error: function (e) {
                         console.log("ERROR : ", e);
@@ -202,8 +201,22 @@
                         '_method':"DELETE"
                     },
                     dataType: 'JSON',
-                    success: function(data) {
-                        location.reload();
+                    success: async function(data) {
+                        if(data.status) {
+                            await $.toast({
+                                heading: 'Success',
+                                text: data.msg,
+                                showHideTransition: 'slide',
+                                icon: 'success',
+                                position: 'top-right'
+                            });
+
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2000);
+                        } else {
+                            alertDanger(data.msg);
+                        }
                     }
                 });
             }

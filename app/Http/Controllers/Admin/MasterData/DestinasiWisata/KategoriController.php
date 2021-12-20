@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\MasterData\DestinasiWisata;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\KategoriWisata;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -146,6 +147,11 @@ class KategoriController extends Controller
     public function destroy(KategoriWisata $kategori)
     {
         //
+        $count = DB::table('destinasi_wisata')->where('kategori_wisata_id', $kategori->id)->count();
+        if($count > 0){
+            return ['status' => false, 'msg' => "Kategori tidak dapat dihapus, karena kategori telah digunakan."];
+        }
+
         $kategori->delete();
         return ['status' => true, 'msg' => "Kategori berhasil dihapus"];
     }
