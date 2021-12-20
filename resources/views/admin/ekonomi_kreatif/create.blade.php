@@ -86,11 +86,11 @@
                                             </div>
 
                                     <div class="col-md-6">
-                                        <label for="">Galeri Foto Akomodasi</label>
+                                        <label for="">Galeri Foto</label>
                                         <div class="input-images"></div>
                                     </div>
                                     <div class="col-md-6">
-                                        <label for="">Galeri Vidio Akomodasi</label>
+                                        <label for="">Galeri Vidio</label>
                                         <div class="table-responsive">
                                             <table class="table table-bordered" id="table_video">
                                                 <thead>
